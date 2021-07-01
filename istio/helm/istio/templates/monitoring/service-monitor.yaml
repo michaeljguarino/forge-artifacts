@@ -1,0 +1,19 @@
+{{ if eq .Values.monitoring.enabled true }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: istio-component-monitor
+  namespace: {{ .Values.monitoring.namespace }}
+  labels: {{ include "istio.labels" . | nindent 4 }}
+spec:
+  jobLabel: istio
+  targetLabels: [app]
+  selector:
+    matchExpressions:
+    - {key: istio, operator: In, values: [pilot]}
+  namespaceSelector:
+    any: true
+  endpoints:
+  - port: http-monitoring
+    interval: 15s
+{{ end }}

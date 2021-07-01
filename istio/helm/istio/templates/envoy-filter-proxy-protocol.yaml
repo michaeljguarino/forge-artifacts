@@ -1,0 +1,23 @@
+{{ if eq .Values.provider "aws" }}
+apiVersion: networking.istio.io/v1alpha3
+kind: EnvoyFilter
+metadata:
+  name: proxy-protocol
+  namespace: {{ .Values.istio.namespace }}
+  labels: {{ include "istio.labels" . | nindent 4 }}
+  # annotations:
+  #   helm.sh/hook: post-install,post-upgrade
+  #   helm.sh/hook-weight: "10"
+spec:
+  workloadSelector:
+    labels:
+      istio: ingressgateway
+  configPatches:
+  - applyTo: LISTENER
+    patch:
+      operation: MERGE
+      value:
+        listener_filters:
+        - name: envoy.filters.listener.proxy_protocol
+        - name: envoy.filters.listener.tls_inspector
+{{ end }}

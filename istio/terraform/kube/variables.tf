@@ -1,4 +1,9 @@
-variable "namespace" {
+variable "operator_namespace" {
   type = string
-  default = "istio"
+  default = "istio-operator"
+}
+
+variable "istio_namespace" {
+  type = string
+  default = "istio-system"
 }

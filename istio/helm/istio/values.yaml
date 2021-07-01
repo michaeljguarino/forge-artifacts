@@ -2,7 +2,117 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-istioRevision: '1-10-1'
+provider: aws
+
+istio:
+  hub: gcr.io/istio-release
+  tag: 1.10.3
+  namespace: istio-system
+  istioComponents:
+    ingressGateways:
+    - name: istio-ingressgateway
+      k8s:
+        service:
+          type: LoadBalancer
+        serviceAnnotations:
+          service.beta.kubernetes.io/aws-load-balancer-name: istio-nlb
+          service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: '*'
+          service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
+          service.beta.kubernetes.io/aws-load-balancer-type: external
+          service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: instance
+          proxy.istio.io/config: '{"gatewayTopology" : { "numTrustedProxies": 2 } }'
 
 istio-operator:
+  operatorNamespace: istio-operator
+  watchedNamespaces: istio-system
   enableCRDTemplates: false
+  hub: gcr.io/istio-release
+  tag: 1.10.3
+
+monitoring:
+  enabled: true
+  namespace: bootstrap
+  grafana:
+    namespace: grafana
+  kiali:
+    enabled: true
+  tracing:
+    enabled: true
+    sampling: 100.0
+
+# TODO: add prometheus service monitor for Kiali
+kiali-server:
+  istio_namespace: istio-system
+  api:
+    namespaces:
+      exclude:
+      - istio-operator
+      - kube-.*
+      - openshift.*
+      - ibm.*
+  deployment:
+    override_ingress_yaml:
+      metadata:
+        annotations:
+            kubernetes.io/tls-acme: "true"
+            kubernetes.io/ingress.class: "nginx"
+            cert-manager.io/cluster-issuer: letsencrypt-prod
+            nginx.ingress.kubernetes.io/force-ssl-redirect: 'true'
+            nginx.ingress.kubernetes.io/use-regex: "true"
+      spec:
+        tls:
+        - hosts:
+          - kiali.kubeflow-aws.com
+          secretName: kiali-tls
+        rules:
+        - host: kiali.kubeflow-aws.com
+          http:
+            paths:
+            - path: /.*
+              pathType: Prefix
+              backend:
+                service:
+                  name: kiali
+                  port:
+                    name: http
+  external_services:
+    prometheus:
+      url: http://bootstrap-prometheus.bootstrap:9090
+    tracing:
+      use_grpc: false # we would actually want this to be true, but it doesn't work currently
+      in_cluster_url: http://istio-jaeger-query.istio-system
+    grafana:
+      auth:
+        type: basic
+        username: admin
+        password: ""
+      url:
+        https://grafana.kubeflow-aws.com
+      in_cluster_url: http://grafana.grafana:80
+      dashboards:
+      - name: "Istio Service Dashboard"
+        variables:
+          namespace: var-namespace
+          service: var-service
+      - name: "Istio Workload Dashboard"
+        variables:
+          namespace: var-namespace
+          service: var-service
+      - name: "Kubernetes / API server"
+        variables:
+          var-datasource: default
+          var-cluster: ''
+          var-instance: All
+
+jaeger:
+  provisionDataStore:
+    cassandra: true
+    elasticsearch: false
+  collector:
+    service: 
+      zipkin:
+        port: 9411
+
+oauth2proxy:
+  enabled: true
+  namespace: oauth2-proxy

@@ -1,0 +1,14 @@
+{{ if eq .Values.monitoring.enabled true }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: istio-workload-dashboard
+  namespace: {{ .Values.monitoring.grafana.namespace }}
+  labels: {{ include "istio.labels" . | nindent 4 }}
+    grafana_dashboard: istio-workload-dashboard
+  annotations:
+    k8s-sidecar-target-directory: /tmp/dashboards/Istio Dashboards
+data:
+  istio-workload-dashboard.json: |-
+{{ .Files.Get "grafana-dashboards/istio-workload-dashboard_rev71.json" | indent 4 }}
+{{ end }}

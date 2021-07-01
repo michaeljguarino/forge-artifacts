@@ -2,9 +2,17 @@ apiVersion: v2
 name: istio
 description: A chart bundling the istio operator for plural
 type: application
-version: 0.1.1
-appVersion: "1.16.0"
+version: 0.1.29
+appVersion: "1.10.3"
 dependencies:
 - name: istio-operator
   version: 1.7.0
   repository: file://../../../../istio/manifests/charts/istio-operator
+- name: jaeger
+  version: 0.46.4
+  repository: https://jaegertracing.github.io/helm-charts
+  condition: monitoring.tracing.enabled
+- name: kiali-server
+  version: 1.37.0
+  repository: https://kiali.org/helm-charts
+  condition: monitoring.kiali.enabled

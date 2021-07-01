@@ -10,7 +10,22 @@ sections:
   - type: TERRAFORM
     name: kube
     configuration: []
+    # - name: operator_namespace
+    #   documentation: the namespace for the istio operator
+    #   type: STRING
+    #   default: istio
+    # - name: istio_namespace
+    #   documentation: the namespace where istio is installed
+    #   type: STRING
+    #   default: istio
   - type: HELM
     name: istio
     configuration: []
-  
+    # - name: operator_namespace
+    #   documentation: the namespace for the istio operator
+    #   type: STRING
+    #   default: istio
+    # - name: istio_namespace
+    #   documentation: the namespace where istio is installed
+    #   type: STRING
+    #   default: istio

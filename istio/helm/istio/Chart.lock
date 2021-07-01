@@ -2,5 +2,11 @@ dependencies:
 - name: istio-operator
   repository: file://../../../../istio/manifests/charts/istio-operator
   version: 1.7.0
-digest: sha256:9fe7246290dae8812db7acb6cb92269aa130f8a888cceb2f86a9a72bc7e53966
-generated: "2021-06-22T14:40:02.099999-04:00"
+- name: jaeger
+  repository: https://jaegertracing.github.io/helm-charts
+  version: 0.46.4
+- name: kiali-server
+  repository: https://kiali.org/helm-charts
+  version: 1.37.0
+digest: sha256:abe7d94801030b956910e59508013c4fddb419339b3dd35d92d4c9cc9d473d2d
+generated: "2021-07-23T14:48:09.802672775+02:00"

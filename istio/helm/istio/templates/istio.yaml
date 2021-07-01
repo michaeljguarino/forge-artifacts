@@ -2,15 +2,68 @@ apiVersion: install.istio.io/v1alpha1
 kind: IstioOperator
 metadata:
   name: istio-plural
-  labels:
-  {{ include "istio.labels" . | nindent 4 }}
+  labels: {{ include "istio.labels" . | nindent 4 }}
+  namespace: {{ .Values.istio.namespace }}
+  # annotations:
+  #   helm.sh/hook: post-install,post-upgrade
+  #   helm.sh/hook-weight: "5"
 spec:
-  revision: {{ .Values.istioRevision }}
-  profile: demo
-{{ with .Values.istioComponents }}
+  profile: default
+  hub: {{ .Values.istio.hub }}
+  tag: {{ .Values.istio.tag }}
+  meshConfig:
+    accessLogFile: /dev/stdout
+    enablePrometheusMerge: true
+    {{ if .Values.monitoring.tracing.enabled }}
+    enableTracing: true
+    {{ end }}
+    defaultConfig:
+      {{ if .Values.monitoring.tracing.enabled }}
+      tracing:
+        sampling: {{ .Values.monitoring.tracing.sampling }}
+        max_path_tag_length: 256
+        zipkin:
+          address: {{ .Release.Name }}-jaeger-collector.{{ .Values.istio.namespace }}.svc.cluster.local:{{ .Values.jaeger.collector.service.zipkin.port }}
+      {{ end }}
+    extensionProviders:
+    {{ if .Values.oauth2proxy.enabled }}
+    - name: oauth2-proxy
+      envoyExtAuthzHttp:
+        service: oauth2-proxy.{{ .Values.oauth2proxy.namespace }}.svc.cluster.local
+        port: '4180' # The default port used by oauth2-proxy.
+        #includeHeadersInCheck: ["authorization", "cookie"]  # headers sent to the oauth2-proxy in the check request.
+        includeHeadersInCheck: # headers sent to the oauth2-proxy in the check request.
+            # https://github.com/oauth2-proxy/oauth2-proxy/issues/350#issuecomment-576949334
+        - cookie
+        - x-forwarded-access-token
+        - x-forwarded-user
+        - x-forwarded-email
+        - authorization
+        - x-forwarded-proto
+        - proxy-authorization
+        - user-agent
+        - x-forwarded-host
+        - from
+        - x-forwarded-for
+        - accept
+        headersToUpstreamOnAllow: [authorization, path, x-auth-request-user, x-auth-request-email, x-auth-request-access-token, x-auth-request-user-groups]             # headers sent to backend application when request is allowed.
+        headersToDownstreamOnDeny: [content-type, set-cookie]     # headers sent back to the client when request is denied.
+    {{ end }}
+{{ with .Values.istio.istioComponents }}
   components:
   {{ toYaml . | nindent 4 }}
 {{ end }}
   values:
     global:
-      istioNamespace: {{ .Release.Namespace }}
+      istioNamespace: {{ .Values.istio.namespace }}
+      {{ if .Values.monitoring.tracing.enabled }}
+      tracer:
+        zipkin:
+          address: {{ .Release.Name }}-jaeger-collector.{{ .Values.istio.namespace }}.svc.cluster.local:{{ .Values.jaeger.collector.service.zipkin.port }}
+      {{ end }}
+    sidecarInjectorWebhook:
+      neverInjectSelector:
+      # kube-prometheus-stack
+      ## Admission Webhook jobs do not terminate as expected with istio-proxy
+      - matchExpressions:
+        - {key: app, operator: In, values: [kube-prometheus-stack-admission-create, kube-prometheus-stack-admission-patch, alertmanager]}

@@ -1,0 +1,14 @@
+{{ if eq .Values.monitoring.enabled true }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: istio-service-dashboard
+  namespace: {{ .Values.monitoring.grafana.namespace }}
+  labels: {{ include "istio.labels" . | nindent 4 }}
+    grafana_dashboard: istio-service-dashboard
+  annotations:
+    k8s-sidecar-target-directory: /tmp/dashboards/Istio Dashboards
+data:
+  istio-service-dashboard.json: |-
+{{ .Files.Get "grafana-dashboards/istio-service-dashboard_rev71.json" | indent 4 }}
+{{ end }}
