@@ -1,0 +1,9 @@
+apiVersion: aws.crossplane.io/v1beta1
+kind: ProviderConfig
+metadata:
+  name: aws-provider
+  annotations:
+    helm.sh/hook: post-install
+spec:
+  credentials:
+    source: InjectedIdentity

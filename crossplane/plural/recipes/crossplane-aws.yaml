@@ -1,0 +1,15 @@
+name: crossplane-aws
+description: Deploys CrossPlane on our bootstrapped EKS cluster
+provider: AWS
+dependencies:
+- repo: bootstrap
+  name: aws-k8s
+sections:
+- name: crossplane
+  items:
+  - type: TERRAFORM
+    name: aws
+    configuration: []
+  - type: HELM
+    name: crossplane
+    configuration: []

@@ -1,0 +1,7 @@
+REPO crossplane
+
+TF terraform/*
+HELM helm/*
+RECIPE plural/recipes/*
+TAG plural/tags/**/*
+CRD plural/crds/crossplane/* helm/crossplane

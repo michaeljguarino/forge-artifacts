@@ -1,0 +1,12 @@
+apiVersion: pkg.crossplane.io/v1alpha1
+kind: ControllerConfig
+metadata:
+  name: aws-config
+  annotations:
+{{ toYaml .Values.serviceAccount.annotations | indent 4 }}
+spec:
+  metadata:
+    annotations:
+{{ toYaml .Values.serviceAccount.annotations | indent 6 }}
+  podSecurityContext:
+    fsGroup: 2000

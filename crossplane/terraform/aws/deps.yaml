@@ -1,0 +1,11 @@
+dependencies:
+- name: aws-bootstrap
+  repo: bootstrap
+  type: terraform
+  version: '>= 0.1.1'
+
+providers:
+- aws
+
+description: crossplane aws bootstrapping
+version: 0.1.3

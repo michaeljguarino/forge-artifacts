@@ -1,0 +1,19 @@
+artifact: {}
+terraform:
+  terraform/aws: h1:ugdObL6FD3KX7DDo+vqicOukcaC2iRYzKu1G39cE4Wc=
+helm:
+  helm/crossplane: h1:tWVXq43htYwDGRI0T6/5d7hnOwstMeCgCRWoJOqSnmQ=
+recipe:
+  plural/recipes/crossplane-aws.yaml: 379182596bd1ea26a4e0323208960f0e4822919598a97845e392e31c210c475c
+integration: {}
+crd:
+  plural/crds/crossplane/apiextensions.crossplane.io_compositeresourcedefinitions.yaml: 8fd1ed140e1fc4714515eb95da94a588726f3dd0b1c4bdc29dcb466adc4250c9:h1:tWVXq43htYwDGRI0T6/5d7hnOwstMeCgCRWoJOqSnmQ=
+  plural/crds/crossplane/apiextensions.crossplane.io_compositions.yaml: 361bb173b5b1637313f0e2db784714124c966e44f4d7a04e3cc01ebdf85de14e:h1:tWVXq43htYwDGRI0T6/5d7hnOwstMeCgCRWoJOqSnmQ=
+  plural/crds/crossplane/pkg.crossplane.io_configurationrevisions.yaml: 61304c8979444d2e785d2b78b5aba3cdba3f4c4a2cb6e8f047d473f1fbda8b07:h1:tWVXq43htYwDGRI0T6/5d7hnOwstMeCgCRWoJOqSnmQ=
+  plural/crds/crossplane/pkg.crossplane.io_configurations.yaml: 55d586f7b6bded3883abb3b03533021d1c0740194c00a18a5c5c2aed106003dc:h1:tWVXq43htYwDGRI0T6/5d7hnOwstMeCgCRWoJOqSnmQ=
+  plural/crds/crossplane/pkg.crossplane.io_controllerconfigs.yaml: a47ad3d563d1bcc41d61abef6d4edfb6c9a9fe08999451f8a9edf1dd323f5842:h1:tWVXq43htYwDGRI0T6/5d7hnOwstMeCgCRWoJOqSnmQ=
+  plural/crds/crossplane/pkg.crossplane.io_locks.yaml: f71219381790c23a8ba296c225343c9217bf0a3ab93db7228da79f078da34538:h1:tWVXq43htYwDGRI0T6/5d7hnOwstMeCgCRWoJOqSnmQ=
+  plural/crds/crossplane/pkg.crossplane.io_providerrevisions.yaml: d6db87d9a7087a6d4e7fddc4bd3a10b0516c3013a8766617803f3d3720383a70:h1:tWVXq43htYwDGRI0T6/5d7hnOwstMeCgCRWoJOqSnmQ=
+  plural/crds/crossplane/pkg.crossplane.io_providers.yaml: aed506ce93d44326a7267023adcb024dfdd3a3405a05997aba9e8f5dc53020b3:h1:tWVXq43htYwDGRI0T6/5d7hnOwstMeCgCRWoJOqSnmQ=
+ird: {}
+tag: {}

@@ -47,5 +47,8 @@ upload-mysql: # uploads mysql artifacts
 upload-kafka: # uploads kafka artifacts
 	plural apply -f kafka/Pluralfile
 
+upload-crossplane: # uploads crossplane artifacts
+	plural apply -f crossplane/Pluralfile
+
 import-operator:
 	cp ../plural-operator/config/crd/bases/* bootstrap/plural/crds/bootstrap

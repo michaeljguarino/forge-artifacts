@@ -1,0 +1,15 @@
+apiVersion: plural.sh/v1alpha1
+kind: Dependencies
+metadata:
+  application: true
+  description: deploys crossplane
+spec:
+  dependencies:
+  - type: helm
+    name: bootstrap
+    repo: bootstrap
+    version: '>= 0.5.1'
+  - type: terraform
+    name: aws
+    repo: crossplane
+    version: '>= 0.1.0'
