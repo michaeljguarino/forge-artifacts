@@ -19,7 +19,6 @@ module "assumable_role_crossplane" {
   role_name                     = "${var.cluster_name}-${var.role_name}"
   provider_url                  = replace(data.aws_eks_cluster.cluster.identity[0].oidc[0].issuer, "https://", "")
   role_policy_arns              = [aws_iam_policy.crossplane.arn]
-  oidc_fully_qualified_subjects = ["system:serviceaccount:${var.namespace}:${var.crossplane_serviceaccount}"]
   oidc_subjects_with_wildcards = ["system:serviceaccount:${var.namespace}:provider-aws-*"]
 }
 

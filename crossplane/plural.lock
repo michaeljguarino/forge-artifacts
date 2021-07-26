@@ -1,6 +1,6 @@
 artifact: {}
 terraform:
-  terraform/aws: h1:ugdObL6FD3KX7DDo+vqicOukcaC2iRYzKu1G39cE4Wc=
+  terraform/aws: h1:56oTQLTQ8trDN6iffCu5IG/lDnJwyA+aJsxQUZ+iWjE=
 helm:
   helm/crossplane: h1:tWVXq43htYwDGRI0T6/5d7hnOwstMeCgCRWoJOqSnmQ=
 recipe:
