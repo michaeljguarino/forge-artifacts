@@ -1,7 +1,7 @@
 dependencies:
 - name: external-dns
   repository: https://charts.bitnami.com/bitnami
-  version: 4.11.0
+  version: 4.12.3
 - name: metrics-server
   repository: https://charts.bitnami.com/bitnami
   version: 5.8.7
@@ -20,5 +20,5 @@ dependencies:
 - name: aws-load-balancer-controller
   repository: https://aws.github.io/eks-charts
   version: 1.2.3
-digest: sha256:296ce40d275e775f3a26b620c8f5b762d020672b39730acae28ab68578e4cee1
-generated: "2021-08-03T15:04:00.037868756+02:00"
+digest: sha256:5dccd635141578521c04d8a49ab1e0748f0339d6447699c264b8f5367d42cf79
+generated: "2021-08-14T18:58:20.585100826Z"
