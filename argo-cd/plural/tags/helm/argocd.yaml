@@ -1,6 +1,0 @@
-spec:
-  chart: argocd
-  version: 0.1.10
-tags:
-- stable
-- warm

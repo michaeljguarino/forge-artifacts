@@ -11,7 +11,7 @@ sections:
     name: aws
     configuration: []
   - type: HELM
-    name: argocd
+    name: argo-cd
     configuration:
     - name: hostname
       documentation: FQDN to use for your Argo CD installation

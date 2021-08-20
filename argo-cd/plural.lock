@@ -4,20 +4,20 @@ terraform:
   terraform/azure: h1:yZyl+PThZHBDNxIvKUx9V5C4wM8m+xmh4HFYmXJHGwg=
   terraform/gcp: h1:Er6eTB0w67NTjpK3WV/L149BWG4iQTO2Ru4YwjeEtQg=
 helm:
-  helm/argo-cd: h1:136q6zn5HVVyIHA1DnzGioH3snzj5+8lISdfx0ec6g0=
+  helm/argo-cd: h1:mVzbEGEyBAaHtIYIMHZtOFAT6lMMOYECp6n9fmRCKNs=
   helm/argocd: h1:ekOxLom9wLnGvjVcvCZU1cGpbS+uEiTm/LAq8ZM0Vz4=
 recipe:
-  plural/recipes/argo-cd-aws.yaml: 175815c115a2758628a14de67e34bfabd4d24807d169d92cb64c5b053c446a13
-  plural/recipes/argo-cd-azure.yaml: 5d36de10cb765d937d98e2c63f57be5d7997f45ad717cf88f0366acf132c7404
-  plural/recipes/argo-cd-gcp.yaml: 9a8df4d1b27291cad79ed0394b34f8ee69d5a6f0718d107298eaa7815e1d083c
+  plural/recipes/argo-cd-aws.yaml: adeddcf803fa5d108303d2eecc911453533a41cd6113b41693b1adfe1554b4e9
+  plural/recipes/argo-cd-azure.yaml: 90caa3599a82b9b60c1d9daecf7d6a4457934dd5d7e16f349e32ea93aacb77f4
+  plural/recipes/argo-cd-gcp.yaml: 28bc851a1d2668a037f7e4c30fa7420deddc30092b8a21b38c577179c1efadb4
 integration: {}
 crd:
-  plural/crds/crd-application.yaml: b947869a3c2ebe23658bbc7fbaa859356ffdf4c43ff4e6a97afc6882f983e361:h1:ekOxLom9wLnGvjVcvCZU1cGpbS+uEiTm/LAq8ZM0Vz4=
-  plural/crds/crd-project.yaml: db83363cb8cfe305fc3bcfbbff07a09a288068ccb182f2e0a3cd1d762dd0dae4:h1:ekOxLom9wLnGvjVcvCZU1cGpbS+uEiTm/LAq8ZM0Vz4=
+  plural/crds/crd-application.yaml: b947869a3c2ebe23658bbc7fbaa859356ffdf4c43ff4e6a97afc6882f983e361:h1:mVzbEGEyBAaHtIYIMHZtOFAT6lMMOYECp6n9fmRCKNs=
+  plural/crds/crd-project.yaml: db83363cb8cfe305fc3bcfbbff07a09a288068ccb182f2e0a3cd1d762dd0dae4:h1:mVzbEGEyBAaHtIYIMHZtOFAT6lMMOYECp6n9fmRCKNs=
 ird: {}
 tag:
-  plural/tags/helm/argo-cd.yaml: c5b6d1286c0300a427bc502b377fe1f3c9ccf0f9cb70b71dbcb867a32b51843d
-  plural/tags/helm/argocd.yaml: feee4f57dd2a1bf4570fe0896b9c7157ff6d28de7ca3506b8dc91a901dc10adb
+  plural/tags/helm/argo-cd.yaml: bc8716bed26920a22fd5b0126a3968c65cdfabe20518a3c257ce001e9513fd3b
+  plural/tags/helm/argocd.yaml: bf0dc31a3f496a77c487690218ce4a0f63cda5574d04acfbf6cf2e1d40a7a1fa
   plural/tags/terraform/aws.yaml: 01c402c260cc7fe359d1ebc4302ff11539cfabbd5a82745907ad445914153bb7
   plural/tags/terraform/azure.yaml: 86b17dc5dcbc7d877dddbda68b790231f9f7eaa025d00471360108ccd5f42a07
   plural/tags/terraform/gcp.yaml: 3761f7e078206cf85f48969d231071adfb3b68ee68b7c68a2b50045e896a3288

@@ -1,0 +1,6 @@
+spec:
+  chart: argo-cd
+  version: 0.1.11
+tags:
+- stable
+- warm

@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: argocd-dashboard
-  labels: {{ include "argocd.labels" . | nindent 4 }}
+  labels: {{ include "argo-cd-plural.labels" . | nindent 4 }}
     grafana_dashboard: argocd-dashboard
   annotations:
     k8s-sidecar-target-directory: /tmp/dashboards/Argo CD Dashboards
