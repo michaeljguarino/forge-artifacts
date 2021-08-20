@@ -11,7 +11,7 @@ sections:
     name: gcp
     configuration: []
   - type: HELM
-    name: argo-cd
+    name: argocd
     configuration:
     - name: hostname
       documentation: FQDN to use for your Argo CD installation

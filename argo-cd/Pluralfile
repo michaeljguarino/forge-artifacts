@@ -1,7 +1,7 @@
 REPO argo-cd
 
 TF terraform/*
-HELM helm/argo-cd
+HELM helm/argocd
 RECIPE plural/recipes/*
 TAG plural/tags/**/*
-CRD plural/crds/* helm/argo-cd
+CRD plural/crds/* helm/argocd
