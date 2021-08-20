@@ -7,7 +7,8 @@ argo-cd:
       hosts:
         - {{ $hostname }}
       tls:
-        - hosts:
+        - secretName: argocd-server-tls
+          hosts:
             - {{ $hostname }}
     config:
       url: https://{{ $hostname }}
