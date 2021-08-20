@@ -97,3 +97,6 @@ upload-ghost: # uploads ghost artifacts
 
 upload-rabbitmq: # uploads rabbitmq artifacts
 	plural apply -f rabbitmq/Pluralfile
+
+upload-argo-cd: # uploads argo-cd artifacts
+	plural apply -f argo-cd/Pluralfile

@@ -1,0 +1,18 @@
+name: argo-cd-gcp
+description: Installs argo-cd on a gcp gke cluster
+provider: GCP
+dependencies:
+- repo: bootstrap
+  name: gcp-kubernetes
+sections:
+- name: argo-cd
+  items:
+  - type: TERRAFORM
+    name: gcp
+    configuration: []
+  - type: HELM
+    name: argo-cd
+    configuration:
+    - name: hostname
+      documentation: FQDN to use for your Argo CD installation
+      type: STRING
