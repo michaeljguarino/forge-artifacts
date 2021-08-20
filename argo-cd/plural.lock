@@ -4,15 +4,15 @@ terraform:
   terraform/azure: h1:yZyl+PThZHBDNxIvKUx9V5C4wM8m+xmh4HFYmXJHGwg=
   terraform/gcp: h1:Er6eTB0w67NTjpK3WV/L149BWG4iQTO2Ru4YwjeEtQg=
 helm:
-  helm/argo-cd: h1:8nOsKYQuf98XR0wl+0ZCTXDhlDmgmJkmiYcw680BJ6Q=
+  helm/argo-cd: h1:136q6zn5HVVyIHA1DnzGioH3snzj5+8lISdfx0ec6g0=
 recipe:
-  plural/recipes/argo-cd-aws.yaml: 9742ff9c45b9dbb3b403ac1b8cd062de24f941499e6d7fadd9a29863ad40ec23
-  plural/recipes/argo-cd-azure.yaml: cb2f06cfa878e896acfe02ceb4d696f99e6e772d1b7d8f1243abd998723edfb1
-  plural/recipes/argo-cd-gcp.yaml: 4f5dfc2999bd588405d550640d9798dd9f1384c040dafc9d936dde99e11aa2fe
+  plural/recipes/argo-cd-aws.yaml: adeddcf803fa5d108303d2eecc911453533a41cd6113b41693b1adfe1554b4e9
+  plural/recipes/argo-cd-azure.yaml: 90caa3599a82b9b60c1d9daecf7d6a4457934dd5d7e16f349e32ea93aacb77f4
+  plural/recipes/argo-cd-gcp.yaml: 28bc851a1d2668a037f7e4c30fa7420deddc30092b8a21b38c577179c1efadb4
 integration: {}
 crd:
-  plural/crds/crd-application.yaml: b947869a3c2ebe23658bbc7fbaa859356ffdf4c43ff4e6a97afc6882f983e361:h1:8nOsKYQuf98XR0wl+0ZCTXDhlDmgmJkmiYcw680BJ6Q=
-  plural/crds/crd-project.yaml: db83363cb8cfe305fc3bcfbbff07a09a288068ccb182f2e0a3cd1d762dd0dae4:h1:8nOsKYQuf98XR0wl+0ZCTXDhlDmgmJkmiYcw680BJ6Q=
+  plural/crds/crd-application.yaml: b947869a3c2ebe23658bbc7fbaa859356ffdf4c43ff4e6a97afc6882f983e361:h1:136q6zn5HVVyIHA1DnzGioH3snzj5+8lISdfx0ec6g0=
+  plural/crds/crd-project.yaml: db83363cb8cfe305fc3bcfbbff07a09a288068ccb182f2e0a3cd1d762dd0dae4:h1:136q6zn5HVVyIHA1DnzGioH3snzj5+8lISdfx0ec6g0=
 ird: {}
 tag:
   plural/tags/helm/argo-cd.yaml: c5b6d1286c0300a427bc502b377fe1f3c9ccf0f9cb70b71dbcb867a32b51843d

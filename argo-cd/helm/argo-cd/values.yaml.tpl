@@ -13,6 +13,7 @@ argo-cd:
     config:
       url: https://{{ $hostname }}
   {{ if .OIDC }}
+      admin.enabled: "false"
       oidc.config: |
         name: Plural
         issuer: {{ .OIDC.Configuration.Issuer }}
@@ -24,6 +25,16 @@ argo-cd:
             essential: true
           groups:
             essential: true
+    rbacConfig:
+      policy.csv: |
+        p, role:org-admin, applications, *, */*, allow
+        p, role:org-admin, clusters, *, *, allow
+        p, role:org-admin, projects, *, *, allow
+        p, role:org-admin, certificates, *, *, allow
+        p, role:org-admin, repositories, *, *, allow
+        p, role:org-admin, accounts, *, *, allow
+        p, role:org-admin, gpgkeys, *, *, allow
+        g, {{ .Values.adminGroup }}, role:org-admin
   configs:
     secret:
       extra:
