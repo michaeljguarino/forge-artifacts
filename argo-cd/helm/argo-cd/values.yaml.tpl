@@ -17,12 +17,17 @@ argo-cd:
         name: Plural
         issuer: {{ .OIDC.Configuration.Issuer }}
         clientID: {{ .OIDC.ClientId }}
-        clientSecret: $CLIENT_SECRET
+        clientSecret: $oidc.plural.clientSecret
         requestedScopes: ["openid", "profile"]
+        requestedIDTokenClaims:
+          email:
+            essential: true
+          groups:
+            essential: true
   configs:
     secret:
       extra:
-        CLIENT_SECRET: {{ .OIDC.ClientSecret | b64enc }}
+        oidc.plural.clientSecret: {{ .OIDC.ClientSecret }}
   dex:
     enabled: false
   {{ end }}
