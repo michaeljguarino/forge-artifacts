@@ -4,7 +4,7 @@ terraform:
   terraform/azure: h1:yZyl+PThZHBDNxIvKUx9V5C4wM8m+xmh4HFYmXJHGwg=
   terraform/gcp: h1:Er6eTB0w67NTjpK3WV/L149BWG4iQTO2Ru4YwjeEtQg=
 helm:
-  helm/argo-cd: h1:ox1oMT8fwADbbnHgYwYG/E4ldXQvMQEgzH3aGRhJA3s=
+  helm/argo-cd: h1:5MENXDXzgmm2phj+Pgl9dbvNsFNVMsbjmscNWybEqnc=
   helm/argocd: h1:ekOxLom9wLnGvjVcvCZU1cGpbS+uEiTm/LAq8ZM0Vz4=
 recipe:
   plural/recipes/argo-cd-aws.yaml: adeddcf803fa5d108303d2eecc911453533a41cd6113b41693b1adfe1554b4e9
@@ -12,8 +12,8 @@ recipe:
   plural/recipes/argo-cd-gcp.yaml: 28bc851a1d2668a037f7e4c30fa7420deddc30092b8a21b38c577179c1efadb4
 integration: {}
 crd:
-  plural/crds/crd-application.yaml: b947869a3c2ebe23658bbc7fbaa859356ffdf4c43ff4e6a97afc6882f983e361:h1:ox1oMT8fwADbbnHgYwYG/E4ldXQvMQEgzH3aGRhJA3s=
-  plural/crds/crd-project.yaml: db83363cb8cfe305fc3bcfbbff07a09a288068ccb182f2e0a3cd1d762dd0dae4:h1:ox1oMT8fwADbbnHgYwYG/E4ldXQvMQEgzH3aGRhJA3s=
+  plural/crds/crd-application.yaml: b947869a3c2ebe23658bbc7fbaa859356ffdf4c43ff4e6a97afc6882f983e361:h1:5MENXDXzgmm2phj+Pgl9dbvNsFNVMsbjmscNWybEqnc=
+  plural/crds/crd-project.yaml: db83363cb8cfe305fc3bcfbbff07a09a288068ccb182f2e0a3cd1d762dd0dae4:h1:5MENXDXzgmm2phj+Pgl9dbvNsFNVMsbjmscNWybEqnc=
 ird: {}
 tag:
   plural/tags/helm/argo-cd.yaml: bc8716bed26920a22fd5b0126a3968c65cdfabe20518a3c257ce001e9513fd3b
