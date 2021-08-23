@@ -3734,7 +3734,7 @@
         "options": [],
         "query": "label_values(kube_pod_info, namespace)",
         "refresh": 1,
-        "regex": ".*argocd.*",
+        "regex": ".*argo-cd.*",
         "skipUrlSync": false,
         "sort": 0,
         "tagValuesQuery": "",

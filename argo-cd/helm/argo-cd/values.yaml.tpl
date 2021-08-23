@@ -41,4 +41,8 @@ argo-cd:
         oidc.plural.clientSecret: {{ .OIDC.ClientSecret }}
   dex:
     enabled: false
+    metrics:
+      enabled: false
+      serviceMonitor:
+        enabled: false
   {{ end }}
