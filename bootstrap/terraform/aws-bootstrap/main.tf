@@ -78,7 +78,7 @@ resource "aws_eks_addon" "core_dns" {
 resource "aws_eks_addon" "kube_proxy" {
   cluster_name      = var.cluster_name
   addon_name        = "kube-proxy"
-  addon_version     = "v1.18.8-eksbuild.1"
+  addon_version     = "v1.19.6-eksbuild.2"
   resolve_conflicts = "OVERWRITE"
   tags = {
       "eks_addon" = "kube-proxy"
