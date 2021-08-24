@@ -1,6 +1,6 @@
 artifact: {}
 terraform:
-  terraform/aws-bootstrap: h1:eIg49HoATgRGpg6gActHon6NvcLdp0kl14QG0qE5+As=
+  terraform/aws-bootstrap: h1:ShWHbTUhaETrJe5hUtc2bHCmQTOaGjUYDiAN7HLIfkw=
   terraform/azure-bootstrap: h1:bSX0MmdSEUcxmxxrpX4E2O/7PvdzxrdltAO2VD4X3F0=
   terraform/gcp-bootstrap: h1:fGyYStILB4gY4mhEqEHTLjQ+Cwb2abaJ/WpuECZHrq4=
   terraform/kube: h1:2VSsMe5CpTm5NWnVWzGWwD7RT48UXmvgM1/6D+P4xPE=

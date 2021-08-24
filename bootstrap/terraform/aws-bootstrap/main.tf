@@ -58,7 +58,7 @@ module "cluster" {
 resource "aws_eks_addon" "vpc_cni" {
   cluster_name = var.cluster_name
   addon_name   = "vpc-cni"
-  addon_version     = "v1.8.0-eksbuild.1"
+  addon_version     = "v1.9.0-eksbuild.1"
   resolve_conflicts = "OVERWRITE"
   tags = {
       "eks_addon" = "vpc-cni"
@@ -68,7 +68,7 @@ resource "aws_eks_addon" "vpc_cni" {
 resource "aws_eks_addon" "core_dns" {
   cluster_name      = var.cluster_name
   addon_name        = "coredns"
-  addon_version     = "v1.7.0-eksbuild.1"
+  addon_version     = "v1.8.3-eksbuild.1"
   resolve_conflicts = "OVERWRITE"
   tags = {
       "eks_addon" = "coredns"
