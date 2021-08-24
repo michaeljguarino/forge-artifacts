@@ -1,8 +1,8 @@
 artifact: {}
 terraform:
-  terraform/aws-bootstrap: h1:QvSS7AGVn5yZDVfKD549bWevUH9EfBwnL66olP0H9n0=
-  terraform/azure-bootstrap: h1:3yGDpbkqjZX0PvsicrxyIA3YzisctWxcMAy7mx3+MOg=
-  terraform/gcp-bootstrap: h1:Okkp1eEU2LHrEPDkjn1pY699wAbwfxwRLwisclnXirA=
+  terraform/aws-bootstrap: h1:Gz2mI4Tq+B8TgolIFrGCbVn1BmfzBQOyR/0+p13+Ld0=
+  terraform/azure-bootstrap: h1:bSX0MmdSEUcxmxxrpX4E2O/7PvdzxrdltAO2VD4X3F0=
+  terraform/gcp-bootstrap: h1:fGyYStILB4gY4mhEqEHTLjQ+Cwb2abaJ/WpuECZHrq4=
   terraform/kube: h1:2VSsMe5CpTm5NWnVWzGWwD7RT48UXmvgM1/6D+P4xPE=
 helm:
   helm/azure-identity: h1:z/P1XnNMlIq3wZHDM0+bJXQwkF3Oq+F3kOmBcUv3SZ8=
