@@ -10,7 +10,7 @@ dependencies:
   version: 3.29.0
 - name: cert-manager
   repository: https://charts.jetstack.io
-  version: v1.4.0
+  version: v1.4.4
 - name: cluster-autoscaler
   repository: https://kubernetes.github.io/autoscaler
   version: 9.9.2
@@ -20,5 +20,5 @@ dependencies:
 - name: aws-load-balancer-controller
   repository: https://aws.github.io/eks-charts
   version: 1.2.3
-digest: sha256:296ce40d275e775f3a26b620c8f5b762d020672b39730acae28ab68578e4cee1
-generated: "2021-08-03T15:04:00.037868756+02:00"
+digest: sha256:d66a8f189235683b3410e3d32d3e50824a5cc0c13d76fbb701d86b60119cf389
+generated: "2021-08-24T16:37:23.828390142Z"
