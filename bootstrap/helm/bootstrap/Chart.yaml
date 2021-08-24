@@ -22,7 +22,7 @@ dependencies:
   version: 3.29.0
   repository: https://kubernetes.github.io/ingress-nginx
 - name: cert-manager
-  version: v1.4.0
+  version: v1.5.3
   repository: https://charts.jetstack.io
 - name: cluster-autoscaler
   version: 9.9.2
