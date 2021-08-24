@@ -64,7 +64,7 @@ resource "aws_eks_addon" "vpc_cni" {
 resource "aws_eks_addon" "core_dns" {
   cluster_name      = var.cluster_name
   addon_name        = "coredns"
-  addon_version     = "v1.8.3-eksbuild.1"
+  addon_version     = "v1.7.0-eksbuild.1"
   tags = {
       "eks_addon" = "coredns"
   }
