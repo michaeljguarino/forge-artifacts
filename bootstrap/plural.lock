@@ -1,6 +1,6 @@
 artifact: {}
 terraform:
-  terraform/aws-bootstrap: h1:8LUToCLMYQTS7AhH2PSyii4Ye3EIuXO0aUKDGrdaY9M=
+  terraform/aws-bootstrap: h1:MRfTwYsor0uYJ6osG0HZ5+Thiq95P3oDf1vkxNBOKZY=
   terraform/azure-bootstrap: h1:bSX0MmdSEUcxmxxrpX4E2O/7PvdzxrdltAO2VD4X3F0=
   terraform/gcp-bootstrap: h1:fGyYStILB4gY4mhEqEHTLjQ+Cwb2abaJ/WpuECZHrq4=
   terraform/kube: h1:2VSsMe5CpTm5NWnVWzGWwD7RT48UXmvgM1/6D+P4xPE=
@@ -16,6 +16,7 @@ crd:
   plural/crds/application.yaml: c40bde3ad70c0d5aa3970a366ff742ba4a31ae40e0d256baf093d164c292abcf:h1:dBJSd9fVUBI9x6u6mzbALI3YjPkUOCuZ59EyJeTNH+o=
   plural/crds/azure-identity/azure-identity.yaml: b82b3c856cf8f494f098d5ee284586189371a05f42e8b52c3e64fa66f892d337:h1:z/P1XnNMlIq3wZHDM0+bJXQwkF3Oq+F3kOmBcUv3SZ8=
   plural/crds/bootstrap/application.yaml: c40bde3ad70c0d5aa3970a366ff742ba4a31ae40e0d256baf093d164c292abcf:h1:DF8TloCYiBWTUoq2b4vrVDsVTAHuDL9+G4swYorn1Ng=
+  plural/crds/bootstrap/aws-loadbalancer-controller.yaml: e5097aaf09fd73e493f97d67b19692b6ce125baae63037c544859b28f5b06b95:h1:DF8TloCYiBWTUoq2b4vrVDsVTAHuDL9+G4swYorn1Ng=
   plural/crds/bootstrap/cert-manager.yaml: 480e2d25505769d0586897de792a5acdc2e37db3fd56ae497a846b98201b95aa:h1:DF8TloCYiBWTUoq2b4vrVDsVTAHuDL9+G4swYorn1Ng=
   plural/crds/bootstrap/crd-alertmanagerconfigs.yaml: 5963c384555c1df33649b702baaca461f90d29bd85e79278efcd2a8bfc35b08f:h1:hE1B/+oj6JRzc73XAUZPLB5ik/3nI9rUeTREO8b3r2w=
   plural/crds/bootstrap/crd-alertmanagers.yaml: f3a090783750a2a3a9579e58ad9d8a55d1a259631e72442d2cab1dfed44a5dc8:h1:hE1B/+oj6JRzc73XAUZPLB5ik/3nI9rUeTREO8b3r2w=
