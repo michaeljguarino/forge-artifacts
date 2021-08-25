@@ -44,7 +44,7 @@ module "cluster" {
     instance_types = var.instance_types
     disk_size = 50
     subnets = module.vpc.private_subnets
-    ami_release_version = "1.21.2-20210722"
+    ami_release_version = "1.21-v20210813"
     force_update_version = true
     ami_type = "AL2_x86_64"
   }
@@ -68,7 +68,7 @@ resource "aws_eks_addon" "vpc_cni" {
 resource "aws_eks_addon" "core_dns" {
   cluster_name      = var.cluster_name
   addon_name        = "coredns"
-  addon_version     = "v1.8.3-eksbuild.1"
+  addon_version     = "v1.8.4-eksbuild.1"
   resolve_conflicts = "OVERWRITE"
   tags = {
       "eks_addon" = "coredns"
