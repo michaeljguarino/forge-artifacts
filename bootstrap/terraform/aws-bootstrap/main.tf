@@ -44,7 +44,7 @@ module "cluster" {
     instance_types = var.instance_types
     disk_size = 50
     subnets = module.vpc.private_subnets
-    ami_release_version = "1.19.6-20210722"
+    ami_release_version = "1.20.4-20210813"
     force_update_version = true
     ami_type = "AL2_x86_64"
   }
@@ -78,7 +78,7 @@ resource "aws_eks_addon" "core_dns" {
 resource "aws_eks_addon" "kube_proxy" {
   cluster_name      = var.cluster_name
   addon_name        = "kube-proxy"
-  addon_version     = "v1.19.6-eksbuild.2"
+  addon_version     = "v1.20.4-eksbuild.2"
   resolve_conflicts = "OVERWRITE"
   tags = {
       "eks_addon" = "kube-proxy"
