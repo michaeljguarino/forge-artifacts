@@ -30,7 +30,7 @@ module "vpc" {
 module "cluster" {
   source          = "github.com/pluralsh/terraform-aws-eks?ref=plural-eks"
   cluster_name    = var.cluster_name
-  cluster_version = "1.20"
+  cluster_version = "1.21"
   subnets         = concat(module.vpc.public_subnets, module.vpc.private_subnets)
   vpc_id          = module.vpc.vpc_id
   enable_irsa     = true
@@ -44,7 +44,7 @@ module "cluster" {
     instance_types = var.instance_types
     disk_size = 50
     subnets = module.vpc.private_subnets
-    ami_release_version = "1.20.4-20210813"
+    ami_release_version = "1.21.2-20210722"
     force_update_version = true
     ami_type = "AL2_x86_64"
   }
@@ -78,7 +78,7 @@ resource "aws_eks_addon" "core_dns" {
 resource "aws_eks_addon" "kube_proxy" {
   cluster_name      = var.cluster_name
   addon_name        = "kube-proxy"
-  addon_version     = "v1.20.4-eksbuild.2"
+  addon_version     = "v1.21.2-eksbuild.2"
   resolve_conflicts = "OVERWRITE"
   tags = {
       "eks_addon" = "kube-proxy"
