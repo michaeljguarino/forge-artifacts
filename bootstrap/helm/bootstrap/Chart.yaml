@@ -33,5 +33,5 @@ dependencies:
   repository: https://charts.appscode.com/stable
 - name: aws-load-balancer-controller
   condition: aws-load-balancer-controller.enabled
-  version: 1.2.3
+  version: 1.2.7
   repository: https://aws.github.io/eks-charts
