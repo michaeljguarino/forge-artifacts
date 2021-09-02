@@ -7,5 +7,5 @@ appVersion: 14.0.1
 
 dependencies:
 - name: gitlab
-  version: 5.0.1
+  version: 5.0.10
   repository: https://charts.gitlab.io/
