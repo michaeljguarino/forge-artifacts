@@ -10,7 +10,7 @@ spec:
     - from:
         - source:
             namespaces:
-              - istio-system
+              - {{ .Values.global.istioNamespace }}
   selector:
     matchLabels:
       {{- include "pipelines.selectorLabels" . | nindent 6 }}
