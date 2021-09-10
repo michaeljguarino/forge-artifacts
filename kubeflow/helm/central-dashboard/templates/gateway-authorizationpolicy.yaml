@@ -2,6 +2,7 @@
 apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
 metadata:
+  labels: {{- include "central-dashboard.labels" . | nindent 4 }}
   name: istio-ingressgateway-oidc
   namespace: {{ .Values.global.istioNamespace }}
 spec:

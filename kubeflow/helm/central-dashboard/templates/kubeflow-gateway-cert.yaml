@@ -1,6 +1,7 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
+  labels: {{- include "central-dashboard.labels" . | nindent 4 }}
   name: kubeflow-ingressgateway-certs
   namespace: {{ .Values.global.istioNamespace }}
 spec:

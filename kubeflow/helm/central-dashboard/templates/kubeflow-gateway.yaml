@@ -1,6 +1,7 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
+  labels: {{- include "central-dashboard.labels" . | nindent 4 }}
   name: kubeflow-gateway
   namespace: kubeflow
 spec:

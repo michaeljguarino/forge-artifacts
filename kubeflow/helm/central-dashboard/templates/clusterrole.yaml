@@ -1,9 +1,8 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  labels:
-    {{- include "central-dashboard.labels" . | nindent 4 }}
-  name: {{ include "central-dashboard.fullname" . }}
+  labels: {{- include "central-dashboard.labels" . | nindent 4 }}
+  name: {{ include "central-dashboard.fullname" . }}-cluster-role
 rules:
   - apiGroups:
       - ""

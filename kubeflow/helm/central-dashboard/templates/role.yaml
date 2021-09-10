@@ -1,10 +1,8 @@
-{{- $fullName := include "central-dashboard.fullname" . -}}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  labels:
-    {{- include "central-dashboard.labels" . | nindent 4 }}
-  name: {{ $fullName }}
+  labels: {{- include "central-dashboard.labels" . | nindent 4 }}
+  name: {{ include "central-dashboard.fullname" . }}-role
   namespace: kubeflow
 rules:
   - apiGroups:

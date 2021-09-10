@@ -1,6 +1,7 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: EnvoyFilter
 metadata:
+  labels: {{- include "central-dashboard.labels" . | nindent 4 }}
   name: kubeflow-userid
   namespace: {{ .Values.global.istioNamespace }}
 spec:
