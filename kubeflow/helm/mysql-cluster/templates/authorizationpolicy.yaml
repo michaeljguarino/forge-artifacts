@@ -1,0 +1,11 @@
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: mysql-allow-all
+spec:
+  action: ALLOW
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: kubeflow-mysql-cluster
+  rules:
+  - {}
