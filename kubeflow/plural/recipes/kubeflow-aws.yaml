@@ -19,3 +19,42 @@ sections:
     - name: hostname
       documentation: FQDN to use for your Kubeflow installation
       type: STRING
+  - type: HELM
+    name: katib
+    configuration: []
+  - type: HELM
+    name: mysql-cluster
+    configuration: []
+  - type: HELM
+    name: notebooks
+    configuration: []
+  - type: HELM
+    name: mpi
+    configuration: []
+  - type: HELM
+    name: mxnet
+    configuration: []
+  - type: HELM
+    name: pytorch
+    configuration: []
+  - type: HELM
+    name: tensorflow
+    configuration: []
+  - type: HELM
+    name: xgboost
+    configuration: []
+  - type: HELM
+    name: pipelines
+    configuration: []
+  - type: HELM
+    name: profile-controller
+    configuration: []
+  - type: HELM
+    name: serving
+    configuration: []
+  - type: HELM
+    name: tensorboards
+    configuration: []
+  - type: HELM
+    name: volumes
+    configuration: []
