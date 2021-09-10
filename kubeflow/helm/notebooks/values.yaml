@@ -57,10 +57,10 @@ webApp:
 
   resources:
     requests:
-      cpu: 50m
+      cpu: 200m
       memory: 226Mi
     limits:
-      cpu: 50m
+      cpu: 200m
       memory: 226Mi
 
   autoscaling:
@@ -151,11 +151,11 @@ controller:
   
   resources:
     requests:
-      cpu: 11m
-      memory: 25Mi
+      cpu: 100m
+      memory: 50Mi
     limits:
-      cpu: 11m
-      memory: 25Mi
+      cpu: 100m
+      memory: 50Mi
 
   autoscaling:
     enabled: false
@@ -198,11 +198,11 @@ podDefaults:
 
   resources:
     requests:
-      cpu: 11m
-      memory: 10Mi
+      cpu: 50m
+      memory: 50Mi
     limits:
-      cpu: 11m
-      memory: 10Mi
+      cpu: 50m
+      memory: 50Mi
 
   autoscaling:
     enabled: false
