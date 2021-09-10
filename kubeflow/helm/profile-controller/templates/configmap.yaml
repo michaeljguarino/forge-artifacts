@@ -28,6 +28,8 @@ data:
   ADMIN: {{ .Values.config.adminUserEmail }}
   USERID_HEADER: {{ .Values.global.userIDHeader }}
   USERID_PREFIX: {{ .Values.global.userIDPrefix | quote }}
+  ISSUER: {{ .Values.global.oidcIssuer }}
+  JWKSURI: {{ .Values.global.jwksURI }}
   WORKLOAD_IDENTITY: ""
   DEFAULTNAMESPACELABELSPATH: /etc/profile-controller/namespace-labels.yaml
 kind: ConfigMap

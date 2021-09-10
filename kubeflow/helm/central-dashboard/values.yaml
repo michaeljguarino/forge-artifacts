@@ -8,6 +8,8 @@ global:
   clusterDomain: cluster.local
   userIDHeader: kubeflow-userid
   userIDPrefix: ""
+  oidcIssuer: https://oidc.plural.sh/
+  jwksURI: https://oidc.plural.sh/.well-known/jwks.json
 
 kubeflowComponents:
   notebooks:

@@ -9,12 +9,14 @@ global:
   clusterDomain: cluster.local
   userIDHeader: kubeflow-userid
   userIDPrefix: ""
+  oidcIssuer: https://oidc.plural.sh/
+  jwksURI: https://oidc.plural.sh/.well-known/jwks.json
 
 image:
   repository: davidspek/profile-controller
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: 0.1.11
+  tag: 0.1.13
 
 kfam:
   image:

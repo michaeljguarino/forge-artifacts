@@ -44,6 +44,10 @@ spec:
             - $(WORKLOAD_IDENTITY)
             - -namespace-labels-path
             - $(DEFAULTNAMESPACELABELSPATH)
+            - -issuer
+            - $(ISSUER)
+            - jwks-uri
+            - $(JWKSURI)
           ports:
             - name: metrics
               containerPort: 8080
