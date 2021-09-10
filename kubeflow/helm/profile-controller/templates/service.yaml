@@ -9,8 +9,8 @@ spec:
   type: ClusterIP
   ports:
     - port: {{ .Values.service.port }}
-      targetPort: tcp-kfam
+      targetPort: kfam
       protocol: TCP
-      name: kfam
+      name: tcp-kfam
   selector:
     {{- include "profile-controller.selectorLabels" . | nindent 4 }}

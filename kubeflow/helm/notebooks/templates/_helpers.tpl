@@ -38,6 +38,7 @@ helm.sh/chart: {{ include "notebooks.chart" . }}
 {{ include "notebooks.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
@@ -46,6 +47,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 Selector labels
 */}}
 {{- define "notebooks.selectorLabels" -}}
+app: {{ include "notebooks.name" . }}
 app.kubernetes.io/name: {{ include "notebooks.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
@@ -54,6 +56,7 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 Controller selector labels
 */}}
 {{- define "notebooks.controllerSelectorLabels" -}}
+app: {{ include "notebooks.name" . }}-controller
 app.kubernetes.io/name: {{ include "notebooks.name" . }}-controller
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
@@ -62,6 +65,7 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 Pod Defaults selector labels
 */}}
 {{- define "notebooks.podDefaultsSelectorLabels" -}}
+app: {{ include "notebooks.name" . }}-pod-defaults
 app.kubernetes.io/name: {{ include "notebooks.name" . }}-pod-defaults
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}

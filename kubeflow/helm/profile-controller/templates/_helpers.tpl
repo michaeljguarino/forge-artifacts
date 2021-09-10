@@ -38,6 +38,7 @@ helm.sh/chart: {{ include "profile-controller.chart" . }}
 {{ include "profile-controller.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
@@ -46,6 +47,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 Selector labels
 */}}
 {{- define "profile-controller.selectorLabels" -}}
+app: {{ include "profile-controller.name" . }}
 app.kubernetes.io/name: {{ include "profile-controller.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
