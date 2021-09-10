@@ -44,6 +44,9 @@ sections:
     name: profile-controller
     configuration: []
   - type: HELM
+    name: pipelines
+    configuration: []
+  - type: HELM
     name: serving
     configuration: []
   - type: HELM
