@@ -9,8 +9,8 @@ spec:
   type: ClusterIP
   ports:
     - port: {{ .Values.metadata.grpc.service.port }}
-      targetPort: grpc-api
+      targetPort: api
       protocol: TCP
-      name: http-grpc-api
+      name: grpc-api
   selector:
     {{- include "pipelines.metadataGRPCServerSelectorLabels" . | nindent 6 }}

@@ -72,20 +72,20 @@ spec:
                   key: dbPort
                   name: pipeline-install-config
           ports:
-            - name: grpc-api
+            - name: api
               containerPort: 8080
               protocol: TCP
           livenessProbe:
             initialDelaySeconds: 3
             periodSeconds: 5
             tcpSocket:
-              port: grpc-api
+              port: api
             timeoutSeconds: 2
           readinessProbe:
             initialDelaySeconds: 3
             periodSeconds: 5
             tcpSocket:
-              port: grpc-api
+              port: api
             timeoutSeconds: 2
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
