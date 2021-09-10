@@ -1,2 +1,2 @@
-secrets:
-  rootPassword: {{ dedupe . "mysql-cluster.secrets.rootPassword" (randAlphaNum 20) }}
+secret:
+  rootPassword: {{ dedupe . "mysql-cluster.secret.rootPassword" (randAlphaNum 20) }}
