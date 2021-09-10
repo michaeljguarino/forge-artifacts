@@ -1,39 +1,20 @@
-# Default values for central-dashboard.
+# Default values for serving.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+replicaCount: 1
+
 global:
-  domain: kubeflow.kubeflow-aws.com
   istioNamespace: istio
   clusterDomain: cluster.local
   userIDHeader: kubeflow-userid
   userIDPrefix: ""
-  oidcIssuer: https://oidc.plural.sh/
-  jwksURI: https://oidc.plural.sh/.well-known/jwks.json
-
-kubeflowComponents:
-  notebooks:
-    enabled: true
-  tensorboards:
-    enabled: true
-  volumes:
-    enabled: true
-  katib:
-    enabled: true
-  pipelines:
-    enabled: false
-  serving:
-    enabled: true
-  operators:
-    enabled: true
-
-replicaCount: 1
 
 image:
-  repository: public.ecr.aws/j1r0q0g6/notebooks/central-dashboard
+  repository: kfserving/models-web-app
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: v1.3.0
+  tag: v0.6.0
 
 imagePullSecrets: []
 nameOverride: ""
@@ -47,6 +28,23 @@ serviceAccount:
   # The name of the service account to use.
   # If not set and create is true, a name is generated using the fullname template
   name: ""
+
+config: {}
+
+controller:
+  istio:
+    enabled: true
+    gateway: kubeflow/kubeflow-gateway
+  image:
+    repository: gcr.io/kfserving/kfserving-controller
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: v0.6.0
+  service:
+    metrics:
+      port: 8080
+    webhook:
+      port: 8443
 
 podAnnotations:
   sidecar.istio.io/inject: "true"
@@ -65,18 +63,13 @@ securityContext: {}
 service:
   port: 80
 
-config:
-  profileControllerService: kubeflow-profile-controller-kfam.kubeflow.svc.cluster.local
-  kfamPort: 8082
-  registrationFlow:
-    enabled: true
-
 virtualService:
   annotations: {}
+  prefix: /models
   gateways:
     - kubeflow-gateway
   hosts:
-    - kubeflow.kubeflow-aws.com
+    - '*'
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious

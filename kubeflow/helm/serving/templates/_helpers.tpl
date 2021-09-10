@@ -1,7 +1,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "katib.name" -}}
+{{- define "serving.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
@@ -10,7 +10,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "katib.fullname" -}}
+{{- define "serving.fullname" -}}
 {{- if .Values.fullnameOverride }}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -26,16 +26,16 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "katib.chart" -}}
+{{- define "serving.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Common labels
 */}}
-{{- define "katib.labels" -}}
-helm.sh/chart: {{ include "katib.chart" . }}
-{{ include "katib.selectorLabels" . }}
+{{- define "serving.labels" -}}
+helm.sh/chart: {{ include "serving.chart" . }}
+{{ include "serving.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -45,9 +45,9 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "katib.selectorLabels" -}}
-app: {{ include "katib.name" . }}
-app.kubernetes.io/name: {{ include "katib.name" . }}
+{{- define "serving.selectorLabels" -}}
+app: {{ include "serving.name" . }}
+app.kubernetes.io/name: {{ include "serving.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -55,19 +55,9 @@ version: {{ .Chart.AppVersion | quote }}
 {{/*
 Controller selector labels
 */}}
-{{- define "katib.controllerSelectorLabels" -}}
-app: {{ include "katib.name" . }}-controller
-app.kubernetes.io/name: {{ include "katib.name" . }}-controller
-app.kubernetes.io/instance: {{ .Release.Name }}
-version: {{ .Chart.AppVersion | quote }}
-{{- end }}
-
-{{/*
-DB Manager selector labels
-*/}}
-{{- define "katib.dbManagerSelectorLabels" -}}
-app: {{ include "katib.name" . }}-db-manager
-app.kubernetes.io/name: {{ include "katib.name" . }}-db-manager
+{{- define "serving.controllerSelectorLabels" -}}
+app: {{ include "serving.name" . }}-controller
+app.kubernetes.io/name: {{ include "serving.name" . }}-controller
 app.kubernetes.io/instance: {{ .Release.Name }}
 version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -75,9 +65,9 @@ version: {{ .Chart.AppVersion | quote }}
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "katib.serviceAccountName" -}}
+{{- define "serving.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create }}
-{{- default (include "katib.fullname" .) .Values.serviceAccount.name }}
+{{- default (include "serving.fullname" .) .Values.serviceAccount.name }}
 {{- else }}
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}

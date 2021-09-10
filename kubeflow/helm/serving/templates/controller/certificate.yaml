@@ -1,0 +1,15 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  labels: {{- include "serving.labels" . | nindent 4 }}
+  name: {{ include "serving.fullname" . }}-controller-certs
+  namespace: kubeflow
+spec:
+  commonName: {{ include "serving.fullname" . }}-controller.kubeflow.svc
+  dnsNames:
+    - {{ include "serving.fullname" . }}-controller.kubeflow.svc
+    - {{ include "serving.fullname" . }}-controller.kubeflow.svc.cluster.local
+  issuerRef:
+    kind: ClusterIssuer
+    name: kubeflow-self-signing-issuer
+  secretName: {{ include "serving.fullname" . }}-controller-certs

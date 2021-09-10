@@ -42,6 +42,10 @@ dependencies:
   version: 0.1.0
   repository: file://../katib
   condition: kubeflowComponents.katib.enabled
+- name: serving
+  version: 0.1.0
+  repository: file://../serving
+  condition: kubeflowComponents.serving.enabled
 - name: mysql-cluster
   version: 0.1.0
   repository: file://../mysql-cluster

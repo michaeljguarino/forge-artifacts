@@ -5,10 +5,6 @@ metadata:
   namespace: kubeflow
   labels:
     {{- include "volumes.labels" . | nindent 4 }}
-  annotations:
-    prometheus.io/path: /metrics
-    prometheus.io/port: {{ .Values.controller.service.port | quote }}
-    prometheus.io/scrape: "true"
 spec:
   type: ClusterIP
   ports:

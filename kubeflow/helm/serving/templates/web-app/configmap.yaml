@@ -1,0 +1,8 @@
+apiVersion: v1
+data:
+  USERID_HEADER: kubeflow-userid
+kind: ConfigMap
+metadata:
+  labels: {{- include "serving.labels" . | nindent 4 }}
+  name: {{ include "serving.fullname" . }}-web-app-parameters
+  namespace: kubeflow

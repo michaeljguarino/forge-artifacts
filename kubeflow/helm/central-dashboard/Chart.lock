@@ -14,6 +14,9 @@ dependencies:
 - name: katib
   repository: file://../katib
   version: 0.1.0
+- name: serving
+  repository: file://../serving
+  version: 0.1.0
 - name: mysql-cluster
   repository: file://../mysql-cluster
   version: 0.1.0
@@ -32,5 +35,5 @@ dependencies:
 - name: xgboost
   repository: file://../operators/xgboost
   version: 0.1.0
-digest: sha256:e126fbd02efb3430eace5028d8aac66013b3ba7fa38a9d09c9f8d313eb9e63ca
-generated: "2021-07-16T15:13:22.126590534+02:00"
+digest: sha256:1b917fe1c04d064b31f211dfee9b91eb39b9e4e633c765edbeedd2f5b955dffb
+generated: "2021-08-13T14:41:55.290925732+02:00"

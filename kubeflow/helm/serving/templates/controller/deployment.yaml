@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "volumes.fullname" . }}-controller
+  name: {{ include "serving.fullname" . }}-controller
   labels:
-    {{- include "volumes.labels" . | nindent 4 }}
+    {{- include "serving.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "volumes.controllerSelectorLabels" . | nindent 6 }}
+      {{- include "serving.controllerSelectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -22,13 +22,13 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "volumes.controllerSelectorLabels" . | nindent 8 }}
+        {{- include "serving.controllerSelectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "volumes.serviceAccountName" . }}-controller
+      serviceAccountName: {{ include "serving.serviceAccountName" . }}-controller
       terminationGracePeriodSeconds: 10
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
@@ -43,9 +43,19 @@ spec:
             - --enable-leader-election
           command:
             - /manager
+          env:
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: SECRET_NAME
+              value: kfserving-webhook-server-cert
           ports:
             - name: metrics
               containerPort: 8080
+              protocol: TCP
+            - name: webhook
+              containerPort: 9443
               protocol: TCP
           livenessProbe:
             httpGet:
@@ -57,9 +67,16 @@ spec:
               port: metrics
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-          envFrom:
-            - configMapRef:
-                name: {{ include "volumes.fullname" . }}-controller-config
+          volumeMounts:
+            - mountPath: /tmp/k8s-webhook-server/serving-certs
+              name: cert
+              readOnly: true
+      terminationGracePeriodSeconds: 10
+      volumes:
+        - name: cert
+          secret:
+            defaultMode: 420
+            secretName: {{ include "serving.fullname" . }}-controller-certs
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
