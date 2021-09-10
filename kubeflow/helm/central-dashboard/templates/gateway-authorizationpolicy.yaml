@@ -1,4 +1,21 @@
-{{- $fullName := include "central-dashboard.fullname" . -}}
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: {{ include "central-dashboard.fullname" . }}-allow-in-cluster-redirect
+  namespace: {{ .Values.global.istioNamespace }}
+  labels: {{- include "central-dashboard.labels" . | nindent 4 }}
+spec:
+  action: ALLOW
+  selector:
+    matchLabels:
+      app: istio-ingressgateway
+      istio: ingressgateway
+  rules:
+  - to:
+    - operation:
+        hosts:
+        - {{ .Values.global.domain }}   # needed for redirect after authentication
+---
 apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
 metadata:
@@ -18,24 +35,7 @@ spec:
   - to:
     - operation:
         hosts:
-        - {{ .Values.config.dashboardDomain }}
+        - {{ .Values.global.domain }}
         # - <<__subdomain_kubecost__>>.<<__domain__>>
         # - <<__subdomain_serving__>>.<<__domain__>>
         # - '*.<<__subdomain_serving__>>.<<__domain__>>'
----
-apiVersion: security.istio.io/v1beta1
-kind: AuthorizationPolicy
-metadata:
-  name: {{ $fullName }}-allow-in-cluster-redirect
-  namespace: {{ .Values.global.istioNamespace }}
-spec:
-  action: ALLOW
-  selector:
-    matchLabels:
-      app: istio-ingressgateway
-      istio: ingressgateway
-  rules:
-  - to:
-    - operation:
-        hosts:
-        - {{ .Values.config.dashboardDomain }}   # needed for redirect after authentication

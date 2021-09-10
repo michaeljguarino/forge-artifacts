@@ -3,6 +3,7 @@
 # Declare variables to be passed into your templates.
 
 global:
+  domain: kubeflow.kubeflow-aws.com
   istioNamespace: istio
   clusterDomain: cluster.local
   userIDHeader: kubeflow-userid
@@ -64,7 +65,7 @@ service:
 
 config:
   profileControllerService: kubeflow-profile-controller-kfam.kubeflow.svc.cluster.local
-  dashboardDomain: kubeflow.kubeflow-aws.com
+  kfamPort: 8081
   registrationFlow:
     enabled: true
 
@@ -73,7 +74,7 @@ virtualService:
   gateways:
     - kubeflow-gateway
   hosts:
-    - '*'
+    - kubeflow.kubeflow-aws.com
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious

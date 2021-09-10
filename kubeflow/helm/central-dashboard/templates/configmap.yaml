@@ -133,6 +133,7 @@ data:
   USERID_HEADER: {{ .Values.global.userIDHeader }}
   USERID_PREFIX: {{ .Values.global.userIDPrefix | quote }}
   PROFILES_KFAM_SERVICE_HOST: {{ .Values.config.profileControllerService }}
+  PROFILES_KFAM_SERVICE_PORT: {{ .Values.config.kfamPort }}
   DASHBOARD_CONFIGMAP: {{ include "central-dashboard.fullname" . }}-config
 kind: ConfigMap
 metadata:

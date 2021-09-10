@@ -29,6 +29,7 @@ data:
   USERID_HEADER: {{ .Values.global.userIDHeader }}
   USERID_PREFIX: {{ .Values.global.userIDPrefix | quote }}
   WORKLOAD_IDENTITY: ""
+  DEFAULTNAMESPACELABELSPATH: /etc/profile-controller/namespace-labels.yaml
 kind: ConfigMap
 metadata:
   labels: {{- include "profile-controller.labels" . | nindent 4 }}

@@ -9,7 +9,7 @@ spec:
     istio: ingressgateway
   servers:
   - hosts:
-    - {{ .Values.config.dashboardDomain }}
+    - {{ .Values.global.domain }}
     # - <<__subdomain_serving__>>.<<__domain__>>
     # - '*.<<__subdomain_serving__>>.<<__domain__>>'
     port:
@@ -20,7 +20,7 @@ spec:
     tls:
       httpsRedirect: true
   - hosts:
-    - {{ .Values.config.dashboardDomain }}
+    - {{ .Values.global.domain }}
     # - <<__subdomain_serving__>>.<<__domain__>>
     # - '*.<<__subdomain_serving__>>.<<__domain__>>'
     port:

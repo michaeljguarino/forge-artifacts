@@ -42,6 +42,8 @@ spec:
             - $(USERID_PREFIX)
             - -workload-identity
             - $(WORKLOAD_IDENTITY)
+            - -namespace-labels-path
+            - $(DEFAULTNAMESPACELABELSPATH)
           ports:
             - name: metrics
               containerPort: 8080

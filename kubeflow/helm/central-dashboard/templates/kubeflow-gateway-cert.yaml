@@ -9,8 +9,8 @@ spec:
   issuerRef:
     name: letsencrypt-prod
     kind: ClusterIssuer
-  commonName: {{ .Values.config.dashboardDomain }}
+  commonName: {{ .Values.global.domain }}
   dnsNames:
-  - {{ .Values.config.dashboardDomain }}
+  - {{ .Values.global.domain }}
   # - <<__subdomain_serving__>>.<<__domain__>>
   # - "*.<<__subdomain_serving__>>.<<__domain__>>"
