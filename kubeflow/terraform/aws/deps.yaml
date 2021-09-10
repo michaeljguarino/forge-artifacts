@@ -2,7 +2,7 @@ apiVersion: plural.sh/v1alpha1
 kind: Dependencies
 metadata:
   description: kubeflow aws setup
-  version: 0.1.5
+  version: 0.1.6
 spec:
   dependencies:
   - name: aws-bootstrap

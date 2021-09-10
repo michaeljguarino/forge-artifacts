@@ -14,7 +14,7 @@ variable "cluster_name" {
 
 variable "kubeflow_serviceaccount" {
   type = string
-  default = "kubeflow-operator"
+  default = "default-editor"
 }
 
 variable "role_name" {
