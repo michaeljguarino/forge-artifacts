@@ -15,58 +15,58 @@ type: application
 # This is the chart version. This version number should be incremented each time you make changes
 # to the chart and its templates, including the app version.
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 0.1.8
+version: 0.1.9
 
 # This is the version number of the application being deployed. This version number should be
 # incremented each time you make changes to the application. Versions are not expected to
 # follow Semantic Versioning. They should reflect the version the application is using.
 # It is recommended to use it with quotes.
 appVersion: "1.3.0"
-dependencies:
-- name: profile-controller
-  version: 0.1.2
-  repository: file://../profile-controller
-- name: notebooks
-  version: 0.1.1
-  repository: file://../notebooks
-  condition: kubeflowComponents.notebooks.enabled
-- name: volumes
-  version: 0.1.1
-  repository: file://../volumes
-  condition: kubeflowComponents.volumes.enabled
-- name: tensorboards
-  version: 0.1.1
-  repository: file://../tensorboards
-  condition: kubeflowComponents.tensorboards.enabled
-- name: katib
-  version: 0.1.2
-  repository: file://../katib
-  condition: kubeflowComponents.katib.enabled
-- name: serving
-  version: 0.1.3
-  repository: file://../serving
-  condition: kubeflowComponents.serving.enabled
-- name: mysql-cluster
-  version: 0.1.1
-  repository: file://../mysql-cluster
-  condition: kubeflowComponents.katib.enabled
-- name: mpi
-  version: 0.1.1
-  repository: file://../operators/mpi
-  condition: kubeflowComponents.operators.enabled
-- name: mxnet
-  version: 0.1.1
-  repository: file://../operators/mxnet
-  condition: kubeflowComponents.operators.enabled
-- name: pytorch
-  version: 0.1.1
-  repository: file://../operators/pytorch
-  condition: kubeflowComponents.operators.enabled
-- name: tensorflow
-  version: 0.1.1
-  repository: file://../operators/tensorflow
-  condition: kubeflowComponents.operators.enabled
-- name: xgboost
-  version: 0.1.1
-  repository: file://../operators/xgboost
-  condition: kubeflowComponents.operators.enabled
+# dependencies:
+# - name: profile-controller
+#   version: 0.1.2
+#   repository: file://../profile-controller
+# - name: notebooks
+#   version: 0.1.1
+#   repository: file://../notebooks
+#   condition: kubeflowComponents.notebooks.enabled
+# - name: volumes
+#   version: 0.1.1
+#   repository: file://../volumes
+#   condition: kubeflowComponents.volumes.enabled
+# - name: tensorboards
+#   version: 0.1.1
+#   repository: file://../tensorboards
+#   condition: kubeflowComponents.tensorboards.enabled
+# - name: katib
+#   version: 0.1.2
+#   repository: file://../katib
+#   condition: kubeflowComponents.katib.enabled
+# - name: serving
+#   version: 0.1.3
+#   repository: file://../serving
+#   condition: kubeflowComponents.serving.enabled
+# - name: mysql-cluster
+#   version: 0.1.1
+#   repository: file://../mysql-cluster
+#   condition: kubeflowComponents.katib.enabled
+# - name: mpi
+#   version: 0.1.1
+#   repository: file://../operators/mpi
+#   condition: kubeflowComponents.operators.enabled
+# - name: mxnet
+#   version: 0.1.1
+#   repository: file://../operators/mxnet
+#   condition: kubeflowComponents.operators.enabled
+# - name: pytorch
+#   version: 0.1.1
+#   repository: file://../operators/pytorch
+#   condition: kubeflowComponents.operators.enabled
+# - name: tensorflow
+#   version: 0.1.1
+#   repository: file://../operators/tensorflow
+#   condition: kubeflowComponents.operators.enabled
+# - name: xgboost
+#   version: 0.1.1
+#   repository: file://../operators/xgboost
+#   condition: kubeflowComponents.operators.enabled
