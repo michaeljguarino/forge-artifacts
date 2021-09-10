@@ -1,0 +1,33 @@
+{{- $fullName := include "central-dashboard.fullname" . -}}
+{{- $svcPort := .Values.service.port -}}
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: {{ $fullName }}
+  namespace: kubeflow
+  labels:
+    {{- include "central-dashboard.selectorLabels" . | nindent 4 }}
+  {{- with .Values.virtualService.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  gateways:
+    {{- range .Values.virtualService.gateways }}
+    - {{ . | quote }}
+    {{- end }}
+  hosts:
+    {{- range .Values.virtualService.hosts }}
+    - {{ . | quote }}
+    {{- end }}
+  http:
+    - match:
+        - uri:
+            prefix: /
+      rewrite:
+        uri: /
+      route:
+        - destination:
+            host: {{ $fullName }}
+            port:
+              number: {{ $svcPort }}

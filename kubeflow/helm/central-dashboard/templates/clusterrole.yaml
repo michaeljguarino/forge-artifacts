@@ -1,0 +1,18 @@
+{{- $fullName := include "central-dashboard.fullname" . -}}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    {{- include "central-dashboard.labels" . | nindent 4 }}
+  name: {{ $fullName }}
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - events
+      - namespaces
+      - nodes
+    verbs:
+      - get
+      - list
+      - watch
