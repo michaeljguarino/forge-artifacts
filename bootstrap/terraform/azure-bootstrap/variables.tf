@@ -28,6 +28,11 @@ variable "os_disk_size" {
   default = 50
 }
 
+variable "os_disk_type" {
+  type = number
+  default = Ephemeral
+}
+
 variable "private_cluster" {
   type = bool
   default = false
