@@ -14,6 +14,7 @@ data:
       secretKeySecret:
         name: pipelines-s3-secret
         key: S3_SECRETKEY
+      keyFormat: {{ printf "\"pipelines/{{workflow.namespace}}/{{workflow.name}}/{{pod.name}}\"" }}
   containerRuntimeExecutor: pns
   executor: |
     imagePullPolicy: IfNotPresent
