@@ -10,63 +10,71 @@ spec:
     repo: bootstrap
     version: '>= 0.5.1'
   - type: helm
+    name: istio
+    repo: istio
+    version: '>= 0.1.66'
+  - type: helm
+    name: oauth2-proxy
+    repo: oauth2-proxy
+    version: '>= 0.1.11'
+  - type: helm
     name: katib
     repo: kubeflow
-    version: '>= 0.1.0'
+    version: '>= 0.1.2'
     optional: true
   - type: helm
     name: notebooks
     repo: kubeflow
-    version: '>= 0.1.0'
+    version: '>= 0.1.1'
     optional: true
   - type: helm
     name: mpi
     repo: kubeflow
-    version: '>= 0.1.0'
+    version: '>= 0.1.1'
     optional: true
   - type: helm
     name: mxnet
     repo: kubeflow
-    version: '>= 0.1.0'
+    version: '>= 0.1.1'
     optional: true
   - type: helm
     name: pytorch
     repo: kubeflow
-    version: '>= 0.1.0'
+    version: '>= 0.1.1'
     optional: true
   - type: helm
     name: tensorflow
     repo: kubeflow
-    version: '>= 0.1.0'
+    version: '>= 0.1.1'
     optional: true
   - type: helm
     name: xgboost
     repo: kubeflow
-    version: '>= 0.1.0'
+    version: '>= 0.1.1'
     optional: true
   - type: helm
     name: pipelines
     repo: kubeflow
-    version: '>= 0.1.0'
+    version: '>= 0.1.2'
     optional: true
   - type: helm
     name: profile-controller
     repo: kubeflow
-    version: '>= 0.1.0'
+    version: '>= 0.1.1'
   - type: helm
     name: serving
     repo: kubeflow
-    version: '>= 0.1.0'
+    version: '>= 0.1.2'
     optional: true
   - type: helm
     name: tensorboards
     repo: kubeflow
-    version: '>= 0.1.0'
+    version: '>= 0.1.1'
     optional: true
   - type: helm
     name: volumes
     repo: kubeflow
-    version: '>= 0.1.0'
+    version: '>= 0.1.1'
     optional: true
   - type: terraform
     name: aws

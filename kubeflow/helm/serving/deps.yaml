@@ -9,6 +9,10 @@ spec:
     name: bootstrap
     repo: bootstrap
     version: '>= 0.5.1'
+  - type: helm
+    name: knative
+    repo: knative
+    version: '>= 0.1.1'
   - type: terraform
     name: aws
     repo: kubeflow

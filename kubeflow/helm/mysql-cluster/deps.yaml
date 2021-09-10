@@ -9,6 +9,10 @@ spec:
     name: bootstrap
     repo: bootstrap
     version: '>= 0.5.1'
+  - type: helm
+    name: mysql
+    repo: mysql
+    version: '>= 0.1.2'
   - type: terraform
     name: aws
     repo: kubeflow
