@@ -30,6 +30,17 @@ nextcloud:
             )
           )
         );
+    {{ $redisNamespace := namespace "redis" }}
+    extraEnv:
+      - name: REDIS_HOST
+        value: redis-master.{{ $redisNamespace }}
+      - name: REDIS_HOST_PORT
+        value: 6379
+      - name: REDIS_HOST_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: redis-secret
+            key: password
   externalDatabase:
     enabled: true
     type: postgresql
@@ -39,6 +50,9 @@ nextcloud:
       secretName: nextcloud.plural-nextcloud.credentials.postgresql.acid.zalan.do
       usernameKey: username
       passwordKey: password
+
+{{ $creds := secret $redisNamespace "redis-password" }}
+redisPassword: $creds
 
 secret:
   username: admin

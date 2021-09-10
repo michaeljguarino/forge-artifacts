@@ -333,7 +333,7 @@ nextcloud:
   ##
   persistence:
     # Nextcloud Data (/var/www/html)
-    enabled: false
+    enabled: true
     annotations: {}
     ## nextcloud data Persistent Volume Storage Class
     ## If defined, storageClassName: <storageClass>
@@ -409,11 +409,11 @@ nextcloud:
   ## Prometheus Exporter / Metrics
   ##
   metrics:
-    enabled: false
+    enabled: true
 
     replicaCount: 1
     # The metrics exporter needs to know how you serve Nextcloud either http or https
-    https: false
+    https: true
     timeout: 5s
 
     image:
@@ -442,7 +442,7 @@ nextcloud:
       labels: {}
 
   rbac:
-    enabled: false
+    enabled: true
     serviceaccount:
       create: true
       name: nextcloud-serviceaccount
