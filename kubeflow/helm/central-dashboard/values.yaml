@@ -16,7 +16,7 @@ kubeflowComponents:
   volumes:
     enabled: true
   katib:
-    enabled: false
+    enabled: true
   pipelines:
     enabled: false
   serving:

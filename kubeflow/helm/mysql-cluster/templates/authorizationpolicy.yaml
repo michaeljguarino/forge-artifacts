@@ -1,11 +1,15 @@
 apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
 metadata:
-  name: mysql-allow-all
+  name: mysql-percona-allow-all
+  namespace: kubeflow
+  # annotations:
+  #   helm.sh/hook: post-install
+  #   helm.sh/hook-weight: "5"
 spec:
   action: ALLOW
   selector:
     matchLabels:
-      app.kubernetes.io/instance: kubeflow-mysql-cluster
+      app.kubernetes.io/name: percona-xtradb-cluster
   rules:
   - {}

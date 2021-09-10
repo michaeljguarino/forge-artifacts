@@ -1,0 +1,90 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "katib.fullname" . }}-db-manager
+  labels:
+    {{- include "katib.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "katib.dbManagerSelectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "katib.dbManagerSelectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "katib.serviceAccountName" . }}-db-manager
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.dbManager.image.repository }}:{{ .Values.dbManager.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.dbManager.image.pullPolicy }}
+          command:
+            - ./katib-db-manager
+          ports:
+            - name: api
+              containerPort: 6789
+              protocol: TCP
+          livenessProbe:
+            exec:
+              command:
+                - /bin/grpc_health_probe
+                - -addr=:6789
+            failureThreshold: 5
+            initialDelaySeconds: 10
+            periodSeconds: 60
+          readinessProbe:
+            exec:
+              command:
+                - /bin/grpc_health_probe
+                - -addr=:6789
+            initialDelaySeconds: 5
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+            - name: DB_NAME
+              value: mysql
+            - name: DB_USER
+              value: root
+              # valueFrom:
+                # secretKeyRef:
+                #   key: {{ .Values.dbManager.config.secret.userKey }}
+                #   name: {{ .Values.dbManager.config.secret.name }}
+            - name: DB_PASSWORD
+              value: root_password
+              # valueFrom:
+              #   secretKeyRef:
+              #     key: {{ .Values.dbManager.config.secret.passwordKey }}
+              #     name: {{ .Values.dbManager.config.secret.name }}
+            - name: KATIB_MYSQL_DB_DATABASE
+              value: {{ .Values.dbManager.config.database.name }}
+            - name: KATIB_MYSQL_DB_HOST
+              value: {{ .Values.dbManager.config.database.host }}
+            - name: KATIB_MYSQL_DB_PORT
+              value: {{ .Values.dbManager.config.database.port | quote }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

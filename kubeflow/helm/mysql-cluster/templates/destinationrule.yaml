@@ -1,0 +1,27 @@
+apiVersion: "networking.istio.io/v1alpha3"
+kind: DestinationRule
+metadata:
+  name: {{ include "mysql-cluster.fullname" . }}-pxc
+  namespace: kubeflow
+  annotations:
+    helm.sh/hook: post-install
+    helm.sh/hook-weight: "5"
+spec:
+  host: {{ include "mysql-cluster.fullname" . }}-pxc.kubeflow.svc.cluster.local
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+---
+apiVersion: "networking.istio.io/v1alpha3"
+kind: DestinationRule
+metadata:
+  name: {{ include "mysql-cluster.fullname" . }}-pxc-unready
+  namespace: kubeflow
+  annotations:
+    helm.sh/hook: post-install
+    helm.sh/hook-weight: "5"
+spec:
+  host: {{ include "mysql-cluster.fullname" . }}-pxc-unready.kubeflow.svc.cluster.local
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL

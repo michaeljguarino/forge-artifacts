@@ -4,11 +4,17 @@
 
 replicaCount: 1
 
+global:
+  istioNamespace: istio
+  clusterDomain: cluster.local
+  userIDHeader: kubeflow-userid
+  userIDPrefix: ""
+
 image:
-  repository: nginx
+  repository: docker.io/kubeflowkatib/katib-new-ui
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: ""
+  tag: v0.11.1
 
 imagePullSecrets: []
 nameOverride: ""
@@ -23,7 +29,41 @@ serviceAccount:
   # If not set and create is true, a name is generated using the fullname template
   name: ""
 
-podAnnotations: {}
+controller:
+  istio:
+    enabled: true
+    gateway: kubeflow/kubeflow-gateway
+  image:
+    repository: docker.io/kubeflowkatib/katib-controller
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: v0.11.1
+  service:
+    webhook:
+      port: 8443
+    metrics:
+      port: 8080
+
+dbManager:
+  image:
+    repository: docker.io/kubeflowkatib/katib-db-manager
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: v0.11.1
+  service:
+    port: 6789
+  config:
+    secret:
+      name: kubeflow-db-user
+      userKey: USERNAME
+      passwordKey: PASSWORD
+    database:
+      name: katib
+      host: cluster1-pxc.kubeflow.svc.cluster.local
+      port: 3306
+
+podAnnotations:
+  sidecar.istio.io/inject: "true"
 
 podSecurityContext: {}
   # fsGroup: 2000
@@ -37,24 +77,15 @@ securityContext: {}
   # runAsUser: 1000
 
 service:
-  type: ClusterIP
   port: 80
 
-ingress:
-  enabled: false
-  className: ""
+virtualService:
   annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
+  prefix: /katib
+  gateways:
+    - kubeflow-gateway
   hosts:
-    - host: chart-example.local
-      paths:
-        - path: /
-          pathType: ImplementationSpecific
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
+    - '*'
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious

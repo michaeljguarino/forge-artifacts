@@ -1,0 +1,139 @@
+apiVersion: v1
+data:
+  early-stopping: |-
+    {
+      "medianstop": {
+        "image": "docker.io/kubeflowkatib/earlystopping-medianstop:v0.11.1"
+      }
+    }
+  metrics-collector-sidecar: |-
+    {
+      "StdOut": {
+        "image": "docker.io/kubeflowkatib/file-metrics-collector:v0.11.1"
+      },
+      "File": {
+        "image": "docker.io/kubeflowkatib/file-metrics-collector:v0.11.1"
+      },
+      "TensorFlowEvent": {
+        "image": "docker.io/kubeflowkatib/tfevent-metrics-collector:v0.11.1",
+        "resources": {
+          "limits": {
+            "memory": "1Gi"
+          }
+        }
+      }
+    }
+  suggestion: |-
+    {
+      "random": {
+        "image": "docker.io/kubeflowkatib/suggestion-hyperopt:v0.11.1"
+      },
+      "tpe": {
+        "image": "docker.io/kubeflowkatib/suggestion-hyperopt:v0.11.1"
+      },
+      "grid": {
+        "image": "docker.io/kubeflowkatib/suggestion-chocolate:v0.11.1"
+      },
+      "hyperband": {
+        "image": "docker.io/kubeflowkatib/suggestion-hyperband:v0.11.1"
+      },
+      "bayesianoptimization": {
+        "image": "docker.io/kubeflowkatib/suggestion-skopt:v0.11.1"
+      },
+      "cmaes": {
+        "image": "docker.io/kubeflowkatib/suggestion-goptuna:v0.11.1"
+      },
+      "enas": {
+        "image": "docker.io/kubeflowkatib/suggestion-enas:v0.11.1",
+        "resources": {
+          "limits": {
+            "memory": "200Mi"
+          }
+        }
+      },
+      "darts": {
+        "image": "docker.io/kubeflowkatib/suggestion-darts:v0.11.1"
+      }
+    }
+kind: ConfigMap
+metadata:
+  name: katib-config
+  namespace: kubeflow
+---
+apiVersion: v1
+data:
+  defaultTrialTemplate.yaml: |-
+    apiVersion: batch/v1
+    kind: Job
+    spec:
+      template:
+        spec:
+          containers:
+            - name: training-container
+              image: docker.io/kubeflowkatib/mxnet-mnist:v1beta1-45c5727
+              command:
+                - "python3"
+                - "/opt/mxnet-mnist/mnist.py"
+                - "--batch-size=64"
+                - "--lr=${trialParameters.learningRate}"
+                - "--num-layers=${trialParameters.numberLayers}"
+                - "--optimizer=${trialParameters.optimizer}"
+          restartPolicy: Never
+  enasCPUTemplate: |-
+    apiVersion: batch/v1
+    kind: Job
+    spec:
+      template:
+        spec:
+          containers:
+            - name: training-container
+              image: docker.io/kubeflowkatib/enas-cnn-cifar10-cpu:v1beta1-45c5727
+              command:
+                - python3
+                - -u
+                - RunTrial.py
+                - --num_epochs=1
+                - "--architecture=\"${trialParameters.neuralNetworkArchitecture}\""
+                - "--nn_config=\"${trialParameters.neuralNetworkConfig}\""
+          restartPolicy: Never
+  pytorchJobTemplate: |-
+    apiVersion: "kubeflow.org/v1"
+    kind: PyTorchJob
+    spec:
+      pytorchReplicaSpecs:
+        Master:
+          replicas: 1
+          restartPolicy: OnFailure
+          template:
+            spec:
+              containers:
+                - name: pytorch
+                  image: docker.io/kubeflowkatib/pytorch-mnist:v1beta1-45c5727
+                  imagePullPolicy: Always
+                  command:
+                    - "python3"
+                    - "/opt/pytorch-mnist/mnist.py"
+                    - "--epochs=1"
+                    - "--lr=${trialParameters.learningRate}"
+                    - "--momentum=${trialParameters.momentum}"
+        Worker:
+          replicas: 2
+          restartPolicy: OnFailure
+          template:
+            spec:
+              containers:
+                - name: pytorch
+                  image: docker.io/kubeflowkatib/pytorch-mnist:v1beta1-45c5727
+                  imagePullPolicy: Always
+                  command:
+                    - "python3"
+                    - "/opt/pytorch-mnist/mnist.py"
+                    - "--epochs=1"
+                    - "--lr=${trialParameters.learningRate}"
+                    - "--momentum=${trialParameters.momentum}"
+kind: ConfigMap
+metadata:
+  labels:
+    app: katib-trial-templates
+  name: trial-template
+  namespace: kubeflow

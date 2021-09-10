@@ -1,9 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "katib.fullname" . }}
+  name: {{ include "katib.fullname" . }}-web-app
   labels:
     {{- include "katib.labels" . | nindent 4 }}
+  namespace: kubeflow
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
@@ -24,29 +25,38 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "katib.serviceAccountName" . }}
+      serviceAccountName: {{ include "katib.serviceAccountName" . }}-web-app
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
-        - name: {{ .Chart.Name }}
+        - name: {{ .Chart.Name }}-web-app
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args:
+            - --port=8080
+          command:
+            - ./katib-ui
           ports:
-            - name: http
-              containerPort: 80
+            - name: website
+              containerPort: 8080
               protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: /
-              port: http
-          readinessProbe:
-            httpGet:
-              path: /
-              port: http
+          # livenessProbe:
+          #   httpGet:
+          #     path: / # TODO: check if this is correct
+          #     port: website
+          # readinessProbe:
+          #   httpGet:
+          #     path: / # TODO: check if this is correct
+          #     port: website
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          env:
+            - name: KATIB_CORE_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

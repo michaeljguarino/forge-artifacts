@@ -1,0 +1,29 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: create-databases-and-users
+  namespace: kubeflow
+  annotations:
+    sidecar.istio.io/inject: "false"
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-weight: "0"
+    helm.sh/hook-delete-policy: hook-succeeded
+spec:
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "false"
+    spec:
+      containers:
+      - name: create-pipelines-db
+        image: percona:8.0
+        command: ["/bin/bash"]
+        # args: ["-c", "echo 'creating database'; mysql -hcluster1-pxc.kubeflow.svc.cluster.local -uroot -p${root} -e \"CREATE DATABASE IF NOT EXISTS pipelines\"; echo 'creating user'; mysql -hcluster1-pxc.kubeflow.svc.cluster.local -uroot -p${root} -e \"CREATE USER IF NOT EXISTS '${USERNAME}' IDENTIFIED BY '${PASSWORD}'\"; echo 'granting user permissions'; mysql -hcluster1-pxc.kubeflow.svc.cluster.local -uroot -p${root} -e \"GRANT ALL PRIVILEGES ON pipelines.* TO '${USERNAME}'@'%'\"; mysql -hcluster1-pxc.kubeflow.svc.cluster.local -uroot -p${root} -e \"FLUSH PRIVILEGES\"; exit"]
+        # args: ["-c", "echo 'creating database'; mysql --ssl-mode=REQUIRED --ssl-ca=/etc/mysql/ssl/ca.crt --ssl-cert=/etc/mysql/ssl/tls.crt --ssl-key=/etc/mysql/ssl/tls.key -hcluster1-pxc.kubeflow.svc.cluster.local -uroot -p${root} -e \"CREATE DATABASE IF NOT EXISTS pipelines\"; echo 'databse created'; exit"]
+        args: ["-c", "echo 'creating databases'; mysql -h{{ include "mysql-cluster.fullname" . }}-pxc.kubeflow.svc.cluster.local -uroot -p${root} -e \"CREATE DATABASE IF NOT EXISTS pipelines\"; mysql -h{{ include "mysql-cluster.fullname" . }}-pxc.kubeflow.svc.cluster.local -uroot -p${root} -e \"CREATE DATABASE IF NOT EXISTS katib\"; echo 'creating user'; mysql -h{{ include "mysql-cluster.fullname" . }}-pxc.kubeflow.svc.cluster.local -uroot -p${root} -e \"CREATE USER IF NOT EXISTS '${USERNAME}' IDENTIFIED BY '${PASSWORD}'\"; echo 'granting user permissions'; mysql -h{{ include "mysql-cluster.fullname" . }}-pxc.kubeflow.svc.cluster.local -uroot -p${root} -e \"GRANT ALL PRIVILEGES ON pipelines.* TO '${USERNAME}'@'%'\"; mysql -h{{ include "mysql-cluster.fullname" . }}-pxc.kubeflow.svc.cluster.local -uroot -p${root} -e \"GRANT ALL PRIVILEGES ON katib.* TO '${USERNAME}'@'%'\"; mysql -h{{ include "mysql-cluster.fullname" . }}-pxc.kubeflow.svc.cluster.local -uroot -p${root} -e \"FLUSH PRIVILEGES\""]
+        envFrom:
+        - secretRef:
+            name: my-cluster-secrets
+        - secretRef:
+            name: kubeflow-db-user
+      restartPolicy: Never

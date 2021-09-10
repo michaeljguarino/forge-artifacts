@@ -1,0 +1,34 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: {{ include "katib.fullname" . }}-web-app
+  namespace: kubeflow
+  labels: {{- include "katib.labels" . | nindent 4 }}
+  {{- with .Values.virtualService.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  gateways:
+    {{- range .Values.virtualService.gateways }}
+    - {{ . | quote }}
+    {{- end }}
+  hosts:
+    {{- range .Values.virtualService.hosts }}
+    - {{ . | quote }}
+    {{- end }}
+  http:
+    - headers:
+        request:
+          add:
+            x-forwarded-prefix: {{ .Values.virtualService.prefix }}
+      match:
+        - uri:
+            prefix: {{ .Values.virtualService.prefix }}/
+      rewrite:
+        uri: {{ .Values.virtualService.prefix }}/
+      route:
+        - destination:
+            host: {{ include "katib.fullname" . }}-web-app.kubeflow.svc.{{ .Values.global.clusterDomain }}
+            port:
+              number: {{ .Values.service.port }}

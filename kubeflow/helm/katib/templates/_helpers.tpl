@@ -38,6 +38,7 @@ helm.sh/chart: {{ include "katib.chart" . }}
 {{ include "katib.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
@@ -46,7 +47,26 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 Selector labels
 */}}
 {{- define "katib.selectorLabels" -}}
+app: {{ include "katib.name" . }}
 app.kubernetes.io/name: {{ include "katib.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+
+{{/*
+Controller selector labels
+*/}}
+{{- define "katib.controllerSelectorLabels" -}}
+app: {{ include "katib.name" . }}-controller
+app.kubernetes.io/name: {{ include "katib.name" . }}-controller
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+
+{{/*
+Pod Defaults selector labels
+*/}}
+{{- define "katib.dbManagerSelectorLabels" -}}
+app: {{ include "katib.name" . }}-db-manager
+app.kubernetes.io/name: {{ include "katib.name" . }}-db-manager
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
