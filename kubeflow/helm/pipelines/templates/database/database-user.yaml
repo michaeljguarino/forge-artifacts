@@ -5,7 +5,7 @@ metadata:
   namespace: kubeflow
   labels: {{- include "pipelines.labels" . | nindent 4 }}
 spec:
-  user: {{ .Values.config.databases.username }}
+  user: {{ .Values.config.databases.connection.username }}
   clusterRef:
     name: kubeflow-mysql-cluster
     namespace: kubeflow
