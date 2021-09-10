@@ -17,7 +17,7 @@ helm:
   helm/tensorboards: h1:msmgVDZE26n/4edZq7XiOrYgd37j5JjD9f9hakPFOcg=
   helm/volumes: h1:2X1zm3d8mgrjwYvbzdh1x0icEJavDMoQmmyzAhfu1Nk=
 recipe:
-  plural/recipes/kubeflow-aws.yaml: 1bf7f157b61fa3da954911d3ac81ac0cc6f27669f900cd7a182e9d11b0d52923
+  plural/recipes/kubeflow-aws.yaml: 27f5be0841453093b97ef39ec8e362fd47428d9a5bde5978fa266a3248cc2e2f
 integration: {}
 crd: {}
 ird: {}

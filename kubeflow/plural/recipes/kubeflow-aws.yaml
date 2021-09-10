@@ -17,6 +17,6 @@ sections:
     name: central-dashboard
     configuration:
     - name: hostname
-      documentation: FQDN to use for your airflow installation
+      documentation: FQDN to use for your Kubeflow installation
       type: STRING
   
