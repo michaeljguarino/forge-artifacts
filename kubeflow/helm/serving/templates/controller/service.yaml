@@ -12,7 +12,7 @@ spec:
       targetPort: webhook
       protocol: TCP
       name: http-webhook
-    - port: {{ .Values.controller.service.port }}
+    - port: {{ .Values.controller.service.metrics.port }}
       targetPort: metrics
       protocol: TCP
       name: http-metrics
