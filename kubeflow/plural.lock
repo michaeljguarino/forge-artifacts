@@ -3,7 +3,7 @@ terraform:
   terraform/aws: h1:0jjH78mG5NmfYkP17FTCPnBc1mi+cVHAwsgjcTlI2nk=
 helm:
   helm/central-dashboard: h1:X4I9MtfOGp6KQafZ4bw5YNENIcby0ZXkllJT5rdlfQ0=
-  helm/katib: h1:djDkxENylWIc1g9M4IkuB3Id9r7p9dJKYhhBO5jhWzU=
+  helm/katib: h1:3kYC80xiy2qgMfUYWboxk2zGdB2WM2nz5a2ZskZ2fWY=
   helm/mysql-cluster: h1:OF80WRLERGHwFNiyJdg7C1u8oRTj0tL4jRR7IERbykE=
   helm/notebooks: h1:t7Ff/4V21Z/QDnSeZ2Ufd65kD5gIkZyPIS57f2eEWZk=
   helm/operators/mpi: h1:SWkK/b7S/7bZSOjRsyFPcYNfmyRizTHHBBJQcg659Z8=
