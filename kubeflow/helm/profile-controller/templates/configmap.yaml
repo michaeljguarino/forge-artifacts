@@ -89,7 +89,7 @@ data:
     data:
       number: "{{ .Count }}"
       items-are-made-of: {{ .Material }}
-  test-kfp.yaml: |-
+  kfp.yaml: |-
     apiVersion: v1
     kind: ConfigMap
     metadata:
