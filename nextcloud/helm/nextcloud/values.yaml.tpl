@@ -23,10 +23,16 @@ nextcloud:
             'class' => '\\OC\\Files\\ObjectStore\\S3',
             'arguments' => array(
               'bucket'     => '{{ .Values.nextcloud_bucket }}',
-              'autocreate' => true,
+              'autocreate' => false,
               'key'        => getenv('S3_KEY'),
               'secret'     => getenv('S3_SECRET'),
+              {{- if eq .Provider "azure" }}
+              'hostname'   => {{- .Configuration.minio.hostname | quote -}},
+              'region'     => 'us-east-1',
+              'use_path_style'=>true,
+              {{- else }}
               'region'     => 'us-east-2',
+              {{- end }}
               'use_ssl'    => true
             )
           )
