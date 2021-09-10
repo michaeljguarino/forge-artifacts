@@ -27,11 +27,11 @@ data:
       },
       "ObjectStoreConfig": {
         "Host": "s3.amazonaws.com",
-        "Region": "<<__aws_region__>>",
+        "Region": "us-east-2",
         "Secure": true,
-        "BucketName": "<<__s3.bucket.pipelines__>>",
-        "PipelineFolder": "<<__s3.path.pipelines__>>",
-        "PipelinePath": "<<__s3.path.pipelines__>>",
+        "BucketName": "pipelines-bucket",
+        "PipelineFolder": "pipelines",
+        "PipelinePath": "pipelines",
         "AccessKey": "",
         "SecretAccessKey": ""
       },
