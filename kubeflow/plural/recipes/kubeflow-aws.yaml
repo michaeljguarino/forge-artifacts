@@ -14,7 +14,7 @@ sections:
       type: STRING
       documentation: bucket to store the logs in
   - type: HELM
-    name: kubeflow
+    name: central-dashboard
     configuration:
     - name: hostname
       documentation: FQDN to use for your airflow installation

@@ -113,16 +113,6 @@ version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
 {{/*
-Metadata Writer selector labels
-*/}}
-{{- define "pipelines.metadataWriterSelectorLabels" -}}
-app: {{ include "pipelines.name" . }}-metadata-writer
-app.kubernetes.io/name: {{ include "pipelines.name" . }}-metadata-writer
-app.kubernetes.io/instance: {{ .Release.Name }}
-version: {{ .Chart.AppVersion | quote }}
-{{- end }}
-
-{{/*
 Viewer selector labels
 */}}
 {{- define "pipelines.viewerSelectorLabels" -}}

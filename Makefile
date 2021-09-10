@@ -115,3 +115,6 @@ upload-influx: # uploads influx artifacts
 
 upload-minio: # uploads minio artifacts
 	plural apply -f minio/Pluralfile
+
+upload-kubeflow: # uploads kubeflow artifacts
+	plural apply -f kubeflow/Pluralfile

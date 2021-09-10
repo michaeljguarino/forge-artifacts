@@ -9,6 +9,65 @@ spec:
     name: bootstrap
     repo: bootstrap
     version: '>= 0.5.1'
+  - type: helm
+    name: katib
+    repo: kubeflow
+    version: '>= 0.1.0'
+    optional: true
+  - type: helm
+    name: notebooks
+    repo: kubeflow
+    version: '>= 0.1.0'
+    optional: true
+  - type: helm
+    name: mpi
+    repo: kubeflow
+    version: '>= 0.1.0'
+    optional: true
+  - type: helm
+    name: mxnet
+    repo: kubeflow
+    version: '>= 0.1.0'
+    optional: true
+  - type: helm
+    name: pytorch
+    repo: kubeflow
+    version: '>= 0.1.0'
+    optional: true
+  - type: helm
+    name: tensorflow
+    repo: kubeflow
+    version: '>= 0.1.0'
+    optional: true
+  - type: helm
+    name: xgboost
+    repo: kubeflow
+    version: '>= 0.1.0'
+    optional: true
+  - type: helm
+    name: pipelines
+    repo: kubeflow
+    version: '>= 0.1.0'
+    optional: true
+  - type: helm
+    name: profile-controller
+    repo: kubeflow
+    version: '>= 0.1.0'
+  - type: helm
+    name: serving
+    repo: kubeflow
+    version: '>= 0.1.0'
+    optional: true
+  - type: helm
+    name: tensorboards
+    repo: kubeflow
+    version: '>= 0.1.0'
+    optional: true
+  - type: helm
+    name: volumes
+    repo: kubeflow
+    version: '>= 0.1.0'
+    optional: true
   - type: terraform
     name: aws
     repo: kubeflow

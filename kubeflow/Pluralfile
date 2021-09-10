@@ -1,7 +1,16 @@
 REPO kubeflow
 
 TF terraform/*
-HELM helm/central-dashboard/*
+HELM helm/central-dashboard
+HELM helm/katib
+HELM helm/mysql-cluster
+HELM helm/notebooks
+HELM helm/operators/*
+HELM helm/pipelines
+HELM helm/profile-controller
+HELM helm/serving
+HELM helm/tensorboards
+HELM helm/volumes
 CRD plural/crds/* helm/kubeflow
 RECIPE plural/recipes/*
 TAG plural/tags/**/*
