@@ -5,11 +5,11 @@ metadata:
   labels:
     {{- include "pipelines.labels" . | nindent 4 }}
 spec:
-  type: {{ .Values.service.type }}
+  type: ClusterIP
   ports:
     - port: {{ .Values.service.port }}
-      targetPort: http
+      targetPort: website
       protocol: TCP
-      name: http
+      name: http-website
   selector:
     {{- include "pipelines.selectorLabels" . | nindent 4 }}
