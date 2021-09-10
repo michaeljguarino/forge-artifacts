@@ -5,12 +5,8 @@ metadata:
   namespace: kubeflow
   labels:
     {{- include "katib.labels" . | nindent 4 }}
-  annotations:
-    prometheus.io/port: {{ .Values.controller.service.metrics.port | quote }}
-    prometheus.io/scheme: http
-    prometheus.io/scrape: "true"
 spec:
-  type: {{ .Values.service.type }}
+  type: ClusterIP
   ports:
     - port: {{ .Values.controller.service.webhook.port }}
       targetPort: webhook
