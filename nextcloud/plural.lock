@@ -4,7 +4,7 @@ terraform:
   terraform/azure: h1:brIH5Gvk+E4qnIRazkfHITiS5O2DSatZr3bOQ55l+1g=
   terraform/gcp: h1:3vhNYtfHBS7xAqszWXU/KNFRnt1StvZiLaXwVW1GwOc=
 helm:
-  helm/nextcloud: h1:aKZpoU+lLEaYOSYZuJ0OwZyvg9m+WMv+ibHSu/tEWDc=
+  helm/nextcloud: h1:INPahdcaecJ56BThWvYmyUpjocO/W+/5dVOKai31g00=
 recipe:
   plural/recipes/nextcloud-aws.yaml: 133e8afafc2d6275181ba1d3de7fcdeefa9240ee251258ffed4caccac4e548e8
 integration: {}

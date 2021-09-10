@@ -30,15 +30,15 @@ nextcloud:
             )
           )
         );
-    externalDatabase:
+  externalDatabase:
+    enabled: true
+    type: postgresql
+    host: plural-nextcloud
+    existingSecret:
       enabled: true
-      type: postgresql
-      host: plural-nextcloud
-      existingSecret:
-        enabled: true
-        secretName: nextcloud.plural-nextcloud.credentials.postgresql.acid.zalan.do
-        usernameKey: username
-        passwordKey: postgresql-password
+      secretName: nextcloud.plural-nextcloud.credentials.postgresql.acid.zalan.do
+      usernameKey: username
+      passwordKey: password
 
 secret:
   username: admin
