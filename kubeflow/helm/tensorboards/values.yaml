@@ -2,19 +2,11 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-replicaCount: 1
-
 global:
   istioNamespace: istio
   clusterDomain: cluster.local
   userIDHeader: kubeflow-userid
   userIDPrefix: ""
-
-image:
-  repository: public.ecr.aws/j1r0q0g6/notebooks/tensorboards-web-app
-  pullPolicy: IfNotPresent
-  # Overrides the image tag whose default is the chart appVersion.
-  tag: v1.3.0
 
 imagePullSecrets: []
 nameOverride: ""
@@ -29,63 +21,113 @@ serviceAccount:
   # If not set and create is true, a name is generated using the fullname template
   name: ""
 
+webApp:
+  replicaCount: 1
+  image:
+    repository: public.ecr.aws/j1r0q0g6/notebooks/tensorboards-web-app
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: v1.3.0
+
+  podAnnotations:
+    sidecar.istio.io/inject: "true"
+    cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
+
+  podSecurityContext: {}
+    # fsGroup: 2000
+
+  securityContext: {}
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+    # runAsNonRoot: true
+    # runAsUser: 1000
+
+  service:
+    port: 80
+
+  virtualService:
+    annotations: {}
+    prefix: /tensorboards
+    gateways:
+      - kubeflow-gateway
+    hosts:
+      - '*'
+
+  resources:
+    requests:
+      cpu: 100m
+      memory: 225Mi
+    limits:
+      cpu: 100m
+      memory: 225Mi
+
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+
+  nodeSelector: {}
+
+  tolerations: []
+
+  affinity: {}
+
 controller:
+
   rwoScheduling:
     enabled: true
+
+  replicaCount: 1
+
   image:
     repository: public.ecr.aws/j1r0q0g6/notebooks/tensorboard-controller
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
     tag: master-18264c8f
+
+  podAnnotations:
+    sidecar.istio.io/inject: "true"
+    cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
+    prometheus.io/port: "8080"
+    prometheus.io/scheme: http
+    prometheus.io/scrape: "true"
+    prometheus.io/path: /metrics
+
+  podSecurityContext: {}
+    # fsGroup: 2000
+
+  securityContext: {}
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+    # runAsNonRoot: true
+    # runAsUser: 1000
+
   service:
     port: 8080
 
-podAnnotations:
-  sidecar.istio.io/inject: "true"
+  resources:
+    requests:
+      cpu: 11m
+      memory: 53Mi
+    limits:
+      cpu: 11m
+      memory: 53Mi
 
-podSecurityContext: {}
-  # fsGroup: 2000
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
 
-securityContext: {}
-  # capabilities:
-  #   drop:
-  #   - ALL
-  # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
-  # runAsUser: 1000
+  nodeSelector: {}
 
-service:
-  port: 80
+  tolerations: []
 
-virtualService:
-  annotations: {}
-  prefix: /tensorboards
-  gateways:
-    - kubeflow-gateway
-  hosts:
-    - '*'
-
-resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
-
-autoscaling:
-  enabled: false
-  minReplicas: 1
-  maxReplicas: 100
-  targetCPUUtilizationPercentage: 80
-  # targetMemoryUtilizationPercentage: 80
-
-nodeSelector: {}
-
-tolerations: []
-
-affinity: {}
+  affinity: {}
