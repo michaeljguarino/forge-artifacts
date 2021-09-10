@@ -4,7 +4,7 @@ metadata:
   name: katib-mysql-user
   namespace: kubeflow
 spec:
-  user: {{ .Values.dbManager.dbUser | b64enc }}
+  user: {{ .Values.dbManager.dbUser }}
   clusterRef:
     name: kubeflow-mysql-cluster
     namespace: kubeflow
