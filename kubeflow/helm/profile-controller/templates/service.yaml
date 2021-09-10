@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "profile-controller.fullname" . }}-kfam
+  namespace: kubeflow
+  labels:
+    {{- include "profile-controller.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: tcp-kfam
+      protocol: TCP
+      name: tcp-kfam
+  selector:
+    {{- include "profile-controller.selectorLabels" . | nindent 4 }}

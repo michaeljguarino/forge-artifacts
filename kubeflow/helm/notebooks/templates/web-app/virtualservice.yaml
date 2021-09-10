@@ -1,10 +1,9 @@
-apiVersion: networking.istio.io/v1beta1
+apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
-  name: {{ include "central-dashboard.fullname" . }}
+  name: {{ include "notebooks.fullname" . }}-web-app
   namespace: kubeflow
-  labels:
-    {{- include "central-dashboard.selectorLabels" . | nindent 4 }}
+  labels: {{- include "notebooks.labels" . | nindent 4 }}
   {{- with .Values.virtualService.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
@@ -19,13 +18,17 @@ spec:
     - {{ . | quote }}
     {{- end }}
   http:
-    - match:
+    - headers:
+        request:
+          add:
+            x-forwarded-prefix: {{ .Values.virtualService.prefix }}
+      match:
         - uri:
-            prefix: /
+            prefix: {{ .Values.virtualService.prefix }}/
       rewrite:
         uri: /
       route:
         - destination:
-            host: {{ include "central-dashboard.fullname" . }}.kubeflow.svc.{{ .Values.global.clusterDomain }}
+            host: {{ include "notebooks.fullname" . }}-web-app.kubeflow.svc.{{ .Values.global.clusterDomain }}
             port:
               number: {{ .Values.service.port }}

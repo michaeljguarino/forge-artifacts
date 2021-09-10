@@ -2,7 +2,7 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: kubeflow-ingressgateway-certs
-  namespace: istio
+  namespace: {{ .Values.global.istioNamespace }}
 spec:
   secretName: kubeflow-ingressgateway-certs
   issuerRef:

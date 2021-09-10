@@ -1,0 +1,12 @@
+apiVersion: v1
+data:
+  ISTIO_GATEWAY: {{ .Values.controller.istio.gateway | quote }}
+  USE_ISTIO: {{ .Values.controller.istio.enabled | quote }}
+  ENABLE_CULLING: {{ .Values.controller.culling.enabled | quote }}
+  CULLING_CHECK_PERIOD: {{ .Values.controller.culling.checkPeriod | quote }}
+  IDLE_TIME: {{ .Values.controller.culling.idleTime | quote }}
+kind: ConfigMap
+metadata:
+  labels: {{- include "notebooks.labels" . | nindent 4 }}
+  name: {{ include "notebooks.fullname" . }}-controller-config
+  namespace: kubeflow

@@ -1,0 +1,129 @@
+# Default values for notebooks.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+global:
+  istioNamespace: istio
+  clusterDomain: cluster.local
+  userIDHeader: kubeflow-userid
+  userIDPrefix: ""
+
+image:
+  repository: public.ecr.aws/j1r0q0g6/notebooks/jupyter-web-app
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: v1.3.1-rc.0
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+config:
+  images:
+    allowCustomImage: true
+    imagePullPolicy:
+      value: IfNotPresent
+      readOnly: false
+    jupyterImages:
+      - public.ecr.aws/j1r0q0g6/notebooks/notebook-servers/jupyter-scipy:master-1831e436
+      - public.ecr.aws/j1r0q0g6/notebooks/notebook-servers/jupyter-pytorch-full:master-1831e436
+      - public.ecr.aws/j1r0q0g6/notebooks/notebook-servers/jupyter-pytorch-cuda-full:master-1831e436
+      - public.ecr.aws/j1r0q0g6/notebooks/notebook-servers/jupyter-tensorflow-full:master-1831e436
+      - public.ecr.aws/j1r0q0g6/notebooks/notebook-servers/jupyter-tensorflow-cuda-full:master-1831e436
+    vscodeImages:
+      - public.ecr.aws/j1r0q0g6/notebooks/notebook-servers/codeserver-python:master-1831e436
+    rstudioImages:
+      - public.ecr.aws/j1r0q0g6/notebooks/notebook-servers/rstudio-tidyverse:master-164fa2ea
+  cpu:
+    # CPU for user's Notebook
+    value: '0.5'
+    # Factor by with to multiply request to calculate limit
+    # if no limit is set, to disable set "none"
+    limitFactor: "1.2"
+    readOnly: false
+  memory:
+    # Memory for user's Notebook
+    value: 1.0Gi
+    # Factor by with to multiply request to calculate limit
+    # if no limit is set, to disable set "none"
+    limitFactor: "1.2"
+    readOnly: false
+
+controller:
+  istio:
+    enabled: true
+    gateway: kubeflow/kubeflow-gateway
+  culling:
+    # Scale notebook replicas to 0 after a given idle time (only works for Jupyter based notebook servers)
+    enabled: false
+    # The frequency in which we check if the Pod needs culling (minutes)
+    checkPeriod: 1
+    # The idle time after which to cull the notebook (minutes)
+    idleTime: 1440 # 1 day
+  image:
+    repository: public.ecr.aws/j1r0q0g6/notebooks/notebook-controller
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: v1.3.0
+  
+
+podAnnotations:
+  sidecar.istio.io/inject: "true"
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  port: 80
+
+virtualService:
+  annotations: {}
+  prefix: /jupyter
+  gateways:
+    - kubeflow-gateway
+  hosts:
+    - '*'
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

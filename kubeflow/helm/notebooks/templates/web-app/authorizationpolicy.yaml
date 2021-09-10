@@ -1,7 +1,7 @@
 apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
 metadata:
-  name: {{ include "central-dashboard.fullname" . }}
+  name: {{ include "notebooks.fullname" . }}-web-app
   namespace: kubeflow
 spec:
   action: ALLOW
@@ -12,4 +12,4 @@ spec:
               - cluster.local/ns/{{ .Values.global.istioNamespace }}/sa/istio-ingressgateway-service-account
   selector:
     matchLabels:
-      {{- include "central-dashboard.selectorLabels" . | nindent 6 }}
+      {{- include "notebooks.selectorLabels" . | nindent 6 }}

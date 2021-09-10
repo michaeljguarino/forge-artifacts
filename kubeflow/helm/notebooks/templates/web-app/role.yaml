@@ -1,0 +1,38 @@
+# This role doesn't seem to be used anywhere. Can likely be removed.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  labels: {{- include "notebooks.labels" . | nindent 4 }}
+  name: {{ include "notebooks.fullname" . }}-web-app-notebook-role
+  namespace: kubeflow
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - pods
+      - pods/log
+      - secrets
+      - services
+    verbs:
+      - '*'
+  - apiGroups:
+      - ""
+      - apps
+      - extensions
+    resources:
+      - deployments
+      - replicasets
+    verbs:
+      - '*'
+  - apiGroups:
+      - kubeflow.org
+    resources:
+      - '*'
+    verbs:
+      - '*'
+  - apiGroups:
+      - batch
+    resources:
+      - jobs
+    verbs:
+      - '*'

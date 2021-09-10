@@ -1,0 +1,115 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "profile-controller.fullname" . }}
+  labels:
+    {{- include "profile-controller.labels" . | nindent 4 }}
+  namespace: kubeflow
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "profile-controller.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "profile-controller.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "profile-controller.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command:
+            - /manager
+            - -userid-header
+            - $(USERID_HEADER)
+            - -userid-prefix
+            - $(USERID_PREFIX)
+            - -workload-identity
+            - $(WORKLOAD_IDENTITY)
+          ports:
+            - name: tcp-controller
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /metrics
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /metrics
+              port: 8080
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "profile-controller.fullname" . }}-config
+          volumeMounts:
+            - mountPath: /etc/profile-controller
+              name: namespace-labels
+              readOnly: true
+        - name: kfam
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.kfam.image.repository }}:{{ .Values.kfam.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.kfam.image.pullPolicy }}
+          command:
+            - /access-management
+            - -cluster-admin
+            - $(ADMIN)
+            - -userid-header
+            - $(USERID_HEADER)
+            - -userid-prefix
+            - $(USERID_PREFIX)
+          ports:
+            - name: tcp-kfam
+              containerPort: 8081
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /metrics
+              port: 8081
+            initialDelaySeconds: 30
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /metrics
+              port: 8081
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "profile-controller.fullname" . }}-config
+      volumes:
+        - configMap:
+            name: {{ include "profile-controller.fullname" . }}-namespace-labels-data
+          name: namespace-labels
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

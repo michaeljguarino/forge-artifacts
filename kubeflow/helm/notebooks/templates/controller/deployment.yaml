@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "central-dashboard.fullname" . }}
+  name: {{ include "notebooks.fullname" . }}-controller
   labels:
-    {{- include "central-dashboard.labels" . | nindent 4 }}
+    {{- include "notebooks.labels" . | nindent 4 }}
   namespace: kubeflow
 spec:
   {{- if not .Values.autoscaling.enabled }}
@@ -11,7 +11,7 @@ spec:
   {{- end }}
   selector:
     matchLabels:
-      {{- include "central-dashboard.selectorLabels" . | nindent 6 }}
+      app: notebook-controller
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -19,40 +19,42 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "central-dashboard.selectorLabels" . | nindent 8 }}
+        app: notebook-controller
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "central-dashboard.serviceAccountName" . }}
+      serviceAccountName: {{ include "notebooks.serviceAccountName" . }}-controller
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
-        - name: {{ .Chart.Name }}
+        - name: {{ .Chart.Name }}-controller
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
-          ports:
-            - name: website
-              containerPort: 8082
-              protocol: TCP
+          image: "{{ .Values.controller.image.repository }}:{{ .Values.controller.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.controller.image.pullPolicy }}
+          command:
+            - /manager
+          # ports:
+          #   - name: website
+          #     containerPort: 5000
+          #     protocol: TCP
           livenessProbe:
             httpGet:
-              path: /healthz
-              port: website
+              path: /metrics
+              port: 8080
             initialDelaySeconds: 30
             periodSeconds: 30
           readinessProbe:
             httpGet:
-              path: /healthz
-              port: website
+              path: /metrics
+              port: 8080
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           envFrom:
             - configMapRef:
-                name: {{ include "central-dashboard.fullname" . }}-parameters
+                name: {{ include "notebooks.fullname" . }}-controller-config
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

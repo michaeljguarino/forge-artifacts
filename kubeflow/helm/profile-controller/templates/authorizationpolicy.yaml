@@ -1,0 +1,15 @@
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: {{ include "profile-controller.fullname" . }}-kfam
+  namespace: kubeflow
+spec:
+  action: ALLOW
+  rules:
+    - from:
+        - source:
+            principals:
+              - cluster.local/ns/kubeflow/sa/central-dashboard
+  selector:
+    matchLabels:
+      {{- include "profile-controller.selectorLabels" . | nindent 6 }}

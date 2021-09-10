@@ -1,9 +1,9 @@
-# Allow all traffic to the istio-ingressgateway
+{{- $fullName := include "central-dashboard.fullname" . -}}
 apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
 metadata:
-  name: istio-ingressgateway
-  namespace: istio
+  name: istio-ingressgateway-oidc
+  namespace: {{ .Values.global.istioNamespace }}
 spec:
   action: CUSTOM
   selector:
@@ -21,3 +21,20 @@ spec:
         # - <<__subdomain_kubecost__>>.<<__domain__>>
         # - <<__subdomain_serving__>>.<<__domain__>>
         # - '*.<<__subdomain_serving__>>.<<__domain__>>'
+---
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: {{ $fullName }}-allow-in-cluster-redirect
+  namespace: {{ .Values.global.istioNamespace }}
+spec:
+  action: ALLOW
+  selector:
+    matchLabels:
+      app: istio-ingressgateway
+      istio: ingressgateway
+  rules:
+  - to:
+    - operation:
+        hosts:
+        - {{ .Values.config.dashboardDomain }}   # needed for redirect after authentication
