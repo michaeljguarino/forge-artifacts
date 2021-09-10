@@ -16,7 +16,7 @@ data:
   dbPort: {{ .Values.config.databases.connection.port | quote }}
   mlmdDb: {{ .Values.config.databases.metadataDB }}
   pipelineDb: {{ .Values.config.databases.pipelineDB }}
-  ConMaxLifeTimeSec: 28800
+  ConMaxLifeTimeSec: "28800"
 kind: ConfigMap
 metadata:
   labels:
