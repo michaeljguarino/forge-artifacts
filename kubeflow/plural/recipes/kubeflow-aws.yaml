@@ -41,9 +41,6 @@ sections:
     name: xgboost
     configuration: []
   - type: HELM
-    name: pipelines
-    configuration: []
-  - type: HELM
     name: profile-controller
     configuration: []
   - type: HELM
