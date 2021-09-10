@@ -20,17 +20,17 @@ data:
     spawnerFormDefaults:
       image:
         # The container Image for the user's Jupyter Notebook
-        value: {{index .Values.config.images.jupyterImages 0 }}
+        value: {{index .Values.webApp.config.images.jupyterImages 0 }}
         # The list of available standard container Images
-        options: {{- toYaml .Values.config.images.jupyterImages | nindent 8 }}
+        options: {{- toYaml .Values.webApp.config.images.jupyterImages | nindent 8 }}
       imageGroupOne:
         # The container Image for the user's Group One Server
         # The annotation `notebooks.kubeflow.org/http-rewrite-uri: /`
         # is applied to notebook in this group, configuring
         # the Istio rewrite for containers that host their web UI at `/`
-        value: {{index .Values.config.images.vscodeImages 0 }}
+        value: {{index .Values.webApp.config.images.vscodeImages 0 }}
         # The list of available standard container Images
-        options: {{- toYaml .Values.config.images.vscodeImages | nindent 8 }}
+        options: {{- toYaml .Values.webApp.config.images.vscodeImages | nindent 8 }}
       imageGroupTwo:
         # The container Image for the user's Group Two Server
         # The annotation `notebooks.kubeflow.org/http-rewrite-uri: /`
@@ -39,27 +39,27 @@ data:
         # The annotation `notebooks.kubeflow.org/http-headers-request-set`
         # is applied to notebook in this group, configuring Istio
         # to add the `X-RStudio-Root-Path` header to requests
-        value: {{index .Values.config.images.rstudioImages 0 }}
+        value: {{index .Values.webApp.config.images.rstudioImages 0 }}
         # The list of available standard container Images
-        options: {{- toYaml .Values.config.images.rstudioImages | nindent 8 }}
-      allowCustomImage: {{ .Values.config.images.allowCustomImage }}
+        options: {{- toYaml .Values.webApp.config.images.rstudioImages | nindent 8 }}
+      allowCustomImage: {{ .Values.webApp.config.images.allowCustomImage }}
       imagePullPolicy:
-        value: {{ .Values.config.images.imagePullPolicy.value }}
-        readOnly: {{ .Values.config.images.imagePullPolicy.readOnly }}
+        value: {{ .Values.webApp.config.images.imagePullPolicy.value }}
+        readOnly: {{ .Values.webApp.config.images.imagePullPolicy.readOnly }}
       cpu:
         # CPU for user's Notebook
-        value: {{ .Values.config.cpu.value }}
+        value: {{ .Values.webApp.config.cpu.value }}
         # Factor by with to multiply request to calculate limit
         # if no limit is set, to disable set "none"
-        limitFactor: {{ .Values.config.cpu.limitFactor }}
-        readOnly: {{ .Values.config.cpu.readOnly }}
+        limitFactor: {{ .Values.webApp.config.cpu.limitFactor }}
+        readOnly: {{ .Values.webApp.config.cpu.readOnly }}
       memory:
         # Memory for user's Notebook
-        value: {{ .Values.config.memory.value }}
+        value: {{ .Values.webApp.config.memory.value }}
         # Factor by with to multiply request to calculate limit
         # if no limit is set, to disable set "none"
-        limitFactor: {{ .Values.config.memory.limitFactor }}
-        readOnly: {{ .Values.config.memory.readOnly }}
+        limitFactor: {{ .Values.webApp.config.memory.limitFactor }}
+        readOnly: {{ .Values.webApp.config.memory.readOnly }}
       environment:
         value: {}
         readOnly: false
@@ -471,7 +471,7 @@ metadata:
 ---
 apiVersion: v1
 data:
-  APP_PREFIX: {{ .Values.virtualService.prefix }}
+  APP_PREFIX: {{ .Values.webApp.virtualService.prefix }}
   UI: default
   USERID_HEADER: {{ .Values.global.userIDHeader }}
   USERID_PREFIX: {{ .Values.global.userIDPrefix | quote }}

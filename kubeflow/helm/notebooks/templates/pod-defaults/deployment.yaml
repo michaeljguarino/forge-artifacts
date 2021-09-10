@@ -6,17 +6,16 @@ metadata:
     {{- include "notebooks.labels" . | nindent 4 }}
   namespace: kubeflow
 spec:
-  {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.replicaCount }}
+  {{- if not .Values.podDefaults.autoscaling.enabled }}
+  replicas: {{ .Values.podDefaults.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
       {{- include "notebooks.podDefaultsSelectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
+      {{- with .Values.podDefaults.podAnnotations }}
       annotations:
-        cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
@@ -28,11 +27,11 @@ spec:
       {{- end }}
       serviceAccountName: {{ include "notebooks.serviceAccountName" . }}-pod-defaults
       securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+        {{- toYaml .Values.podDefaults.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}-pod-defaults
           securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
+            {{- toYaml .Values.podDefaults.securityContext | nindent 12 }}
           image: "{{ .Values.podDefaults.image.repository }}:{{ .Values.podDefaults.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.podDefaults.image.pullPolicy }}
           args:
@@ -51,7 +50,7 @@ spec:
           #     path: /
           #     port: webhook
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+            {{- toYaml .Values.podDefaults.resources | nindent 12 }}
           volumeMounts:
             - mountPath: /etc/webhook/certs
               name: webhook-cert
@@ -60,15 +59,15 @@ spec:
         - name: webhook-cert
           secret:
             secretName: {{ include "notebooks.fullname" . }}-pod-defaults-certs
-      {{- with .Values.nodeSelector }}
+      {{- with .Values.podDefaults.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.affinity }}
+      {{- with .Values.podDefaults.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.tolerations }}
+      {{- with .Values.podDefaults.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}

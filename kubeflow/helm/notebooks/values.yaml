@@ -2,19 +2,11 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-replicaCount: 1
-
 global:
   istioNamespace: istio
   clusterDomain: cluster.local
   userIDHeader: kubeflow-userid
   userIDPrefix: ""
-
-image:
-  repository: public.ecr.aws/j1r0q0g6/notebooks/jupyter-web-app
-  pullPolicy: IfNotPresent
-  # Overrides the image tag whose default is the chart appVersion.
-  tag: v1.3.1-rc.0
 
 imagePullSecrets: []
 nameOverride: ""
@@ -29,38 +21,95 @@ serviceAccount:
   # If not set and create is true, a name is generated using the fullname template
   name: ""
 
-config:
-  images:
-    allowCustomImage: true
-    imagePullPolicy:
-      value: IfNotPresent
+webApp:
+  replicaCount: 1
+  image:
+    repository: public.ecr.aws/j1r0q0g6/notebooks/jupyter-web-app
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: v1.3.1-rc.0
+  
+  podAnnotations:
+    sidecar.istio.io/inject: "true"
+    cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
+
+  podSecurityContext: {}
+    # fsGroup: 2000
+
+  securityContext: {}
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+    # runAsNonRoot: true
+    # runAsUser: 1000
+
+  service:
+    port: 80
+
+  virtualService:
+    annotations: {}
+    prefix: /jupyter
+    gateways:
+      - kubeflow-gateway
+    hosts:
+      - '*'
+
+  resources:
+    requests:
+      cpu: 11m
+      memory: 226Mi
+    limits:
+      cpu: 11m
+      memory: 226Mi
+
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+
+  nodeSelector: {}
+
+  tolerations: []
+
+  affinity: {}
+
+
+  config:
+    images:
+      allowCustomImage: true
+      imagePullPolicy:
+        value: IfNotPresent
+        readOnly: false
+      jupyterImages:
+        - public.ecr.aws/j1r0q0g6/notebooks/notebook-servers/jupyter-scipy:master-1831e436
+        - public.ecr.aws/j1r0q0g6/notebooks/notebook-servers/jupyter-pytorch-full:master-1831e436
+        - public.ecr.aws/j1r0q0g6/notebooks/notebook-servers/jupyter-pytorch-cuda-full:master-1831e436
+        - public.ecr.aws/j1r0q0g6/notebooks/notebook-servers/jupyter-tensorflow-full:master-1831e436
+        - public.ecr.aws/j1r0q0g6/notebooks/notebook-servers/jupyter-tensorflow-cuda-full:master-1831e436
+      vscodeImages:
+        - public.ecr.aws/j1r0q0g6/notebooks/notebook-servers/codeserver-python:master-1831e436
+      rstudioImages:
+        - public.ecr.aws/j1r0q0g6/notebooks/notebook-servers/rstudio-tidyverse:master-164fa2ea
+    cpu:
+      # CPU for user's Notebook
+      value: '0.5'
+      # Factor by with to multiply request to calculate limit
+      # if no limit is set, to disable set "none"
+      limitFactor: "1.2"
       readOnly: false
-    jupyterImages:
-      - public.ecr.aws/j1r0q0g6/notebooks/notebook-servers/jupyter-scipy:master-1831e436
-      - public.ecr.aws/j1r0q0g6/notebooks/notebook-servers/jupyter-pytorch-full:master-1831e436
-      - public.ecr.aws/j1r0q0g6/notebooks/notebook-servers/jupyter-pytorch-cuda-full:master-1831e436
-      - public.ecr.aws/j1r0q0g6/notebooks/notebook-servers/jupyter-tensorflow-full:master-1831e436
-      - public.ecr.aws/j1r0q0g6/notebooks/notebook-servers/jupyter-tensorflow-cuda-full:master-1831e436
-    vscodeImages:
-      - public.ecr.aws/j1r0q0g6/notebooks/notebook-servers/codeserver-python:master-1831e436
-    rstudioImages:
-      - public.ecr.aws/j1r0q0g6/notebooks/notebook-servers/rstudio-tidyverse:master-164fa2ea
-  cpu:
-    # CPU for user's Notebook
-    value: '0.5'
-    # Factor by with to multiply request to calculate limit
-    # if no limit is set, to disable set "none"
-    limitFactor: "1.2"
-    readOnly: false
-  memory:
-    # Memory for user's Notebook
-    value: 1.0Gi
-    # Factor by with to multiply request to calculate limit
-    # if no limit is set, to disable set "none"
-    limitFactor: "1.2"
-    readOnly: false
+    memory:
+      # Memory for user's Notebook
+      value: 1.0Gi
+      # Factor by with to multiply request to calculate limit
+      # if no limit is set, to disable set "none"
+      limitFactor: "1.2"
+      readOnly: false
 
 controller:
+  replicaCount: 1
   istio:
     enabled: true
     gateway: kubeflow/kubeflow-gateway
@@ -76,11 +125,54 @@ controller:
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
     tag: v1.3.0
+
   service:
     metrics:
       port: 8080
+  
+  podAnnotations:
+    sidecar.istio.io/inject: "true"
+    cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
+    prometheus.io/port: "8080"
+    prometheus.io/scheme: http
+    prometheus.io/scrape: "true"
+    prometheus.io/path: /metrics
+
+  podSecurityContext: {}
+    # fsGroup: 2000
+
+  securityContext: {}
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+    # runAsNonRoot: true
+    # runAsUser: 1000
+  
+  resources:
+    requests:
+      cpu: 11m
+      memory: 25Mi
+    limits:
+      cpu: 11m
+      memory: 25Mi
+
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+
+  nodeSelector: {}
+
+  tolerations: []
+
+  affinity: {}
+  
 
 podDefaults:
+  replicaCount: 1
   image:
     repository: public.ecr.aws/j1r0q0g6/notebooks/admission-webhook
     pullPolicy: IfNotPresent
@@ -89,52 +181,38 @@ podDefaults:
   service:
     port: 443
 
-podAnnotations:
-  sidecar.istio.io/inject: "true"
+  podAnnotations:
+    sidecar.istio.io/inject: "true"
+    cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
 
-podSecurityContext: {}
-  # fsGroup: 2000
+  podSecurityContext: {}
+    # fsGroup: 2000
 
-securityContext: {}
-  # capabilities:
-  #   drop:
-  #   - ALL
-  # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
-  # runAsUser: 1000
+  securityContext: {}
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+    # runAsNonRoot: true
+    # runAsUser: 1000
 
-service:
-  port: 80
+  resources:
+    requests:
+      cpu: 11m
+      memory: 10Mi
+    limits:
+      cpu: 11m
+      memory: 10Mi
 
-virtualService:
-  annotations: {}
-  prefix: /jupyter
-  gateways:
-    - kubeflow-gateway
-  hosts:
-    - '*'
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
 
-resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
+  nodeSelector: {}
 
-autoscaling:
-  enabled: false
-  minReplicas: 1
-  maxReplicas: 100
-  targetCPUUtilizationPercentage: 80
-  # targetMemoryUtilizationPercentage: 80
+  tolerations: []
 
-nodeSelector: {}
-
-tolerations: []
-
-affinity: {}
+  affinity: {}

@@ -6,17 +6,16 @@ metadata:
     {{- include "notebooks.labels" . | nindent 4 }}
   namespace: kubeflow
 spec:
-  {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.replicaCount }}
+  {{- if not .Values.webApp.autoscaling.enabled }}
+  replicas: {{ .Values.webApp.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
       {{- include "notebooks.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
+      {{- with .Values.webApp.podAnnotations }}
       annotations:
-        cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
@@ -28,13 +27,13 @@ spec:
       {{- end }}
       serviceAccountName: {{ include "notebooks.serviceAccountName" . }}-web-app
       securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+        {{- toYaml .Values.webApp.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}-web-app
           securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+            {{- toYaml .Values.webApp.securityContext | nindent 12 }}
+          image: "{{ .Values.webApp.image.repository }}:{{ .Values.webApp.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.webApp.image.pullPolicy }}
           ports:
             - name: website
               containerPort: 5000
@@ -48,7 +47,7 @@ spec:
           #     path: / # TODO: check if this is correct
           #     port: website
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+            {{- toYaml .Values.webApp.resources | nindent 12 }}
           envFrom:
             - configMapRef:
                 name: {{ include "notebooks.fullname" . }}-web-app-parameters
@@ -64,15 +63,15 @@ spec:
         - configMap:
             name: {{ include "notebooks.fullname" . }}-web-app-logos
           name: logos-volume
-      {{- with .Values.nodeSelector }}
+      {{- with .Values.webApp.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.affinity }}
+      {{- with .Values.webApp.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.tolerations }}
+      {{- with .Values.webApp.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}

@@ -52,7 +52,7 @@ webApp:
     gateways:
       - kubeflow-gateway
     hosts:
-    - '*'
+      - '*'
   resources:
     requests:
       cpu: 32m

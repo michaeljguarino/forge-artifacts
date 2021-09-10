@@ -6,21 +6,16 @@ metadata:
     {{- include "notebooks.labels" . | nindent 4 }}
   namespace: kubeflow
 spec:
-  {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.replicaCount }}
+  {{- if not .Values.controller.autoscaling.enabled }}
+  replicas: {{ .Values.controller.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
       {{- include "notebooks.controllerSelectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
+      {{- with .Values.controller.podAnnotations }}
       annotations:
-        cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
-        prometheus.io/port: "8080"
-        prometheus.io/scheme: http
-        prometheus.io/scrape: "true"
-        prometheus.io/path: /metrics
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
@@ -32,11 +27,11 @@ spec:
       {{- end }}
       serviceAccountName: {{ include "notebooks.serviceAccountName" . }}-controller
       securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+        {{- toYaml .Values.controller.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}-controller
           securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
+            {{- toYaml .Values.controller.securityContext | nindent 12 }}
           image: "{{ .Values.controller.image.repository }}:{{ .Values.controller.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.controller.image.pullPolicy }}
           command:
@@ -56,19 +51,19 @@ spec:
               path: /metrics
               port: metrics
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+            {{- toYaml .Values.controller.resources | nindent 12 }}
           envFrom:
             - configMapRef:
                 name: {{ include "notebooks.fullname" . }}-controller-config
-      {{- with .Values.nodeSelector }}
+      {{- with .Values.controller.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.affinity }}
+      {{- with .Values.controller.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.tolerations }}
+      {{- with .Values.controller.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
