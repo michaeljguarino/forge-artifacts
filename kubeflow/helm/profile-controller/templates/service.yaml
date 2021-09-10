@@ -11,6 +11,6 @@ spec:
     - port: {{ .Values.service.port }}
       targetPort: tcp-kfam
       protocol: TCP
-      name: tcp-kfam
+      name: kfam
   selector:
     {{- include "profile-controller.selectorLabels" . | nindent 4 }}

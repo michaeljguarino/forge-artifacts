@@ -11,7 +11,7 @@ spec:
   {{- end }}
   selector:
     matchLabels:
-      app: notebook-controller
+      {{- include "notebooks.controllerSelectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -19,7 +19,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        app: notebook-controller
+        {{- include "notebooks.controllerSelectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:

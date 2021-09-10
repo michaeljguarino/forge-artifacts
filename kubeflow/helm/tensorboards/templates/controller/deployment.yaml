@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "xgboost.fullname" . }}
+  name: {{ include "tensorboards.fullname" . }}-controller
   labels:
-    {{- include "xgboost.labels" . | nindent 4 }}
+    {{- include "tensorboards.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "xgboost.selectorLabels" . | nindent 6 }}
+      {{- include "tensorboards.controllerSelectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -18,24 +18,27 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "xgboost.selectorLabels" . | nindent 8 }}
+        {{- include "tensorboards.controllerSelectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "xgboost.serviceAccountName" . }}
+      serviceAccountName: {{ include "tensorboards.serviceAccountName" . }}-controller
+      terminationGracePeriodSeconds: 10
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          image: "{{ .Values.controller.image.repository }}:{{ .Values.controller.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.controller.image.pullPolicy }}
+          args:
+            - --metrics-addr=0.0.0.0:8080
+            - --enable-leader-election
           command:
-            - /root/manager
-            - -mode=in-cluster
+            - /manager
           ports:
             - name: metrics
               containerPort: 8080
@@ -50,6 +53,9 @@ spec:
               port: metrics
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "tensorboards.fullname" . }}-controller-config
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

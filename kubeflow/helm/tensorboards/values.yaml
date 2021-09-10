@@ -1,6 +1,8 @@
-# Default values for central-dashboard.
+# Default values for tensorboards.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
+
+replicaCount: 1
 
 global:
   istioNamespace: istio
@@ -8,24 +10,8 @@ global:
   userIDHeader: kubeflow-userid
   userIDPrefix: ""
 
-kubeflowComponents:
-  notebooks:
-    enabled: true
-  tensorboards:
-    enabled: true
-  volumes:
-    enabled: true
-  katib:
-    enabled: false
-  pipelines:
-    enabled: false
-  serving:
-    enabled: false
-
-replicaCount: 1
-
 image:
-  repository: public.ecr.aws/j1r0q0g6/notebooks/central-dashboard
+  repository: public.ecr.aws/j1r0q0g6/notebooks/tensorboards-web-app
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: v1.3.0
@@ -43,8 +29,18 @@ serviceAccount:
   # If not set and create is true, a name is generated using the fullname template
   name: ""
 
-podAnnotations:
-  sidecar.istio.io/inject: "true"
+controller:
+  rwoScheduling:
+    enabled: true
+  image:
+    repository: public.ecr.aws/j1r0q0g6/notebooks/tensorboard-controller
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: master-18264c8f
+  service:
+    port: 8080
+
+podAnnotations: {}
 
 podSecurityContext: {}
   # fsGroup: 2000
@@ -60,13 +56,9 @@ securityContext: {}
 service:
   port: 80
 
-config:
-  dashboardDomain: kubeflow.kubeflow-aws.com
-  registrationFlow:
-    enabled: true
-
 virtualService:
   annotations: {}
+  prefix: /tensorboards
   gateways:
     - kubeflow-gateway
   hosts:

@@ -1,0 +1,10 @@
+apiVersion: v1
+data:
+  APP_PREFIX: {{ .Values.virtualService.prefix }}
+  USERID_HEADER: {{ .Values.global.userIDHeader }}
+  USERID_PREFIX: {{ .Values.global.userIDPrefix | quote }}
+kind: ConfigMap
+metadata:
+  labels: {{- include "tensorboards.labels" . | nindent 4 }}
+  name: {{ include "tensorboards.fullname" . }}-web-app-parameters
+  namespace: kubeflow

@@ -43,7 +43,7 @@ spec:
             - -workload-identity
             - $(WORKLOAD_IDENTITY)
           ports:
-            - name: tcp-controller
+            - name: controller
               containerPort: 8080
               protocol: TCP
           livenessProbe:
@@ -79,7 +79,7 @@ spec:
             - -userid-prefix
             - $(USERID_PREFIX)
           ports:
-            - name: tcp-kfam
+            - name: kfam
               containerPort: 8081
               protocol: TCP
           livenessProbe:

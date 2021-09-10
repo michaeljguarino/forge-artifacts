@@ -36,17 +36,17 @@ spec:
           args:
             - -monitoring-port=8443
           ports:
-            - name: tcp-metrics
+            - name: metrics
               containerPort: 8443
               protocol: TCP
           livenessProbe:
             httpGet:
               path: /metrics
-              port: tcp-metrics
+              port: metrics
           readinessProbe:
             httpGet:
               path: /metrics
-              port: tcp-metrics
+              port: metrics
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           env:

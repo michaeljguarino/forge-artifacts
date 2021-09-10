@@ -1,7 +1,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "notebooks.name" -}}
+{{- define "tensorboards.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
@@ -10,7 +10,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "notebooks.fullname" -}}
+{{- define "tensorboards.fullname" -}}
 {{- if .Values.fullnameOverride }}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -26,16 +26,16 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "notebooks.chart" -}}
+{{- define "tensorboards.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Common labels
 */}}
-{{- define "notebooks.labels" -}}
-helm.sh/chart: {{ include "notebooks.chart" . }}
-{{ include "notebooks.selectorLabels" . }}
+{{- define "tensorboards.labels" -}}
+helm.sh/chart: {{ include "tensorboards.chart" . }}
+{{ include "tensorboards.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -45,25 +45,25 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "notebooks.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "notebooks.name" . }}
+{{- define "tensorboards.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "tensorboards.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
 Controller selector labels
 */}}
-{{- define "notebooks.controllerSelectorLabels" -}}
-app.kubernetes.io/name: {{ include "notebooks.name" . }}-controller
+{{- define "tensorboards.controllerSelectorLabels" -}}
+app.kubernetes.io/name: {{ include "tensorboards.name" . }}-controller
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "notebooks.serviceAccountName" -}}
+{{- define "tensorboards.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create }}
-{{- default (include "notebooks.fullname" .) .Values.serviceAccount.name }}
+{{- default (include "tensorboards.fullname" .) .Values.serviceAccount.name }}
 {{- else }}
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
