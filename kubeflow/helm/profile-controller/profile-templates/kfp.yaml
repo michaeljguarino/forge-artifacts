@@ -23,6 +23,8 @@ spec:
     metadata:
       labels:
         app: ml-pipeline-visualizationserver
+      annotations:
+        cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
       annotations: {}
     spec:
       containers:
@@ -96,7 +98,8 @@ spec:
     metadata:
       labels:
         app: ml-pipeline-ui-artifact
-      annotations: {}
+      annotations:
+        cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
     spec:
       containers:
       - name: ml-pipeline-ui-artifact
