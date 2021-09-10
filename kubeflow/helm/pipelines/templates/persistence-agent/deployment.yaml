@@ -35,13 +35,32 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.persistenceAgent.image.repository }}:{{ .Values.persistenceAgent.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.persistenceAgent.image.pullPolicy }}
-          env:
-            - name: NAMESPACE
-              value: ""
-            - name: TTL_SECONDS_AFTER_WORKFLOW_FINISH
-              value: "86400"
-            - name: NUM_WORKERS
-              value: "2"
+          args:
+            - --logtostderr
+            - "true"
+            - --namespace
+            - ${NAMESPACE}
+            - --ttlSecondsAfterWorkflowFinish
+            - ${TTL_SECONDS_AFTER_WORKFLOW_FINISH}
+            - --numWorker
+            - ${NUM_WORKERS}
+            - --mlPipelineAPIServerName
+            - ${API_SERVER_HOST_SERVICE}
+            - --mlPipelineServiceHttpPort
+            - ${API_SERVER_HTTP_PORT}
+            - --mlPipelineServiceGRPCPort
+            - ${API_SERVER_GRPC_PORT}
+            - --mlPipelineAPIServerBasePath
+            - ${API_SERVER_BASE_PATH}
+            - --clientQPS
+            - ${MAX_CLIENT_QPS}
+            - --clientBurst
+            - ${MAX_CLIENT_BURST}
+          command:
+            - persistence_agent
+          envFrom:
+            - configMapRef:
+                name: {{ include "pipelines.fullname" . }}-persistence-agent-parameters
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}

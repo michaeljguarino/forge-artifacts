@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "pipelines.fullname" . }}-persistence-agent-parameters
+  labels: {{- include "pipelines.labels" . | nindent 4 }}
+data:
+  NAMESPACE: ""
+  TTL_SECONDS_AFTER_WORKFLOW_FINISH: "86400"
+  NUM_WORKERS: "2"
+  API_SERVER_HOST_SERVICE: {{ include "pipelines.fullname" . }}-api-server
+  API_SERVER_HTTP_PORT: {{ .Values.apiServer.service.http.port | quote }}
+  API_SERVER_GRPC_PORT: {{ .Values.apiServer.service.grpc.port | quote }}
+  API_SERVER_BASE_PATH: "/apis/v1beta1"
+  MAX_CLIENT_QPS: "5"
+  MAX_CLIENT_BURST: "10"
