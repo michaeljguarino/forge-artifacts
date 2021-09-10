@@ -32,10 +32,20 @@ nextcloud:
         );
     {{ $redisNamespace := namespace "redis" }}
     extraEnv:
+      - name: S3_KEY
+        valueFrom:
+          secretKeyRef:
+            name: nextcloud-s3-secret
+            key: username
+      - name: S3_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: nextcloud-s3-secret
+            key: password
       - name: REDIS_HOST
         value: redis-master.{{ $redisNamespace }}
       - name: REDIS_HOST_PORT
-        value: 6379
+        value: "6379"
       - name: REDIS_HOST_PASSWORD
         valueFrom:
           secretKeyRef:
@@ -52,7 +62,7 @@ nextcloud:
       passwordKey: password
 
 {{ $creds := secret $redisNamespace "redis-password" }}
-redisPassword: $creds
+redisPassword: {{ $creds.password }}
 
 secret:
   username: admin

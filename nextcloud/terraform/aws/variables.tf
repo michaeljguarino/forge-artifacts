@@ -14,7 +14,7 @@ variable "cluster_name" {
 
 variable "nextcloud_serviceaccount" {
   type = string
-  default = "default-editor"
+  default = "nextcloud-serviceaccount"
 }
 
 variable "role_name" {

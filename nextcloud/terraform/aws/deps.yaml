@@ -2,7 +2,7 @@ apiVersion: plural.sh/v1alpha1
 kind: Dependencies
 metadata:
   description: nextcloud aws setup
-  version: 0.1.0
+  version: 0.1.3
 spec:
   dependencies:
   - name: aws-bootstrap
