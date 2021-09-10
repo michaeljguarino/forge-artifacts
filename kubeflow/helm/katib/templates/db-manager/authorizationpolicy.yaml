@@ -8,6 +8,6 @@ spec:
   action: ALLOW
   selector:
     matchLabels:
-      app: katib-db-manager
+      {{- include "katib.dbManagerSelectorLabels" . | nindent 6 }}
   rules:
   - {}

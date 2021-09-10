@@ -1,0 +1,21 @@
+apiVersion: mysql.presslabs.org/v1alpha1
+kind: MysqlUser
+metadata:
+  name: katib-mysql-user
+  namespace: kubeflow
+spec:
+  user: katib
+  clusterRef:
+    name: kubeflow-mysql-cluster
+    namespace: kubeflow
+  password:
+    name: katib-db-user
+    key: PASSWORD
+  allowedHosts:
+    - "%"
+  permissions:
+    - schema: katib
+      tables:
+      - "*"
+      permissions:
+      - ALL

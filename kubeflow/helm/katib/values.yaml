@@ -45,6 +45,7 @@ controller:
       port: 8080
 
 dbManager:
+  dbPassword: something-secret
   image:
     repository: docker.io/kubeflowkatib/katib-db-manager
     pullPolicy: IfNotPresent
@@ -54,12 +55,12 @@ dbManager:
     port: 6789
   config:
     secret:
-      name: kubeflow-db-user
+      name: katib-db-user
       userKey: USERNAME
       passwordKey: PASSWORD
     database:
       name: katib
-      host: kubeflow-mysql-cluster-pxc.kubeflow.svc.cluster.local
+      host: mysql.kubeflow.svc.cluster.local
       port: 3306
 
 podAnnotations:

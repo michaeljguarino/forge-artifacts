@@ -1,11 +1,2 @@
-secrets:
-  root: root_password
-  xtrabackup: backup_password
-  monitor: monitory
-  clustercheck: clustercheckpassword
-  proxyadmin: admin_password
-  pmmserver: admin
-  operator: operatoradmin
-  replication: repl_password
-  kubeflow_user: kubeflow
-  kubeflow_password: kubeflow
+secret:
+  rootPassword: root_password
