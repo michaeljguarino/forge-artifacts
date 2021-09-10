@@ -162,7 +162,7 @@ data:
       - from:
         - source:
             principals:
-            - cluster.local/ns/kubeflow/sa/ml-pipeline
+            - cluster.local/ns/kubeflow/sa/kubeflow-pipelines-api-server
     ---
     apiVersion: v1
     kind: Service
