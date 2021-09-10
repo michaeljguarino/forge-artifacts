@@ -76,13 +76,13 @@ spec:
             - name: DBCONFIG_USER
               valueFrom:
                 secretKeyRef:
-                  key: username
-                  name: mysql-secret
+                  key: USERNAME
+                  name: pipelines-db-user
             - name: DBCONFIG_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  key: password
-                  name: mysql-secret
+                  key: PASSWORD
+                  name: pipelines-db-user
           ports:
             - name: webhook-api
               containerPort: 8443
