@@ -6,8 +6,8 @@ data:
   autoUpdatePipelineDefaultVersion: "true"
   bucketName: mlpipeline
   bucketRegion: us-east-2
-  bucketPipelineFolder: ""
-  bucketPipelinePath: ""
+  bucketPipelineFolder: "pipelines"
+  bucketPipelinePath: "pipelines"
   cacheDb: {{ .Values.config.databases.cacheDB }}
   cacheImage: gcr.io/google-containers/busybox
   cacheNodeRestrictions: "false"

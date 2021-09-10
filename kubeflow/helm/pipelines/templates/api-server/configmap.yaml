@@ -30,8 +30,8 @@ data:
         "Region": "us-east-2",
         "Secure": true,
         "BucketName": "pipelines-bucket",
-        "PipelineFolder": "",
-        "PipelinePath": "",
+        "PipelineFolder": "pipelines",
+        "PipelinePath": "pipelines",
         "AccessKey": "",
         "SecretAccessKey": ""
       },
