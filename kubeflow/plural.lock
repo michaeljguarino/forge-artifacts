@@ -2,7 +2,7 @@ artifact: {}
 terraform:
   terraform/aws: h1:Oj0zitoq4rKd6EK/0bm6HJHa8BcqvYjZ6ACpz7Hgjgg=
 helm:
-  helm/central-dashboard: h1:OIhR03f8tEx3UTggBmkYM3RwExoyfoVZZl01juZTQZ0=
+  helm/central-dashboard: h1:kyU+zF0UvaBExfIoXyPOwShEAtmcviwKY5rro8J8YX4=
   helm/katib: h1:9Jlw8he65fiUKEjRSuyNlQNfpf/b8IMIPpN66dSkcfs=
   helm/mysql-cluster: h1:7nk13AI3vcux06mJzBNmG5OeqBljTRAGQN3IIBT5kZE=
   helm/notebooks: h1:InriyyiW8jmHnHHYd4sgGYOY1jlUECdQw3RV3SlcRlo=

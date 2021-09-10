@@ -91,6 +91,8 @@ data:
             "link": "/jupyter/new?namespace=kubeflow"
           {{ end }}
           {{ if eq .Values.kubeflowComponents.pipelines.enabled true }}
+          },
+          {
             "text": "Upload a pipeline",
             "desc": "Pipelines",
             "link": "/pipeline/"
