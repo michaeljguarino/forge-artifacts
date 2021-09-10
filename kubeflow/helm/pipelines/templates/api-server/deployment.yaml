@@ -126,9 +126,9 @@ spec:
                 - -O
                 - '-'
                 - http://localhost:8888/apis/v1beta1/healthz
-            initialDelaySeconds: 3
-            periodSeconds: 5
-            timeoutSeconds: 2
+            initialDelaySeconds: 30
+            periodSeconds: 50
+            timeoutSeconds: 20
           readinessProbe:
             exec:
               command:
@@ -138,9 +138,9 @@ spec:
                 - -O
                 - '-'
                 - http://localhost:8888/apis/v1beta1/healthz
-            initialDelaySeconds: 3
-            periodSeconds: 5
-            timeoutSeconds: 2
+            initialDelaySeconds: 30
+            periodSeconds: 50
+            timeoutSeconds: 20
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       # TODO: check if this config is needed
