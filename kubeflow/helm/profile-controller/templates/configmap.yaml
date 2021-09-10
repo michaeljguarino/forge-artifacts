@@ -86,6 +86,10 @@ data:
         - namespaceSelector:
             matchLabels:
               istio: system
+      - to:
+        - namespaceSelector:
+            matchLabels:
+              app.plural.sh/name: kubeflow
   test-template.yaml: |-
     apiVersion: v1
     kind: ConfigMap
