@@ -11,6 +11,6 @@ HELM helm/profile-controller
 HELM helm/serving
 HELM helm/tensorboards
 HELM helm/volumes
-CRD plural/crds/* helm/profile-controller
+CRD plural/crds/* helm/central-dashboard
 RECIPE plural/recipes/*
 TAG plural/tags/**/*

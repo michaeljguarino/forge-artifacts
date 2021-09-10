@@ -20,6 +20,6 @@ recipe:
   plural/recipes/kubeflow-aws.yaml: eb96af9681878c7ebcd4b4ddcbd8aa7053f528a4e2f6a20efaa067d359f1cad9
 integration: {}
 crd:
-  plural/crds/profiles.yaml: b3097e7bce72e61f2f0eca692594fc5301e681c36f08ed38e205d406af99f6d4:h1:N9pniBkvUKE7FJU+mThDbmVKbPSos5oZjBleTqikQSo=
+  plural/crds/profiles.yaml: b3097e7bce72e61f2f0eca692594fc5301e681c36f08ed38e205d406af99f6d4:h1:93j96nnXsNghvBD0sKNWoSPnNA7RDVtLRAoaPYAVaOg=
 ird: {}
 tag: {}
