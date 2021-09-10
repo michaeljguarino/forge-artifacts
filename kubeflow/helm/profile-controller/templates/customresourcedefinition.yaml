@@ -3,8 +3,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.4.0
-  labels:
-    kustomize.component: profiles
+  labels: {{- include "profile-controller.labels" . | nindent 4 }}
   name: profiles.kubeflow.org
 spec:
   conversion:

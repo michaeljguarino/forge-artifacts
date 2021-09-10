@@ -10,7 +10,7 @@ spec:
     - from:
         - source:
             principals:
-              - cluster.local/ns/kubeflow/sa/central-dashboard
+              - cluster.local/ns/kubeflow/sa/{{ .Release.Name }}-central-dashboard
   selector:
     matchLabels:
       {{- include "profile-controller.selectorLabels" . | nindent 6 }}

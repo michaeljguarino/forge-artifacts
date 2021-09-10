@@ -3,6 +3,7 @@ kind: AuthorizationPolicy
 metadata:
   name: {{ include "katib.fullname" . }}-db-manager-allow-all
   namespace: kubeflow
+  labels: {{- include "katib.labels" . | nindent 4 }}
 spec:
   action: ALLOW
   selector:

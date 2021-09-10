@@ -59,7 +59,7 @@ dbManager:
       passwordKey: PASSWORD
     database:
       name: katib
-      host: cluster1-pxc.kubeflow.svc.cluster.local
+      host: kubeflow-mysql-cluster-pxc.kubeflow.svc.cluster.local
       port: 3306
 
 podAnnotations:

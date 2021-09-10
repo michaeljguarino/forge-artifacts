@@ -1,11 +1,12 @@
 apiVersion: pxc.percona.com/v1-8-0
 kind: PerconaXtraDBCluster
 metadata:
+  labels: {{- include "mysql-cluster.labels" . | nindent 4 }}
   name: {{ include "mysql-cluster.fullname" . }}
   finalizers:
     - delete-pxc-pods-in-order
 #    - delete-proxysql-pvc
-#    - delete-pxc-pvc
+    - delete-pxc-pvc
 #  annotations:
 #    percona.com/issue-vault-token: "true"
 spec:

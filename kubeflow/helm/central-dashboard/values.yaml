@@ -21,6 +21,8 @@ kubeflowComponents:
     enabled: false
   serving:
     enabled: false
+  operators:
+    enabled: true
 
 replicaCount: 1
 
@@ -61,6 +63,7 @@ service:
   port: 80
 
 config:
+  profileControllerService: kubeflow-profile-controller-kfam.kubeflow.svc.cluster.local
   dashboardDomain: kubeflow.kubeflow-aws.com
   registrationFlow:
     enabled: true

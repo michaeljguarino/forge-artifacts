@@ -38,7 +38,6 @@ helm.sh/chart: {{ include "tensorflow.chart" . }}
 {{ include "tensorflow.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
-version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
@@ -50,6 +49,7 @@ Selector labels
 app: {{ include "tensorflow.name" . }}
 app.kubernetes.io/name: {{ include "tensorflow.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
+version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
 {{/*

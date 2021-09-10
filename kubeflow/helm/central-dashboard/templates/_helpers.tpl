@@ -38,7 +38,6 @@ helm.sh/chart: {{ include "central-dashboard.chart" . }}
 {{ include "central-dashboard.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
-version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
@@ -50,6 +49,7 @@ Selector labels
 app: {{ include "central-dashboard.name" . }}
 app.kubernetes.io/name: {{ include "central-dashboard.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
+version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
 {{/*

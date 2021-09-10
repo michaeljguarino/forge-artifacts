@@ -59,17 +59,15 @@ spec:
             - name: DB_NAME
               value: mysql
             - name: DB_USER
-              value: root
-              # valueFrom:
-                # secretKeyRef:
-                #   key: {{ .Values.dbManager.config.secret.userKey }}
-                #   name: {{ .Values.dbManager.config.secret.name }}
+              valueFrom:
+                secretKeyRef:
+                  key: {{ .Values.dbManager.config.secret.userKey }}
+                  name: {{ .Values.dbManager.config.secret.name }}
             - name: DB_PASSWORD
-              value: root_password
-              # valueFrom:
-              #   secretKeyRef:
-              #     key: {{ .Values.dbManager.config.secret.passwordKey }}
-              #     name: {{ .Values.dbManager.config.secret.name }}
+              valueFrom:
+                secretKeyRef:
+                  key: {{ .Values.dbManager.config.secret.passwordKey }}
+                  name: {{ .Values.dbManager.config.secret.name }}
             - name: KATIB_MYSQL_DB_DATABASE
               value: {{ .Values.dbManager.config.database.name }}
             - name: KATIB_MYSQL_DB_HOST

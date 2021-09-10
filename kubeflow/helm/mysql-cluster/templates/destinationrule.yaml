@@ -5,7 +5,8 @@ metadata:
   namespace: kubeflow
   annotations:
     helm.sh/hook: post-install
-    helm.sh/hook-weight: "5"
+    helm.sh/hook-weight: "10"
+  labels: {{- include "mysql-cluster.labels" . | nindent 4 }}
 spec:
   host: {{ include "mysql-cluster.fullname" . }}-pxc.kubeflow.svc.cluster.local
   trafficPolicy:
@@ -19,7 +20,8 @@ metadata:
   namespace: kubeflow
   annotations:
     helm.sh/hook: post-install
-    helm.sh/hook-weight: "5"
+    helm.sh/hook-weight: "10"
+  labels: {{- include "mysql-cluster.labels" . | nindent 4 }}
 spec:
   host: {{ include "mysql-cluster.fullname" . }}-pxc-unready.kubeflow.svc.cluster.local
   trafficPolicy:

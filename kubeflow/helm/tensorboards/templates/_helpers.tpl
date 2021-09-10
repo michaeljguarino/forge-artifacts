@@ -38,7 +38,6 @@ helm.sh/chart: {{ include "tensorboards.chart" . }}
 {{ include "tensorboards.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
-version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
@@ -50,6 +49,7 @@ Selector labels
 app: {{ include "tensorboards.name" . }}
 app.kubernetes.io/name: {{ include "tensorboards.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
+version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
 {{/*
@@ -59,6 +59,7 @@ Controller selector labels
 app: {{ include "tensorboards.name" . }}-controller
 app.kubernetes.io/name: {{ include "tensorboards.name" . }}-controller
 app.kubernetes.io/instance: {{ .Release.Name }}
+version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
 {{/*

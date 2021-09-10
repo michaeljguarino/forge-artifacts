@@ -132,7 +132,7 @@ data:
   REGISTRATION_FLOW: {{ .Values.config.registrationFlow.enabled | quote }}
   USERID_HEADER: {{ .Values.global.userIDHeader }}
   USERID_PREFIX: {{ .Values.global.userIDPrefix | quote }}
-  PROFILES_KFAM_SERVICE_HOST: profile-controller-kfam.kubeflow
+  PROFILES_KFAM_SERVICE_HOST: {{ .Values.config.profileControllerService }}
   DASHBOARD_CONFIGMAP: {{ include "central-dashboard.fullname" . }}-config
 kind: ConfigMap
 metadata:

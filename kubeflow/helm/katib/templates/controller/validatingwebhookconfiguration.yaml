@@ -4,6 +4,7 @@ metadata:
   annotations:
     cert-manager.io/inject-ca-from: kubeflow/katib-webhook-cert
   name: katib.kubeflow.org
+  labels: {{- include "katib.labels" . | nindent 4 }}
 webhooks:
   - admissionReviewVersions:
       - v1beta1
