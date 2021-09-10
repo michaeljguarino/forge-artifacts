@@ -46,7 +46,7 @@ spec:
                 fieldRef:
                   fieldPath: metadata.namespace
             - name: OBJECTSTORECONFIG_SECURE
-              value: "false"
+              value: "true"
             - name: OBJECTSTORECONFIG_BUCKETNAME
               valueFrom:
                 configMapKeyRef:
