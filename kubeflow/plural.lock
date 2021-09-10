@@ -19,6 +19,7 @@ helm:
 recipe:
   plural/recipes/kubeflow-aws.yaml: dd217bc9816d20fd1cfa33adc18d2515f5251b7e7095891cf8bbde0dc32f0c6b
 integration: {}
-crd: {}
+crd:
+  plural/crds/profiles.yaml: b3097e7bce72e61f2f0eca692594fc5301e681c36f08ed38e205d406af99f6d4:h1:qK4lrN/CaitBshXDxLlHXrrDQDbj0SzWtBQpmMsZlzw=
 ird: {}
 tag: {}
