@@ -30,7 +30,7 @@ variable "os_disk_size" {
 
 variable "os_disk_type" {
   type = number
-  default = Ephemeral
+  default = "Ephemeral"
 }
 
 variable "private_cluster" {
