@@ -33,6 +33,8 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.metadata.envoy.image.repository }}:{{ .Values.metadata.envoy.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.metadata.envoy.image.pullPolicy }}
+          args:
+            - /config/envoy.yaml
           ports:
             - name: md-envoy
               containerPort: 9090
@@ -42,6 +44,13 @@ spec:
               protocol: TCP
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - mountPath: /config
+              name: config-volume
+      volumes:
+        - configMap:
+            name: {{ include "pipelines.fullname" . }}-metadata-envoy-config
+          name: config-volume
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

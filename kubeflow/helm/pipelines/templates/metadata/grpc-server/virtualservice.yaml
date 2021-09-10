@@ -31,4 +31,4 @@ spec:
         - destination:
             host: {{ include "pipelines.fullname" . }}-metadata-envoy.kubeflow.svc.{{ .Values.global.clusterDomain }}
             port:
-              number: {{ .Values.metadata.grpc.service.port }}
+              number: {{ .Values.metadata.envoy.service.port }}
