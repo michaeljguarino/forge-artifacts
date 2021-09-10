@@ -28,6 +28,7 @@ provider "minio" {
 
 resource "minio_s3_bucket" "nextcloud" {
   bucket = var.nextcloud_bucket
+  acl = "private"
 }
 
 data "minio_iam_policy_document" "nextcloud" {

@@ -1,7 +1,7 @@
 artifact: {}
 terraform:
   terraform/aws: h1:zcruYk8hOkQJAbaF2sDjRGbWZX3Ctk2ENbdCtfHcheo=
-  terraform/azure: h1:tpzojuhhkW1RrGxo7aVmX7B//tLkLSJpbYj25GHe85s=
+  terraform/azure: h1:KMykPfIA6tx6FdRw9Vqhji1AICsd/7Zv3JT9qinn+Zc=
   terraform/gcp: h1:3vhNYtfHBS7xAqszWXU/KNFRnt1StvZiLaXwVW1GwOc=
 helm:
   helm/nextcloud: h1:6BAa7u1fzGtc17kJb1Rue09TqHkE+vFT+ueUDlESYzE=
