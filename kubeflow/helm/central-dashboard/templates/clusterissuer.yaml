@@ -1,0 +1,8 @@
+# This issuer is used by certain Kubeflow applications for cluster-internal certificates
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: kubeflow-self-signing-issuer
+  labels: {{- include "central-dashboard.labels" . | nindent 4 }} 
+spec:
+  selfSigned: {}

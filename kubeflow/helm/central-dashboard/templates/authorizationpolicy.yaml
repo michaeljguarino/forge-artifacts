@@ -1,6 +1,7 @@
 apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
 metadata:
+  labels: {{- include "central-dashboard.labels" . | nindent 4 }}
   name: {{ include "central-dashboard.fullname" . }}
   namespace: kubeflow
 spec:
