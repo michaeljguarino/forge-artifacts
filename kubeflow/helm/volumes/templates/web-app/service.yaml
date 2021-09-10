@@ -11,6 +11,6 @@ spec:
     - port: {{ .Values.service.port }}
       targetPort: website
       protocol: TCP
-      name: tcp-website
+      name: http-website
   selector:
     {{- include "volumes.selectorLabels" . | nindent 4 }}

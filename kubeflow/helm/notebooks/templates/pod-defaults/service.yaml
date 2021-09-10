@@ -11,6 +11,6 @@ spec:
     - port: {{ .Values.podDefaults.service.port }}
       targetPort: webhook
       protocol: TCP
-      name: tcp-webhook
+      name: http-webhook
   selector:
     {{- include "notebooks.podDefaultsSelectorLabels" . | nindent 4 }}

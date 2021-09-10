@@ -15,6 +15,6 @@ spec:
     - port: {{ .Values.service.port }}
       targetPort: metrics
       protocol: TCP
-      name: tcp-metrics
+      name: http-metrics
   selector:
     {{- include "pytorch.selectorLabels" . | nindent 4 }}
