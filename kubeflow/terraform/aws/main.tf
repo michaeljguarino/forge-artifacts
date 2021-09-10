@@ -51,7 +51,7 @@ resource "aws_iam_policy" "kubeflow" {
 resource "kubernetes_secret" "pipelines_s3_secret" {
   metadata {
     name = "pipelines-s3-secret"
-    namespace = kubernetes_namespace.kubeflow.metadata.name
+    namespace = kubernetes_namespace.kubeflow.id
   }
   data = {
     "S3_ACCESSKEY" = aws_iam_access_key.pipelines.id
