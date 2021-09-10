@@ -3,7 +3,7 @@ terraform:
   terraform/aws: h1:Oj0zitoq4rKd6EK/0bm6HJHa8BcqvYjZ6ACpz7Hgjgg=
 helm:
   helm/central-dashboard: h1:kyU+zF0UvaBExfIoXyPOwShEAtmcviwKY5rro8J8YX4=
-  helm/katib: h1:9Jlw8he65fiUKEjRSuyNlQNfpf/b8IMIPpN66dSkcfs=
+  helm/katib: h1:q7G+/uGHl9w8wPqibb+/+tohX5ZnFfCExqV1y5MVJUk=
   helm/mysql-cluster: h1:ITIhvamfZqBkahuD+FdXKRx4X5uE7RMQFE7v5E9BDeI=
   helm/notebooks: h1:InriyyiW8jmHnHHYd4sgGYOY1jlUECdQw3RV3SlcRlo=
   helm/operators/mpi: h1:zkcrkR8qOfRhnulC+PCxY9xrX1Y5VO5W0MwB1AuGNY8=
@@ -11,7 +11,7 @@ helm:
   helm/operators/pytorch: h1:KRh+hGTYK9G4+ER8WSl7zsLGZHDQJGNfupT6ypDouS4=
   helm/operators/tensorflow: h1:toqrsNF9bD96nYXAu5N9wHnmJcfOhnBa7yBxYaXJ7aw=
   helm/operators/xgboost: h1:KaitX2yztaulcHy63YJ9gogrBf6K+97ApMc1pFJzYs4=
-  helm/pipelines: h1:PfEs2BaLZh3gG7WPs8XYRItO8Ohbq1l1EpD40gkpFZ4=
+  helm/pipelines: h1:FLGsnIn3pTks6HbtCJ04c8qs0Vc1Yu/ypeVh23+bH10=
   helm/profile-controller: h1:22nc35nsJ1fEE6E56OqUc6cxsjLAGnq+oG5odBklxPQ=
   helm/serving: h1:1bruQzFSmjYZ3XJKm35bd4BAxOI4/oipbNog1AsD/rg=
   helm/tensorboards: h1:e+2xTYX53JCJ+0gIMvpcNJRTXqUzUrkoVnp9dscn+IE=

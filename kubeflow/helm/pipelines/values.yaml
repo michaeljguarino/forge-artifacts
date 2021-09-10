@@ -16,7 +16,7 @@ replicaCount: 1
 config:
   databases:
     connection:
-      host: mysql.kubeflow.svc.cluster.local
+      host: kubeflow-mysql-cluster-mysql-master.kubeflow.svc.cluster.local
       port: 3306
       username: pipelines
       password: SuperSecurePassword
