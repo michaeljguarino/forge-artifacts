@@ -17,8 +17,8 @@ spec:
               - cluster.local/ns/kubeflow/sa/{{ include "pipelines.serviceAccountName" . }}-cache-server
     - from:
       - source:
-        requestPrincipals:
-        - https://oidc.plural.sh//*
+          requestPrincipals:
+          - https://oidc.plural.sh//*
     - when:
         - key: request.headers[{{ .Values.global.userIDHeader }}]
           notValues:
