@@ -3,7 +3,7 @@ apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
 metadata:
   name: istio-ingressgateway
-  namespace: istio-system
+  namespace: istio
 spec:
   action: CUSTOM
   selector:

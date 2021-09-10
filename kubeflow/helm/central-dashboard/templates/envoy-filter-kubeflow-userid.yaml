@@ -2,7 +2,7 @@ apiVersion: networking.istio.io/v1alpha3
 kind: EnvoyFilter
 metadata:
   name: kubeflow-userid
-  namespace: istio-system
+  namespace: istio
 spec:
   workloadSelector:
     labels:
