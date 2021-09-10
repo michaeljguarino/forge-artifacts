@@ -1,11 +1,11 @@
 apiVersion: v1
 data:
-  ConMaxLifeTimeSec: "120"
   appName: pipeline
   appVersion: 1.6.0
   autoUpdatePipelineDefaultVersion: "true"
-  bucketName: pipelines-bucket
+  bucketHost: s3.amazonaws.com
   bucketRegion: us-east-2
+  bucketName: pipelines-bucket
   bucketPipelineFolder: "pipelines"
   bucketPipelinePath: "pipelines"
   cacheDb: {{ .Values.config.databases.cacheDB }}
@@ -14,6 +14,9 @@ data:
   cronScheduleTimezone: UTC
   dbHost: {{ .Values.config.databases.connection.host }}
   dbPort: {{ .Values.config.databases.connection.port | quote }}
+  dbConMaxLifeTimeSec: "120"
+  dbDriverName: mysql
+  dbGroupConcatMaxLen: "4194304"
   mlmdDb: {{ .Values.config.databases.metadataDB }}
   pipelineDb: {{ .Values.config.databases.pipelineDB }}
 kind: ConfigMap

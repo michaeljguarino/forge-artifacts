@@ -45,8 +45,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
-            - name: OBJECTSTORECONFIG_SECURE
-              value: "true"
+            - name: OBJECTSTORECONFIG_HOST
+              valueFrom:
+                configMapKeyRef:
+                  key: bucketHost
+                  name: pipeline-install-config
             - name: OBJECTSTORECONFIG_BUCKETNAME
               valueFrom:
                 configMapKeyRef:
@@ -105,7 +108,17 @@ spec:
             - name: DBCONFIG_CONMAXLIFETIMESEC
               valueFrom:
                 configMapKeyRef:
-                  key: ConMaxLifeTimeSec
+                  key: dbConMaxLifeTimeSec
+                  name: pipeline-install-config
+            - name: DBCONFIG_DRIVERNAME
+              valueFrom:
+                configMapKeyRef:
+                  key: dbDriverName
+                  name: pipeline-install-config
+            - name: DBCONFIG_GROUPCONCATMAXLEN
+              valueFrom:
+                configMapKeyRef:
+                  key: dbGroupConcatMaxLen
                   name: pipeline-install-config
           envFrom:
             - configMapRef:
@@ -143,19 +156,6 @@ spec:
             timeoutSeconds: 2
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-      # TODO: check if this config is needed
-          volumeMounts:
-            - mountPath: /config
-              name: config-volume
-      volumes:
-        - configMap:
-            name: {{ include "pipelines.fullname" . }}-api-server-config
-            items:
-              - key: config.json
-                path: config.json
-              - key: sample_config.json
-                path: sample_config.json
-          name: config-volume
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
