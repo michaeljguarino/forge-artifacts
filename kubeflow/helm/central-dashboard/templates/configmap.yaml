@@ -10,14 +10,6 @@ data:
           "text": "Notebooks",
           "icon": "book"
         {{ end }}
-        {{ if eq .Values.kubeflowComponents.tensorboards.enabled true }}
-        },
-        {
-          "type": "item",
-          "link": "/tensorboards/",
-          "text": "Tensorboards",
-          "icon": "assessment"
-        {{ end }}
         {{ if eq .Values.kubeflowComponents.volumes.enabled true }}
         },
         {
@@ -25,6 +17,14 @@ data:
           "link": "/volumes/",
           "text": "Volumes",
           "icon": "device:storage"
+        {{ end }}
+        {{ if eq .Values.kubeflowComponents.tensorboards.enabled true }}
+        },
+        {
+          "type": "item",
+          "link": "/tensorboards/",
+          "text": "Tensorboards",
+          "icon": "assessment"
         {{ end }}
         {{ if eq .Values.kubeflowComponents.katib.enabled true }}
         },
