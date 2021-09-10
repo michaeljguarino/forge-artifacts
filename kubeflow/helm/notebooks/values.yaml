@@ -57,10 +57,10 @@ webApp:
 
   resources:
     requests:
-      cpu: 11m
+      cpu: 50m
       memory: 226Mi
     limits:
-      cpu: 11m
+      cpu: 50m
       memory: 226Mi
 
   autoscaling:
