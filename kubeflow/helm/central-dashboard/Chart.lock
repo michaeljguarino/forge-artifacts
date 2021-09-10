@@ -1,7 +1,7 @@
 dependencies:
 - name: profile-controller
   repository: file://../profile-controller
-  version: 0.1.1
+  version: 0.1.2
 - name: notebooks
   repository: file://../notebooks
   version: 0.1.1
@@ -35,5 +35,5 @@ dependencies:
 - name: xgboost
   repository: file://../operators/xgboost
   version: 0.1.1
-digest: sha256:e025a35b80803d09e13b24842a7a874a6b05328b51b12d613552793b3b718bd2
-generated: "2021-08-15T16:01:22.59408009+02:00"
+digest: sha256:78279be053ae72884e9c0b7531c25871b8ae799e0e36ced4714b7fcc614ac90d
+generated: "2021-08-15T16:19:38.661631429+02:00"
