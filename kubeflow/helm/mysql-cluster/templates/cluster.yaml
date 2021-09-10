@@ -68,7 +68,8 @@ spec:
 #    imagePullSecrets:
 #      - name: private-registry-credentials
 #    priorityClassName: high-priority
-#    annotations:
+    # annotations:
+    #   traffic.sidecar.istio.io/excludeInboundPorts: "3306,33062"
 #      iam.amazonaws.com/role: role-arn
     labels: {{- include "mysql-cluster.labels" . | nindent 4 }}
 #    containerSecurityContext:
