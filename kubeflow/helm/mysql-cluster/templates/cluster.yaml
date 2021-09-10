@@ -4,7 +4,7 @@ metadata:
   name: kubeflow-mysql-cluster
   namespace: kubeflow
 spec:
-  replicas: 1
+  replicas: 2
   secretName: kubeflow-mysql-cluster-root
   volumeSpec:
     persistentVolumeClaim:
