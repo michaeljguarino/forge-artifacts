@@ -1,0 +1,83 @@
+apiVersion: acid.zalan.do/v1
+kind: postgresql
+metadata:
+  name: plural-nextcloud
+  labels:
+  {{ include "nextcloud-plural.labels" . | nindent 4 }}
+spec:
+  teamId: plural
+  volume:
+    size: 25Gi
+  numberOfInstances: 1
+  users:
+    nextcloud:  # database owner
+    - superuser
+    - createdb
+  databases:
+    nextcloud: nextcloud  # dbname: owner
+  postgresql:
+    version: "13"
+  sidecars:
+  - image: gcr.io/pluralsh/postgres-exporter:0.8.0
+    name: exporter
+    ports:
+    - containerPort: 9187
+      name: http-metrics
+      protocol: TCP
+    env:
+    - name: "DATA_SOURCE_URI"
+      value: "127.0.0.1:5432/nextcloud?sslmode=disable"
+    - name: "DATA_SOURCE_USER"
+      valueFrom:
+        secretKeyRef:
+          name: postgres.plural-nextcloud.credentials.postgresql.acid.zalan.do
+          key: username
+    - name: "DATA_SOURCE_PASS"
+      valueFrom:
+        secretKeyRef:
+          name: postgres.plural-nextcloud.credentials.postgresql.acid.zalan.do
+          key: password
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nextcloud-master
+  labels:
+    spilo-role: master
+    {{ include "nextcloud-plural.labels" . | nindent 4 }}
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9187"
+spec:
+  type: ClusterIP
+  ports:
+  - name: postgres
+    port: 5432
+    targetPort: 5432
+  - name: http-metrics
+    port: 9187
+    targetPort: http-metrics
+  selector:
+    spilo-role: master
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nextcloud-replica
+  labels:
+    spilo-role: replica
+    {{ include "nextcloud-plural.labels" . | nindent 4 }}
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9187"
+spec:
+  type: ClusterIP
+  ports:
+  - name: postgres
+    port: 5432
+    targetPort: 5432
+  - name: http-metrics
+    port: 9187
+    targetPort: http-metrics
+  selector:
+    spilo-role: replica

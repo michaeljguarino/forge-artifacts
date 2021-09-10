@@ -1,0 +1,21 @@
+name: nextcloud-aws
+description: Installs nextcloud on an aws eks cluster
+provider: AWS
+dependencies:
+- repo: bootstrap
+  name: aws-k8s
+sections:
+- name: nextcloud
+  items:
+  - type: TERRAFORM
+    name: aws
+    configuration:
+    - name: nextcloud_bucket
+      type: STRING
+      documentation: bucket to store nextcloud data
+  - type: HELM
+    name: nextcloud
+    configuration:
+    - name: hostname
+      documentation: FQDN to use for your nextcloud installation
+      type: STRING

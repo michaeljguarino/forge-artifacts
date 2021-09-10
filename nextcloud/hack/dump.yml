@@ -1,0 +1,37 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: nextcloud-dump
+  namespace: nextcloud
+spec:
+  template:
+    spec:
+      containers:
+      - name: dump
+        image: gcr.io/pluralsh/dumper:0.1.1
+        imagePullPolicy: Always
+        env:
+        - name: SOURCE_USER
+          value: postgres
+        - name: SOURCE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: nextcloud-postgres-password
+              key: postgresql-password
+        - name: SOURCE_HOST
+          value: nextcloud-postgresql
+        - name: SOURCE_DB
+          value: nextcloud
+        - name: DEST_USER
+          value: nextcloud
+        - name: DEST_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: nextcloud.plural-nextcloud.credentials.postgresql.acid.zalan.do
+              key: password
+        - name: DEST_HOST
+          value: plural-nextcloud
+        - name: DEST_DB
+          value: nextcloud
+      restartPolicy: Never
+  backoffLimit: 5

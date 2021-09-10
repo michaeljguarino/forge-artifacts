@@ -118,3 +118,6 @@ upload-minio: # uploads minio artifacts
 
 upload-kubeflow: # uploads kubeflow artifacts
 	plural apply -f kubeflow/Pluralfile
+
+upload-nextcloud: # uploads nextcloud artifacts
+	plural apply -f nextcloud/Pluralfile
