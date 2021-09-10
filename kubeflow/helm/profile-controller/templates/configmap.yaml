@@ -35,3 +35,151 @@ metadata:
   labels: {{- include "profile-controller.labels" . | nindent 4 }}
   name: {{ include "profile-controller.fullname" . }}-config
   namespace: kubeflow
+---
+apiVersion: v1
+data:
+  test-template.yaml: |-
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: test-template-configmap
+      namespace: {{ .Namespace }}
+    data:
+      number: "{{ .Count }}"
+      items-are-made-of: {{ .Material }}
+  test-kfp.yaml: |-
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: metadata-grpc-configmap
+      namespace: {{ .Namespace }}
+    data:
+      METADATA_GRPC_SERVICE_HOST: "metadata-grpc-service.kubeflow"
+      METADATA_GRPC_SERVICE_PORT: "8080"
+    ---
+    # Visualization server related manifests below
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      labels:
+        app: ml-pipeline-visualizationserver
+      name: ml-pipeline-visualizationserver
+      namespace: {{ .Namespace }}
+    spec:
+      selector:
+        matchLabels:
+          app: ml-pipeline-visualizationserver
+      template:
+        metadata:
+          labels:
+            app: ml-pipeline-visualizationserver
+          annotations: {}
+        spec:
+          containers:
+          - name: ml-pipeline-visualizationserver
+            image: gcr.io/ml-pipeline/visualization-server:1.6.0
+            imagePullPolicy: IfNotPresent
+            ports:
+            - containerPort: 8888
+            resources:
+              requests:
+                cpu: 50m
+                memory: 200Mi
+              limits:
+                cpu: 500m
+                memory: 1Gi
+          serviceAccountName: default-editor
+    ---
+    apiVersion: networking.istio.io/v1alpha3
+    kind: DestinationRule
+    metadata:
+      name: ml-pipeline-visualizationserver
+      namespace: {{ .Namespace }}
+    spec:
+      host: ml-pipeline-visualizationserver
+      trafficPolicy:
+        tls:
+          mode: ISTIO_MUTUAL
+    ---
+    apiVersion: security.istio.io/v1beta1
+    kind: AuthorizationPolicy
+    metadata:
+      name: ml-pipeline-visualizationserver
+      namespace: {{ .Namespace }}
+    spec:
+      selector:
+        matchLabels:
+          app: ml-pipeline-visualizationserver
+      rules:
+      - from:
+        - source:
+            principals:
+            - cluster.local/ns/kubeflow/sa/ml-pipeline
+    ---
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: ml-pipeline-visualizationserver
+      namespace: {{ .Namespace }}
+    spec:
+      selector:
+        app: ml-pipeline-visualizationserver
+      ports:
+      - name: http
+        port: 8888
+        protocol: TCP
+        targetPort: 8888
+    ---
+    # Artifact fetcher related resources below.
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      labels:
+        app: ml-pipeline-ui-artifact
+      name: ml-pipeline-ui-artifact
+      namespace: {{ .Namespace }}
+    spec:
+      selector:
+        matchLabels:
+          app: ml-pipeline-ui-artifact
+      template:
+        metadata:
+          labels:
+            app: ml-pipeline-ui-artifact
+          annotations: {}
+        spec:
+          containers:
+          - name: ml-pipeline-ui-artifact
+            image: gcr.io/ml-pipeline/frontend:1.6.0
+            imagePullPolicy: IfNotPresent
+            ports:
+            - containerPort: 3000
+            resources:
+              requests:
+                cpu: 10m
+                memory: 70Mi
+              limits:
+                cpu: 100m
+                memory: 500Mi
+          serviceAccountName: default-editor
+    ---
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: ml-pipeline-ui-artifact
+      namespace: {{ .Namespace }}
+      labels:
+        app: ml-pipeline-ui-artifact
+    spec:
+      selector:
+        app: ml-pipeline-ui-artifact
+      ports:
+      - name: http  # name is required to let istio understand request protocol
+        port: 80
+        protocol: TCP
+        targetPort: 3000
+kind: ConfigMap
+metadata:
+  labels: {{- include "profile-controller.labels" . | nindent 4 }}
+  name: {{ include "profile-controller.fullname" . }}-templates
+  namespace: kubeflow

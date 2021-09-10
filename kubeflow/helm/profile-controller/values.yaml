@@ -14,14 +14,14 @@ image:
   repository: davidspek/profile-controller
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: 0.1.10
+  tag: 0.1.11
 
 kfam:
   image:
-    repository: public.ecr.aws/j1r0q0g6/notebooks/access-management
+    repository: davidspek/kfam
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
-    tag: v1.3.0
+    tag: 0.1.0
 
 imagePullSecrets: []
 nameOverride: ""
@@ -62,7 +62,7 @@ service:
   controller:
     port: 8080
   kfam:
-    port: 8081
+    port: 8082
 
 virtualService:
   annotations: {}

@@ -48,16 +48,21 @@ spec:
             - name: metrics
               containerPort: 8080
               protocol: TCP
+            - name: probe
+              containerPort: 8081
+              protocol: TCP
           livenessProbe:
             httpGet:
-              path: /metrics
-              port: metrics
-            initialDelaySeconds: 30
-            periodSeconds: 30
+              path: /healthz
+              port: probe
+            initialDelaySeconds: 15
+            periodSeconds: 20
           readinessProbe:
             httpGet:
-              path: /metrics
-              port: metrics
+              path: /readyz
+              port: probe
+            initialDelaySeconds: 5
+            periodSeconds: 10
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           envFrom:
@@ -66,6 +71,9 @@ spec:
           volumeMounts:
             - mountPath: /etc/profile-controller
               name: namespace-labels
+              readOnly: true
+            - mountPath: /templates
+              name: profile-templates
               readOnly: true
         - name: kfam
           securityContext:
@@ -82,7 +90,7 @@ spec:
             - $(USERID_PREFIX)
           ports:
             - name: kfam
-              containerPort: 8081
+              containerPort: 8082
               protocol: TCP
           livenessProbe:
             httpGet:
@@ -103,6 +111,9 @@ spec:
         - configMap:
             name: {{ include "profile-controller.fullname" . }}-namespace-labels-data
           name: namespace-labels
+        - configMap:
+            name: {{ include "profile-controller.fullname" . }}-templates
+          name: profile-templates
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

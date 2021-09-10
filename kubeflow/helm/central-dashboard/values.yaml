@@ -65,7 +65,7 @@ service:
 
 config:
   profileControllerService: kubeflow-profile-controller-kfam.kubeflow.svc.cluster.local
-  kfamPort: 8081
+  kfamPort: 8082
   registrationFlow:
     enabled: true
 
