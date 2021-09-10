@@ -55,11 +55,11 @@ webApp:
     - '*'
   resources:
     requests:
-      cpu: 11m
-      memory: 72Mi
+      cpu: 32m
+      memory: 128Mi
     limits:
-      cpu: 11m
-      memory: 72Mi
+      cpu: 32m
+      memory: 128Mi
 
   autoscaling:
     enabled: false
@@ -107,11 +107,11 @@ controller:
   
   resources:
     requests:
-      cpu: 11m
-      memory: 72Mi
+      cpu: 32m
+      memory: 128Mi
     limits:
-      cpu: 11m
-      memory: 72Mi
+      cpu: 32m
+      memory: 128Mi
 
   autoscaling:
     enabled: false
@@ -161,11 +161,11 @@ dbManager:
 
   resources:
     requests:
-      cpu: 11m
-      memory: 72Mi
+      cpu: 32m
+      memory: 128Mi
     limits:
-      cpu: 11m
-      memory: 72Mi
+      cpu: 32m
+      memory: 128Mi
 
   autoscaling:
     enabled: false
