@@ -4,17 +4,17 @@ metadata:
   name: katib-mysql-user
   namespace: kubeflow
 spec:
-  user: katib
+  user: {{ .Values.dbManager.dbUser | b64enc }}
   clusterRef:
     name: kubeflow-mysql-cluster
     namespace: kubeflow
   password:
-    name: katib-db-user
+    name: {{ .Values.dbManager.config.secret.name }}
     key: PASSWORD
   allowedHosts:
     - "%"
   permissions:
-    - schema: katib
+    - schema: {{ .Values.dbManager.config.database.name }}
       tables:
       - "*"
       permissions:

@@ -1,0 +1,35 @@
+apiVersion: mysql.presslabs.org/v1alpha1
+kind: MysqlDatabase
+metadata:
+  name: pipelines-database
+  namespace: kubeflow
+  labels: {{- include "pipelines.labels" . | nindent 4 }}
+spec:
+  database: {{ .Values.config.databases.pipelineDB }}
+  clusterRef:
+    name: kubeflow-mysql-cluster
+    namespace: kubeflow
+---
+apiVersion: mysql.presslabs.org/v1alpha1
+kind: MysqlDatabase
+metadata:
+  name: pipelines-cache-database
+  namespace: kubeflow
+  labels: {{- include "pipelines.labels" . | nindent 4 }}
+spec:
+  database: {{ .Values.config.databases.cacheDB }}
+  clusterRef:
+    name: kubeflow-mysql-cluster
+    namespace: kubeflow
+---
+apiVersion: mysql.presslabs.org/v1alpha1
+kind: MysqlDatabase
+metadata:
+  name: pipelines-metadata-database
+  namespace: kubeflow
+  labels: {{- include "pipelines.labels" . | nindent 4 }}
+spec:
+  database: {{ .Values.config.databases.metadataDB }}
+  clusterRef:
+    name: kubeflow-mysql-cluster
+    namespace: kubeflow

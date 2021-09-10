@@ -13,6 +13,17 @@ global:
 
 replicaCount: 1
 
+config:
+  databases:
+    connection:
+      host: mysql.kubeflow.svc.cluster.local
+      port: 3306
+      username: pipelines
+      password: SuperSecurePassword
+    pipelineDB: mlpipeline
+    metadataDB: metadb
+    cacheDB: cachedb
+
 image:
   repository: gcr.io/ml-pipeline/frontend
   pullPolicy: IfNotPresent

@@ -46,6 +46,7 @@ controller:
 
 dbManager:
   dbPassword: something-secret
+  dbUser: katib
   image:
     repository: docker.io/kubeflowkatib/katib-db-manager
     pullPolicy: IfNotPresent

@@ -8,14 +8,14 @@ data:
   bucketRegion: us-east-2
   bucketPipelineFolder: pipeline
   bucketPipelinePath: pipeline
-  cacheDb: cachedb
+  cacheDb: {{ .Values.config.databases.cacheDB }}
   cacheImage: gcr.io/google-containers/busybox
   cacheNodeRestrictions: "false"
   cronScheduleTimezone: UTC
-  dbHost: mysql
-  dbPort: "3306"
-  mlmdDb: metadb
-  pipelineDb: mlpipeline
+  dbHost: {{ .Values.config.databases.connection.host }}
+  dbPort: {{ .Values.config.databases.connection.port | quote }}
+  mlmdDb: {{ .Values.config.databases.metadataDB }}
+  pipelineDb: {{ .Values.config.databases.pipelineDB }}
 kind: ConfigMap
 metadata:
   labels:
