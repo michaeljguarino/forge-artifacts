@@ -5,17 +5,17 @@ helm:
   helm/central-dashboard: h1:X4I9MtfOGp6KQafZ4bw5YNENIcby0ZXkllJT5rdlfQ0=
   helm/katib: h1:3kYC80xiy2qgMfUYWboxk2zGdB2WM2nz5a2ZskZ2fWY=
   helm/mysql-cluster: h1:OF80WRLERGHwFNiyJdg7C1u8oRTj0tL4jRR7IERbykE=
-  helm/notebooks: h1:t7Ff/4V21Z/QDnSeZ2Ufd65kD5gIkZyPIS57f2eEWZk=
-  helm/operators/mpi: h1:SWkK/b7S/7bZSOjRsyFPcYNfmyRizTHHBBJQcg659Z8=
-  helm/operators/mxnet: h1:8TcczTn1en2nSnAbcO2xNtgXJDWAGYIb60rmuEhp+7k=
-  helm/operators/pytorch: h1:oa/p7w3rzum6fd78XDCgzj0ReTaphqOWDThQkXWv6YM=
-  helm/operators/tensorflow: h1:Vrm7jJKZG5cpB/ziagqGAlBS024hSILS98ameS7MI3I=
-  helm/operators/xgboost: h1:4ScTFLtR8MU65SsN3O0qfc8R0xx7k9ztk18GH8Ds+n4=
-  helm/pipelines: h1:TMNS7yh1BILsnMAtQtrONkJeYiu+wHASNufxFFlEWQE=
-  helm/profile-controller: h1:N9pniBkvUKE7FJU+mThDbmVKbPSos5oZjBleTqikQSo=
-  helm/serving: h1:b/RhYixd+CRwz5LbYVYZxzPwlSfGx0dssP/aZzQ7o1Q=
-  helm/tensorboards: h1:msmgVDZE26n/4edZq7XiOrYgd37j5JjD9f9hakPFOcg=
-  helm/volumes: h1:2X1zm3d8mgrjwYvbzdh1x0icEJavDMoQmmyzAhfu1Nk=
+  helm/notebooks: h1:JO2I9rjMHPVje6edduiv97YyPmuu8/qh9gVYRs4ElSo=
+  helm/operators/mpi: h1:C8JOIqmxDvOsb17KP0u0PuLHw6gqU6quDrG/scxgzJE=
+  helm/operators/mxnet: h1:HK78XX8l33GDHjQD3dXblTI/zA2RTdO2NVpNy5tRIDE=
+  helm/operators/pytorch: h1:hKU0AlUsDRqiFEzosEqXvEsWFJ6A77Xipbf5UYaxwhc=
+  helm/operators/tensorflow: h1:6O1qmbjGtQEy6oA8DEAFbu7SZuM6QunVd3SOpFhu150=
+  helm/operators/xgboost: h1:ZApaSgrPvFn+AGi7CD5iY+YWKPeRrdJZ1nm9Qq83nUE=
+  helm/pipelines: h1:Cb7Z4SJ5b33ht0GoY8l9ls8ZjbQPfgdvbL3xnMiL4r0=
+  helm/profile-controller: h1:rUMhHVsho2dGtl+HAIZ+NSyddyX9SRAeSTxDDCO0w3k=
+  helm/serving: h1:SJQCXzOzqO1MCqzKcJN0Avl1bWP7sx6wzOnm8Mt8Mc4=
+  helm/tensorboards: h1:3Uq/otHTa0q8mOeVxaYBztDUjhQY4/HnClcd5Mm1p9I=
+  helm/volumes: h1:jiQrDBbiBpEo7sKwLxQOz44/Ulk/KVpURiqXZy4nNic=
 recipe:
   plural/recipes/kubeflow-aws.yaml: d91a60b4dcfa35391d2dcf8c4a739aba889487e1e50dcf7bc39a03966ea889bc
 integration: {}
