@@ -1,0 +1,11 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  labels: {{- include "pipelines.labels" . | nindent 4 }}
+  name: {{ include "pipelines.fullname" . }}-api-server
+  namespace: kubeflow
+spec:
+  host: {{ include "pipelines.fullname" . }}-api-server.kubeflow.svc.{{ .Values.global.clusterDomain }}
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL

@@ -1,0 +1,13 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  labels: {{- include "pipelines.labels" . | nindent 4 }}
+  name: {{ include "pipelines.fullname" . }}-metadata-writer-cluster-role-binding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ include "pipelines.fullname" . }}-metadata-writer-cluster-role
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "pipelines.serviceAccountName" . }}-metadata-writer
+    namespace: kubeflow

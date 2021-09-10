@@ -2,13 +2,13 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   labels: {{- include "pipelines.labels" . | nindent 4 }}
-  name: {{ include "pipelines.fullname" . }}-web-app-role-binding
+  name: {{ include "pipelines.fullname" . }}-cache-server-role-binding
   namespace: kubeflow
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: {{ include "pipelines.fullname" . }}-web-app-role
+  name: {{ include "pipelines.fullname" . }}-cache-server-role
 subjects:
   - kind: ServiceAccount
-    name: {{ include "pipelines.serviceAccountName" . }}-web-app
+    name: {{ include "pipelines.serviceAccountName" . }}-cache-server
     namespace: kubeflow

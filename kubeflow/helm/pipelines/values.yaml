@@ -56,6 +56,116 @@ virtualService:
   hosts:
     - '*'
 
+controller:
+  image:
+    repository: public.ecr.aws/j1r0q0g6/notebooks/notebook-controller
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: v1.3.0
+  service:
+    metrics:
+      port: 8080
+
+apiServer:
+  image:
+    repository: gcr.io/ml-pipeline/api-server
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: 1.6.0
+  service:
+    http:
+      port: 8888
+    grpc:
+      port: 8887
+
+persistenceAgent:
+  image:
+    repository: gcr.io/ml-pipeline/persistenceagent
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: 1.6.0
+
+scheduledWorkflow:
+  image:
+    repository: gcr.io/ml-pipeline/scheduledworkflow
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: 1.6.0
+
+viewerController:
+  image:
+    repository: gcr.io/ml-pipeline/viewer-crd-controller
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: 1.6.0
+
+visualizationServer:
+  image:
+    repository: gcr.io/ml-pipeline/visualization-server
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: 1.6.0
+  service:
+    port: 8888
+
+argoWorkflowController:
+  image:
+    repository: gcr.io/ml-pipeline/workflow-controller
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: v2.12.9-license-compliance
+  service:
+    port: 9090
+
+cache:
+  server:
+    image:
+      repository: gcr.io/ml-pipeline/cache-server
+      pullPolicy: IfNotPresent
+      # Overrides the image tag whose default is the chart appVersion.
+      tag: 1.6.0
+    service:
+      port: 443
+  deployer:
+    image:
+      repository: gcr.io/ml-pipeline/cache-deployer
+      pullPolicy: IfNotPresent
+      # Overrides the image tag whose default is the chart appVersion.
+      tag: 1.6.0
+
+metadata:
+  envoy:
+    image:
+      repository: gcr.io/ml-pipeline/metadata-envoy
+      pullPolicy: IfNotPresent
+      # Overrides the image tag whose default is the chart appVersion.
+      tag: 1.6.0
+    service:
+      port: 9090
+      admin:
+        port: 9901
+  grpc:
+    image:
+      repository: gcr.io/tfx-oss-public/ml_metadata_store_server
+      pullPolicy: IfNotPresent
+      # Overrides the image tag whose default is the chart appVersion.
+      tag: 0.30.0
+    service:
+      port: 8080
+    virtualService:
+      annotations: {}
+      prefix: /ml_metadata
+      gateways:
+        - kubeflow-gateway
+      hosts:
+        - '*'
+  writer:
+    image:
+      repository: gcr.io/ml-pipeline/metadata-writer
+      pullPolicy: IfNotPresent
+      # Overrides the image tag whose default is the chart appVersion.
+      tag: 1.6.0
+
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
   # choice for the user. This also increases chances charts run on environments with little

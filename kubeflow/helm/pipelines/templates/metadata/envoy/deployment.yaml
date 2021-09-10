@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "pipelines.fullname" . }}-metadata-envoy
+  namespace: kubeflow
+  labels:
+    {{- include "pipelines.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "pipelines.metadataEnvoySelectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        sidecar.istio.io/inject: "false"
+        # cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "pipelines.metadataEnvoySelectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "pipelines.serviceAccountName" . }}-metadata-envoy
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}-metadata-envoy
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.metadata.envoy.image.repository }}:{{ .Values.metadata.envoy.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.metadata.envoy.image.pullPolicy }}
+          ports:
+            - name: md-envoy
+              containerPort: 9090
+              protocol: TCP
+            - name: envoy-admin
+              containerPort: 9901
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

@@ -27,6 +27,7 @@ data:
   viewer-tensorboard-template.json: |
     {
         "spec": {
+            "serviceAccountName": "default-editor"
             "containers": [
                 {
                     "env": [

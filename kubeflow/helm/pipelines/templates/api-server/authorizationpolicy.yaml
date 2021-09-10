@@ -1,0 +1,24 @@
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  labels: {{- include "pipelines.labels" . | nindent 4 }}
+  name: {{ include "pipelines.fullname" . }}-api-server
+  namespace: kubeflow
+spec:
+  rules:
+    - from:
+        - source:
+            principals:
+              - cluster.local/ns/kubeflow/sa/{{ include "pipelines.serviceAccountName" . }}-api-server
+              - cluster.local/ns/kubeflow/sa/{{ include "pipelines.serviceAccountName" . }}-web-app
+              - cluster.local/ns/kubeflow/sa/{{ include "pipelines.serviceAccountName" . }}-persistence-agent
+              - cluster.local/ns/kubeflow/sa/{{ include "pipelines.serviceAccountName" . }}-scheduled-workflow
+              - cluster.local/ns/kubeflow/sa/{{ include "pipelines.serviceAccountName" . }}-viewer-controller
+              - cluster.local/ns/kubeflow/sa/{{ include "pipelines.serviceAccountName" . }}-cache-server
+    - when:
+        - key: request.headers[{{ .Values.global.userIDHeader }}]
+          notValues:
+            - '*'
+  selector:
+    matchLabels:
+      {{- include "pipelines.apiServerSelectorLabels" . | nindent 6 }}

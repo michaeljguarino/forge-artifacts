@@ -1,0 +1,170 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "pipelines.fullname" . }}-api-server
+  namespace: kubeflow
+  labels:
+    {{- include "pipelines.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "pipelines.apiServerSelectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "pipelines.apiServerSelectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "pipelines.serviceAccountName" . }}-api-server
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}-api-server
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.apiServer.image.repository }}:{{ .Values.apiServer.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.apiServer.image.pullPolicy }}
+          env:
+            - name: AUTO_UPDATE_PIPELINE_DEFAULT_VERSION
+              valueFrom:
+                configMapKeyRef:
+                  key: autoUpdatePipelineDefaultVersion
+                  name: pipeline-install-config
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: OBJECTSTORECONFIG_SECURE
+              value: "false"
+            - name: OBJECTSTORECONFIG_BUCKETNAME
+              valueFrom:
+                configMapKeyRef:
+                  key: bucketName
+                  name: pipeline-install-config
+            - name: OBJECTSTORECONFIG_PIPELINEFOLDER
+              valueFrom:
+                configMapKeyRef:
+                  key: bucketPipelineFolder
+                  name: pipeline-install-config
+            - name: OBJECTSTORECONFIG_PIPELINEPATH
+              valueFrom:
+                configMapKeyRef:
+                  key: bucketPipelinePath
+                  name: pipeline-install-config
+            - name: OBJECTSTORECONFIG_REGION
+              valueFrom:
+                configMapKeyRef:
+                  key: bucketRegion
+                  name: pipeline-install-config
+            - name: OBJECTSTORECONFIG_ACCESSKEY
+              valueFrom:
+                secretKeyRef:
+                  key: S3_ACCESSKEY
+                  name: pipelines-s3-secret
+            - name: OBJECTSTORECONFIG_SECRETACCESSKEY
+              valueFrom:
+                secretKeyRef:
+                  key: S3_SECRETKEY
+                  name: pipelines-s3-secret
+            - name: DBCONFIG_USER
+              valueFrom:
+                secretKeyRef:
+                  key: username
+                  name: mysql-secret
+            - name: DBCONFIG_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: mysql-secret
+            - name: DBCONFIG_DBNAME
+              valueFrom:
+                configMapKeyRef:
+                  key: pipelineDb
+                  name: pipeline-install-config
+            - name: DBCONFIG_HOST
+              valueFrom:
+                configMapKeyRef:
+                  key: dbHost
+                  name: pipeline-install-config
+            - name: DBCONFIG_PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: dbPort
+                  name: pipeline-install-config
+            - name: DBCONFIG_CONMAXLIFETIMESEC
+              valueFrom:
+                configMapKeyRef:
+                  key: ConMaxLifeTimeSec
+                  name: pipeline-install-config
+          envFrom:
+            - configMapRef:
+                name: {{ include "pipelines.fullname" . }}-api-server-parameters
+          ports:
+            - name: http-api-server
+              containerPort: 8888
+              protocol: TCP
+            - name: grpc-api-server
+              containerPort: 8887
+              protocol: TCP
+          livenessProbe:
+            exec:
+              command:
+                - wget
+                - -q
+                - -S
+                - -O
+                - '-'
+                - http://localhost:8888/apis/v1beta1/healthz
+            initialDelaySeconds: 3
+            periodSeconds: 5
+            timeoutSeconds: 2
+          readinessProbe:
+            exec:
+              command:
+                - wget
+                - -q
+                - -S
+                - -O
+                - '-'
+                - http://localhost:8888/apis/v1beta1/healthz
+            initialDelaySeconds: 3
+            periodSeconds: 5
+            timeoutSeconds: 2
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      # TODO: check if this config is needed
+      #     volumeMounts:
+      #       - mountPath: /config
+      #         name: config-volume
+      # volumes:
+      #   - configMap:
+      #       name: {{ include "pipelines.fullname" . }}-api-server-config
+      #       items:
+      #         - key: config.json
+      #           path: config.json
+      #         - key: sample_config.json
+      #           path: sample_config.json
+      #     name: config-volume
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

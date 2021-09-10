@@ -24,11 +24,12 @@ spec:
             x-forwarded-prefix: {{ .Values.virtualService.prefix }}
       match:
         - uri:
-            prefix: {{ .Values.virtualService.prefix }}/
+            prefix: {{ .Values.virtualService.prefix }}
       rewrite:
-        uri: /
+        uri: {{ .Values.virtualService.prefix }}
       route:
         - destination:
             host: {{ include "pipelines.fullname" . }}-web-app.kubeflow.svc.{{ .Values.global.clusterDomain }}
             port:
               number: {{ .Values.service.port }}
+      timeout: 300s

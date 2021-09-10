@@ -1,0 +1,68 @@
+apiVersion: v1
+data:
+  KUBEFLOW_USERID_HEADER: {{ .Values.global.userIDHeader }}
+  KUBEFLOW_USERID_PREFIX: {{ .Values.global.userIDPrefix }}
+  DEFAULTPIPELINERUNNERSERVICEACCOUNT: default-editor
+  MULTIUSER: "true"
+  VISUALIZATIONSERVICE_NAME: {{ include "pipelines.fullname" . }}-visualization-server
+  VISUALIZATIONSERVICE_PORT: {{ .Values.visualizationServer.service.port }}
+kind: ConfigMap
+metadata:
+  labels: {{- include "pipelines.labels" . | nindent 4 }}
+  name: {{ include "pipelines.fullname" . }}-api-server-parameters
+  namespace: kubeflow
+---
+apiVersion: v1 # TODO: check if this config is needed
+data:
+  config.json: |
+    {
+      "DBConfig": {
+        "Host": "<<__rds.host__>>",
+        "Port": <<__rds.port__>>,
+        "DriverName": "mysql",
+        "DataSourceName": "",
+        "DBName": "<<__rds.db_name.pipelines__>>",
+        "GroupConcatMaxLen": "4194304",
+        "ConMaxLifeTimeSec": "120"
+      },
+      "ObjectStoreConfig": {
+        "Host": "s3.amazonaws.com",
+        "Region": "<<__aws_region__>>",
+        "Secure": true,
+        "BucketName": "<<__s3.bucket.pipelines__>>",
+        "PipelineFolder": "<<__s3.path.pipelines__>>",
+        "PipelinePath": "<<__s3.path.pipelines__>>",
+        "AccessKey": "",
+        "SecretAccessKey": ""
+      },
+      "InitConnectionTimeout": "6m",
+      "DefaultPipelineRunnerServiceAccount": "default-editor"
+    }
+  sample_config.json: |
+    [
+      {
+        "name": "[Demo] XGBoost - Iterative model training",
+        "description": "[source code](https://github.com/kubeflow/pipelines/blob/master/samples/core/train_until_good/train_until_good.py) This sample demonstrates iterative training using a train-eval-check recursive loop. The main pipeline trains the initial model and then gradually trains the model some more until the model evaluation metrics are good enough.",
+        "file": "/samples/core/train_until_good/train_until_good.py.yaml"
+      },
+      {
+        "name": "[Demo] TFX - Taxi tip prediction model trainer",
+        "description": "[source code](https://github.com/kubeflow/pipelines/tree/master/samples/core/parameterized_tfx_oss) [GCP Permission requirements](https://github.com/kubeflow/pipelines/blob/master/samples/core/parameterized_tfx_oss#permission). Example pipeline that does classification with model analysis based on a public tax cab dataset.",
+        "file": "/samples/core/parameterized_tfx_oss/parameterized_tfx_oss.py.yaml"
+      },
+      {
+        "name": "[Tutorial] Data passing in python components",
+        "description": "[source code](https://github.com/kubeflow/pipelines/tree/master/samples/tutorials/Data%20passing%20in%20python%20components) Shows how to pass data between python components.",
+        "file": "/samples/tutorials/Data passing in python components/Data passing in python components - Files.py.yaml"
+      },
+      {
+        "name": "[Tutorial] DSL - Control structures",
+        "description": "[source code](https://github.com/kubeflow/pipelines/tree/master/samples/tutorials/DSL%20-%20Control%20structures) Shows how to use conditional execution and exit handlers. This pipeline will randomly fail to demonstrate that the exit handler gets executed even in case of failure.",
+        "file": "/samples/tutorials/DSL - Control structures/DSL - Control structures.py.yaml"
+      }
+    ]
+kind: ConfigMap
+metadata:
+  labels: {{- include "pipelines.labels" . | nindent 4 }}
+  name: {{ include "pipelines.fullname" . }}-api-server-config
+  namespace: kubeflow

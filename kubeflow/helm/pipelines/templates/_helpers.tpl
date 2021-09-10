@@ -53,19 +53,19 @@ version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
 {{/*
-Controller selector labels
+API Server selector labels
 */}}
-{{- define "pipelines.controllerSelectorLabels" -}}
-app: {{ include "pipelines.name" . }}-controller
-app.kubernetes.io/name: {{ include "pipelines.name" . }}-controller
+{{- define "pipelines.apiServerSelectorLabels" -}}
+app: {{ include "pipelines.name" . }}-api
+app.kubernetes.io/name: {{ include "pipelines.name" . }}-api
 app.kubernetes.io/instance: {{ .Release.Name }}
 version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
 {{/*
-Argo selector labels
+Argo Workflow Controller selector labels
 */}}
-{{- define "pipelines.argoSelectorLabels" -}}
+{{- define "pipelines.argoWorkflowControllerSelectorLabels" -}}
 app: {{ include "pipelines.name" . }}-argo
 app.kubernetes.io/name: {{ include "pipelines.name" . }}-argo
 app.kubernetes.io/instance: {{ .Release.Name }}
@@ -98,6 +98,16 @@ Container Builder selector labels
 {{- define "pipelines.containerBuilderSelectorLabels" -}}
 app: {{ include "pipelines.name" . }}-container-builder
 app.kubernetes.io/name: {{ include "pipelines.name" . }}-container-builder
+app.kubernetes.io/instance: {{ .Release.Name }}
+version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+
+{{/*
+Metadata Envoy selector labels
+*/}}
+{{- define "pipelines.metadataEnvoySelectorLabels" -}}
+app: {{ include "pipelines.name" . }}-metadata-envoy
+app.kubernetes.io/name: {{ include "pipelines.name" . }}-metadata-envoy
 app.kubernetes.io/instance: {{ .Release.Name }}
 version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -153,11 +163,11 @@ version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
 {{/*
-Viewer CRD  selector labels
+Viewer Controller  selector labels
 */}}
-{{- define "pipelines.viewerCRDSelectorLabels" -}}
-app: {{ include "pipelines.name" . }}-viewer-crd
-app.kubernetes.io/name: {{ include "pipelines.name" . }}-viewer-crd
+{{- define "pipelines.viewerControllerSelectorLabels" -}}
+app: {{ include "pipelines.name" . }}-viewer-controller
+app.kubernetes.io/name: {{ include "pipelines.name" . }}-viewer-controller
 app.kubernetes.io/instance: {{ .Release.Name }}
 version: {{ .Chart.AppVersion | quote }}
 {{- end }}

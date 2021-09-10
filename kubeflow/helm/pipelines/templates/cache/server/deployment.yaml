@@ -1,0 +1,111 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "pipelines.fullname" . }}-cache-server
+  namespace: kubeflow
+  labels:
+    {{- include "pipelines.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "pipelines.cacheServerSelectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        # cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "pipelines.cacheServerSelectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "pipelines.serviceAccountName" . }}-cache-server
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}-cache-server
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.cache.server.image.repository }}:{{ .Values.cache.server.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.cache.server.image.pullPolicy }}
+          args:
+            - --db_driver=$(DBCONFIG_DRIVER)
+            - --db_host=$(DBCONFIG_HOST_NAME)
+            - --db_port=$(DBCONFIG_PORT)
+            - --db_name=$(DBCONFIG_DB_NAME)
+            - --db_user=$(DBCONFIG_USER)
+            - --db_password=$(DBCONFIG_PASSWORD)
+            - --namespace_to_watch=$(NAMESPACE_TO_WATCH)
+          env:
+            - name: NAMESPACE_TO_WATCH
+              value: ""
+            - name: CACHE_IMAGE
+              valueFrom:
+                configMapKeyRef:
+                  key: cacheImage
+                  name: pipeline-install-config
+            - name: CACHE_NODE_RESTRICTIONS
+              valueFrom:
+                configMapKeyRef:
+                  key: cacheNodeRestrictions
+                  name: pipeline-install-config
+            - name: DBCONFIG_DRIVER
+              value: mysql
+            - name: DBCONFIG_DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  key: cacheDb
+                  name: pipeline-install-config
+            - name: DBCONFIG_HOST_NAME
+              valueFrom:
+                configMapKeyRef:
+                  key: dbHost
+                  name: pipeline-install-config
+            - name: DBCONFIG_PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: dbPort
+                  name: pipeline-install-config
+            - name: DBCONFIG_USER
+              valueFrom:
+                secretKeyRef:
+                  key: username
+                  name: mysql-secret
+            - name: DBCONFIG_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: mysql-secret
+          ports:
+            - name: webhook-api
+              containerPort: 8443
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - mountPath: /etc/webhook/certs
+              name: webhook-tls-certs
+              readOnly: true
+      volumes:
+        - secret:
+            secretName: webhook-server-tls
+          name: webhook-tls-certs
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

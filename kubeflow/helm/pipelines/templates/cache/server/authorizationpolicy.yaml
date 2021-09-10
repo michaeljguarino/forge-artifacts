@@ -1,0 +1,12 @@
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  labels: {{- include "pipelines.labels" . | nindent 4 }}
+  name: {{ include "pipelines.fullname" . }}-cache-server
+  namespace: kubeflow
+spec:
+  rules:
+    - {}
+  selector:
+    matchLabels:
+      {{- include "pipelines.cacheServerSelectorLabels" . | nindent 6 }}
