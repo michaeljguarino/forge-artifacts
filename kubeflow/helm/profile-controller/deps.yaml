@@ -9,6 +9,10 @@ spec:
     name: bootstrap
     repo: bootstrap
     version: '>= 0.5.1'
+  - type: helm
+    name: crossplane
+    repo: crossplane
+    version: '>= 0.1.4'
   - type: terraform
     name: aws
     repo: kubeflow

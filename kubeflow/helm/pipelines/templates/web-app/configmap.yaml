@@ -39,7 +39,7 @@ data:
                             "valueFrom": {
                                 "secretKeyRef": {
                                     "name": "pipelines-s3-secret",
-                                    "key": "S3_ACCESSKEY"
+                                    "key": "username"
                                 }
                             }
                         },
@@ -48,7 +48,7 @@ data:
                             "valueFrom": {
                                 "secretKeyRef": {
                                     "name": "pipelines-s3-secret",
-                                    "key": "S3_SECRETKEY"
+                                    "key": "password"
                                 }
                             }
                         },

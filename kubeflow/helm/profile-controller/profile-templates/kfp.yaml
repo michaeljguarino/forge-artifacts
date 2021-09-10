@@ -1,0 +1,231 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: metadata-grpc-configmap
+  namespace: {{ .Namespace }}
+data:
+  METADATA_GRPC_SERVICE_HOST: "kubeflow-pipelines-metadata-grpc-server.kubeflow"
+  METADATA_GRPC_SERVICE_PORT: "8080"
+---
+# Visualization server related manifests below
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: ml-pipeline-visualizationserver
+  name: ml-pipeline-visualizationserver
+  namespace: {{ .Namespace }}
+spec:
+  selector:
+    matchLabels:
+      app: ml-pipeline-visualizationserver
+  template:
+    metadata:
+      labels:
+        app: ml-pipeline-visualizationserver
+      annotations: {}
+    spec:
+      containers:
+      - name: ml-pipeline-visualizationserver
+        image: gcr.io/ml-pipeline/visualization-server:1.6.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8888
+        resources:
+          requests:
+            cpu: 50m
+            memory: 200Mi
+          limits:
+            cpu: 500m
+            memory: 1Gi
+      serviceAccountName: default-editor
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: ml-pipeline-visualizationserver
+  namespace: {{ .Namespace }}
+spec:
+  host: ml-pipeline-visualizationserver
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+---
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: ml-pipeline-visualizationserver
+  namespace: {{ .Namespace }}
+spec:
+  selector:
+    matchLabels:
+      app: ml-pipeline-visualizationserver
+  rules:
+  - from:
+    - source:
+        principals:
+        - cluster.local/ns/kubeflow/sa/kubeflow-pipelines-api-server
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ml-pipeline-visualizationserver
+  namespace: {{ .Namespace }}
+spec:
+  selector:
+    app: ml-pipeline-visualizationserver
+  ports:
+  - name: http
+    port: 8888
+    protocol: TCP
+    targetPort: 8888
+---
+# Artifact fetcher related resources below.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: ml-pipeline-ui-artifact
+  name: ml-pipeline-ui-artifact
+  namespace: {{ .Namespace }}
+spec:
+  selector:
+    matchLabels:
+      app: ml-pipeline-ui-artifact
+  template:
+    metadata:
+      labels:
+        app: ml-pipeline-ui-artifact
+      annotations: {}
+    spec:
+      containers:
+      - name: ml-pipeline-ui-artifact
+        image: gcr.io/ml-pipeline/frontend:1.6.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 3000
+        env:
+        - name: AWS_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              key: username
+              name: pipelines-s3-secret
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: pipelines-s3-secret
+        resources:
+          requests:
+            cpu: 10m
+            memory: 70Mi
+          limits:
+            cpu: 100m
+            memory: 500Mi
+      serviceAccountName: default-editor
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ml-pipeline-ui-artifact
+  namespace: {{ .Namespace }}
+  labels:
+    app: ml-pipeline-ui-artifact
+spec:
+  selector:
+    app: ml-pipeline-ui-artifact
+  ports:
+  - name: http  # name is required to let istio understand request protocol
+    port: 80
+    protocol: TCP
+    targetPort: 3000
+---
+# Section for crossplane AWS permissions
+apiVersion: identity.aws.crossplane.io/v1alpha1
+kind: IAMPolicy
+metadata:
+  name: s3-iam-policy-ns-{{ .Namespace }}
+  namespace: {{ .Namespace }}
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    description: test policy
+    document: |
+      {
+          "Version": "2012-10-17",
+          "Statement": [
+              {
+                "Sid": "AllowUserToSeeBucketListInTheConsole",
+                "Action": ["s3:ListAllMyBuckets", "s3:GetBucketLocation"],
+                "Effect": "Allow",
+                "Resource": ["arn:aws:s3:::*"]
+              },
+              {
+                "Sid": "AllowRootAndHomeListingOfCompanyBucket",
+                "Action": ["s3:ListBucket"],
+                "Effect": "Allow",
+                "Resource": ["arn:aws:s3:::pipelines-bucket"],
+                "Condition":{"StringEquals":{"s3:prefix":["","pipelines/", "pipelines/{{ .Namespace }}"],"s3:delimiter":["/"]}}
+                },
+              {
+                "Sid": "AllowListingOfUserFolder",
+                "Action": ["s3:ListBucket"],
+                "Effect": "Allow",
+                "Resource": ["arn:aws:s3:::pipelines-bucket"],
+                "Condition":{"StringLike":{"s3:prefix":["pipelines/{{ .Namespace }}/*"]}}
+              },
+              {
+                  "Sid": "kubeflowNSdavid",
+                  "Effect": "Allow",
+                  "Action": "s3:*",
+                  "Resource": [
+                      "arn:aws:s3:::pipelines-bucket/pipelines/{{ .Namespace }}/*"
+                  ]
+              }
+          ]
+      }
+    name: kubeflow-s3-test-policy
+  providerConfigRef:
+    name: aws-provider
+---
+apiVersion: identity.aws.crossplane.io/v1alpha1
+kind: IAMUser
+metadata:
+  name: iam-user-ns-{{ .Namespace }}
+  namespace: {{ .Namespace }}
+spec:
+  deletionPolicy: Delete
+  forProvider: {}
+  providerConfigRef:
+    name: aws-provider
+---
+apiVersion: identity.aws.crossplane.io/v1alpha1
+kind: IAMAccessKey
+metadata:
+  name: access-key-ns-{{ .Namespace }}
+  namespace: {{ .Namespace }}
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    userNameRef:
+      name: iam-user-ns-{{ .Namespace }}
+  writeConnectionSecretToRef:
+    name: pipelines-s3-secret
+    namespace: {{ .Namespace }}
+  providerConfigRef:
+    name: aws-provider
+---
+apiVersion: identity.aws.crossplane.io/v1alpha1
+kind: IAMUserPolicyAttachment
+metadata:
+  name: policy-attachement-ns-{{ .Namespace }}
+  namespace: {{ .Namespace }}
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    userNameRef:
+      name: iam-user-ns-{{ .Namespace }}
+    policyArnRef:
+      name: s3-iam-policy-ns-{{ .Namespace }}
+  providerConfigRef:
+    name: aws-provider

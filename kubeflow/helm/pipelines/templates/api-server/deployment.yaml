@@ -73,12 +73,12 @@ spec:
             - name: OBJECTSTORECONFIG_ACCESSKEY
               valueFrom:
                 secretKeyRef:
-                  key: S3_ACCESSKEY
+                  key: username
                   name: pipelines-s3-secret
             - name: OBJECTSTORECONFIG_SECRETACCESSKEY
               valueFrom:
                 secretKeyRef:
-                  key: S3_SECRETKEY
+                  key: password
                   name: pipelines-s3-secret
             - name: DBCONFIG_USER
               valueFrom:

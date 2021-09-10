@@ -16,7 +16,7 @@ image:
   repository: davidspek/profile-controller
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: 0.1.16
+  tag: 0.1.18
 
 kfam:
   image:

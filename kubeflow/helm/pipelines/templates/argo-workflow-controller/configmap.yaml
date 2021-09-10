@@ -10,10 +10,10 @@ data:
       insecure: false
       accessKeySecret:
         name: pipelines-s3-secret
-        key: S3_ACCESSKEY
+        key: username
       secretKeySecret:
         name: pipelines-s3-secret
-        key: S3_SECRETKEY
+        key: password
       keyFormat: {{ printf "\"pipelines/{{workflow.namespace}}/{{workflow.name}}/{{pod.name}}\"" }}
   containerRuntimeExecutor: pns
   executor: |

@@ -54,8 +54,8 @@ resource "kubernetes_secret" "pipelines_s3_secret" {
     namespace = kubernetes_namespace.kubeflow.id
   }
   data = {
-    "S3_ACCESSKEY" = aws_iam_access_key.pipelines.id
-    "S3_SECRETKEY" = aws_iam_access_key.pipelines.secret
+    "username" = aws_iam_access_key.pipelines.id
+    "password" = aws_iam_access_key.pipelines.secret
   }
 }
 
