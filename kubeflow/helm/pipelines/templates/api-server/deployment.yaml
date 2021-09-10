@@ -144,18 +144,18 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       # TODO: check if this config is needed
-      #     volumeMounts:
-      #       - mountPath: /config
-      #         name: config-volume
-      # volumes:
-      #   - configMap:
-      #       name: {{ include "pipelines.fullname" . }}-api-server-config
-      #       items:
-      #         - key: config.json
-      #           path: config.json
-      #         - key: sample_config.json
-      #           path: sample_config.json
-      #     name: config-volume
+          volumeMounts:
+            - mountPath: /config
+              name: config-volume
+      volumes:
+        - configMap:
+            name: {{ include "pipelines.fullname" . }}-api-server-config
+            items:
+              - key: config.json
+                path: config.json
+              - key: sample_config.json
+                path: sample_config.json
+          name: config-volume
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

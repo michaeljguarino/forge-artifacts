@@ -17,11 +17,11 @@ data:
   config.json: |
     {
       "DBConfig": {
-        "Host": "<<__rds.host__>>",
-        "Port": <<__rds.port__>>,
+        "Host": "{{ .Values.config.databases.connection.host }}",
+        "Port": "{{ .Values.config.databases.connection.port }}",
         "DriverName": "mysql",
         "DataSourceName": "",
-        "DBName": "<<__rds.db_name.pipelines__>>",
+        "DBName": "{{ .Values.config.databases.pipelineDB }}",
         "GroupConcatMaxLen": "4194304",
         "ConMaxLifeTimeSec": "120"
       },
