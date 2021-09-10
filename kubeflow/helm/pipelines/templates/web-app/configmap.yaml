@@ -10,7 +10,7 @@ data:
   METADATA_ENVOY_SERVICE_SERVICE_PORT: "9090"
   ML_PIPELINE_SERVICE_HOST: kubeflow-pipelines-api-server.kubeflow.svc.cluster.local
   ML_PIPELINE_SERVICE_PORT: "8888"
-  DISABLE_GKE_METADATA: "false" # name is misleading, should be false to disable
+  DISABLE_GKE_METADATA: "true"
   DEPLOYMENT: KUBEFLOW
   ARTIFACTS_SERVICE_PROXY_NAME: ml-pipeline-ui-artifact
   ARTIFACTS_SERVICE_PROXY_PORT: "80"
