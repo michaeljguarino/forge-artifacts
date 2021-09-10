@@ -16,6 +16,10 @@ spec:
     metadata:
       {{- with .Values.podAnnotations }}
       annotations:
+        prometheus.io/port: "8080"
+        prometheus.io/scheme: http
+        prometheus.io/scrape: "true"
+        prometheus.io/path: /metrics
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
@@ -36,20 +40,20 @@ spec:
           imagePullPolicy: {{ .Values.controller.image.pullPolicy }}
           command:
             - /manager
-          # ports:
-          #   - name: website
-          #     containerPort: 5000
-          #     protocol: TCP
+          ports:
+            - name: metrics
+              containerPort: 8080
+              protocol: TCP
           livenessProbe:
             httpGet:
               path: /metrics
-              port: 8080
+              port: metrics
             initialDelaySeconds: 30
             periodSeconds: 30
           readinessProbe:
             httpGet:
               path: /metrics
-              port: 8080
+              port: metrics
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           envFrom:

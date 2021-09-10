@@ -76,6 +76,9 @@ controller:
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
     tag: v1.3.0
+  service:
+    metrics:
+      port: 8080
 
 podDefaults:
   image:
