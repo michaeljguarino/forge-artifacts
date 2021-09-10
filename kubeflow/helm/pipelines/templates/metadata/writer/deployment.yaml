@@ -38,6 +38,9 @@ spec:
           env:
             - name: NAMESPACE_TO_WATCH
               value: ""
+          envFrom:
+            - configMapRef:
+                name: {{ include "pipelines.fullname" . }}-metadata-writer-parameters
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
