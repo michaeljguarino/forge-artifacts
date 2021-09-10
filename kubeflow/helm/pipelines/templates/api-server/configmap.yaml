@@ -23,7 +23,7 @@ data:
         "DataSourceName": "",
         "DBName": "{{ .Values.config.databases.pipelineDB }}",
         "GroupConcatMaxLen": "4194304",
-        "ConMaxLifeTimeSec": "120"
+        "ConMaxLifeTimeSec": "28800"
       },
       "ObjectStoreConfig": {
         "Host": "s3.amazonaws.com",
