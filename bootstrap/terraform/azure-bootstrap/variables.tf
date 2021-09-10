@@ -29,7 +29,7 @@ variable "os_disk_size" {
 }
 
 variable "os_disk_type" {
-  type = number
+  type = string
   default = "Ephemeral"
 }
 
