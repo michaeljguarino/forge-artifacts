@@ -1,12 +1,13 @@
 artifact: {}
 terraform:
   terraform/aws: h1:zcruYk8hOkQJAbaF2sDjRGbWZX3Ctk2ENbdCtfHcheo=
-  terraform/azure: h1:brIH5Gvk+E4qnIRazkfHITiS5O2DSatZr3bOQ55l+1g=
+  terraform/azure: h1:K0OuSxLTL3+qahNjQWBVG1xTp6pRvtYdgRhbtzIXfXc=
   terraform/gcp: h1:3vhNYtfHBS7xAqszWXU/KNFRnt1StvZiLaXwVW1GwOc=
 helm:
   helm/nextcloud: h1:LB+TaCCBLwqWE6vjPJ5qsBHtCBx87OiQivw9rqqn3mM=
 recipe:
   plural/recipes/nextcloud-aws.yaml: 133e8afafc2d6275181ba1d3de7fcdeefa9240ee251258ffed4caccac4e548e8
+  plural/recipes/nextcloud-azure.yaml: 433fc3155a17e15dd00db4ce6f7b05ee91f39836aa0fcfeebcf57ba4e274bef8
 integration: {}
 crd: {}
 ird: {}
@@ -15,3 +16,4 @@ tag:
   plural/tags/terraform/aws.yaml: 01c402c260cc7fe359d1ebc4302ff11539cfabbd5a82745907ad445914153bb7
   plural/tags/terraform/azure.yaml: 86b17dc5dcbc7d877dddbda68b790231f9f7eaa025d00471360108ccd5f42a07
   plural/tags/terraform/gcp.yaml: 3761f7e078206cf85f48969d231071adfb3b68ee68b7c68a2b50045e896a3288
+attrs: {}
