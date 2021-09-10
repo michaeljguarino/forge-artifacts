@@ -40,8 +40,6 @@ resource "aws_iam_user" "pipelines" {
 resource "aws_iam_user_policy_attachment" "attach_s3_full_access" {
   user       = aws_iam_user.pipelines.name
   policy_arn = aws_iam_policy.kubeflow.arn
-  path        = "/"
-  description = "Grants ${aws_iam_user.pipelines.name} full permissions for S3 bucket ${aws_s3_bucket.pipelines.bucket}"
 }
 
 resource "aws_iam_policy" "kubeflow" {
