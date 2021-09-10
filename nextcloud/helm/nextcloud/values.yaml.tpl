@@ -18,6 +18,7 @@ nextcloud:
       s3.config.php: |-
         <?php
         $CONFIG = array (
+          'filelocking.enabled' => false,
           'objectstore' => array(
             'class' => '\\OC\\Files\\ObjectStore\\S3',
             'arguments' => array(
