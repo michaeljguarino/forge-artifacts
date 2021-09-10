@@ -21,7 +21,7 @@ kubeflowComponents:
   katib:
     enabled: true
   pipelines:
-    enabled: false
+    enabled: true
   serving:
     enabled: true
   operators:
