@@ -48,6 +48,17 @@ resource "aws_iam_policy" "kubeflow" {
   policy      = data.aws_iam_policy_document.kubeflow.json
 }
 
+resource "kubernetes_secret" "pipelines_s3_secret" {
+  metadata {
+    name = "pipelines-s3-secret"
+    namespace = kubernetes_namespace.kubeflow.metadata.name
+  }
+  data = {
+    "S3_ACCESSKEY" = aws_iam_access_key.pipelines.id
+    "S3_SECRETKEY" = aws_iam_access_key.pipelines.secret
+  }
+}
+
 resource "aws_s3_bucket" "pipelines" {
   bucket = var.pipelines_bucket
   acl    = "private"
