@@ -14,12 +14,9 @@ spec:
       {{- include "pipelines.metadataEnvoySelectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
       annotations:
         sidecar.istio.io/inject: "false"
         cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
       labels:
         {{- include "pipelines.metadataEnvoySelectorLabels" . | nindent 8 }}
     spec:
