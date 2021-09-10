@@ -46,7 +46,7 @@ spec:
             - $(DEFAULTNAMESPACELABELSPATH)
             - -issuer
             - $(ISSUER)
-            - jwks-uri
+            - -jwks-uri
             - $(JWKSURI)
           ports:
             - name: metrics
