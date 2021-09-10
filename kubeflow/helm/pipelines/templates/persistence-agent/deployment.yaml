@@ -36,26 +36,16 @@ spec:
           image: "{{ .Values.persistenceAgent.image.repository }}:{{ .Values.persistenceAgent.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.persistenceAgent.image.pullPolicy }}
           args:
-            - --logtostderr
-            - "true"
-            - --namespace
-            - ${NAMESPACE}
-            - --ttlSecondsAfterWorkflowFinish
-            - ${TTL_SECONDS_AFTER_WORKFLOW_FINISH}
-            - --numWorker
-            - ${NUM_WORKERS}
-            - --mlPipelineAPIServerName
-            - ${API_SERVER_HOST_SERVICE}
-            - --mlPipelineServiceHttpPort
-            - ${API_SERVER_HTTP_PORT}
-            - --mlPipelineServiceGRPCPort
-            - ${API_SERVER_GRPC_PORT}
-            - --mlPipelineAPIServerBasePath
-            - ${API_SERVER_BASE_PATH}
-            - --clientQPS
-            - ${MAX_CLIENT_QPS}
-            - --clientBurst
-            - ${MAX_CLIENT_BURST}
+            - --logtostderr="true"
+            - --namespace=${NAMESPACE}
+            - --ttlSecondsAfterWorkflowFinish=${TTL_SECONDS_AFTER_WORKFLOW_FINISH}
+            - --numWorker=${NUM_WORKERS}
+            - --mlPipelineAPIServerName=${API_SERVER_HOST_SERVICE}
+            - --mlPipelineServiceHttpPort=${API_SERVER_HTTP_PORT}
+            - --mlPipelineServiceGRPCPort=${API_SERVER_GRPC_PORT}
+            - --mlPipelineAPIServerBasePath=${API_SERVER_BASE_PATH}
+            - --clientQPS=${MAX_CLIENT_QPS}
+            - --clientBurst=${MAX_CLIENT_BURST}
           command:
             - persistence_agent
           envFrom:
