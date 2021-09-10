@@ -1,7 +1,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  labels: {{- include "notebooks.labels" . | nindent 4 }}
+  labels: {{- include "pipelines.labels" . | nindent 4 }}
   name: {{ include "pipelines.fullname" . }}-persistence-agent-role-binding
   namespace: kubeflow
 roleRef:

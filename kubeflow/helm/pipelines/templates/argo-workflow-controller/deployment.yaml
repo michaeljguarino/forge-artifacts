@@ -32,7 +32,7 @@ spec:
       {{- end }}
       serviceAccountName: {{ include "pipelines.serviceAccountName" . }}-argo-workflow-controller
       securityContext:
-        runAsNonRoot: true
+        # runAsNonRoot: true # TODO: Fix runAsNonRoot
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}-argo-workflow-controller

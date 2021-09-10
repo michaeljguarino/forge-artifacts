@@ -15,6 +15,7 @@ spec:
     metadata:
       {{- with .Values.podAnnotations }}
       annotations:
+        cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
         prometheus.io/port: "8080"
         prometheus.io/scheme: http
         prometheus.io/scrape: "true"

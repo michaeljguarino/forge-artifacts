@@ -16,7 +16,7 @@ spec:
     metadata:
       {{- with .Values.podAnnotations }}
       annotations:
-        # cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
+        cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
