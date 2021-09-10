@@ -11,7 +11,7 @@ helm:
   helm/operators/pytorch: h1:KRh+hGTYK9G4+ER8WSl7zsLGZHDQJGNfupT6ypDouS4=
   helm/operators/tensorflow: h1:toqrsNF9bD96nYXAu5N9wHnmJcfOhnBa7yBxYaXJ7aw=
   helm/operators/xgboost: h1:KaitX2yztaulcHy63YJ9gogrBf6K+97ApMc1pFJzYs4=
-  helm/pipelines: h1:qlI0cZd4Z8CsE5xmKDrqGR6cHYn2gzPu/vJksx0+LBc=
+  helm/pipelines: h1://ZxIagQBHAcfP/EcpK+jb1MOzPgyguO5JKM4xSMUjI=
   helm/profile-controller: h1:Ga9xUy9TQFXqJsSBkPQJwYEEWd4SJtfieG9CfprS/gE=
   helm/serving: h1:1bruQzFSmjYZ3XJKm35bd4BAxOI4/oipbNog1AsD/rg=
   helm/tensorboards: h1:e+2xTYX53JCJ+0gIMvpcNJRTXqUzUrkoVnp9dscn+IE=
