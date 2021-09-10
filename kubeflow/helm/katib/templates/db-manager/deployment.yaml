@@ -28,7 +28,7 @@ spec:
       securityContext:
         {{- toYaml .Values.dbManager.podSecurityContext | nindent 8 }}
       containers:
-        - name: {{ .Chart.Name }}
+        - name: {{ .Chart.Name }}-db-manager
           securityContext:
             {{- toYaml .Values.dbManager.securityContext | nindent 12 }}
           image: "{{ .Values.dbManager.image.repository }}:{{ .Values.dbManager.image.tag | default .Chart.AppVersion }}"
