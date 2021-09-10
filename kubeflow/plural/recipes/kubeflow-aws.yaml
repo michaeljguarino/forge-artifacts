@@ -1,0 +1,22 @@
+name: kubeflow-aws
+description: Installs Kubeflow on an EKS cluster
+provider: AWS
+dependencies:
+- repo: bootstrap
+  name: aws-k8s
+sections:
+- name: kubeflow
+  items:
+  - type: TERRAFORM
+    name: aws
+    configuration:
+    - name: pipelines_bucket
+      type: STRING
+      documentation: bucket to store the logs in
+  - type: HELM
+    name: kubeflow
+    configuration:
+    - name: hostname
+      documentation: FQDN to use for your airflow installation
+      type: STRING
+  

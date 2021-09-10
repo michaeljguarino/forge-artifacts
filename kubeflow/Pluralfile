@@ -1,8 +1,7 @@
 REPO kubeflow
 
 TF terraform/*
-HELM helm/*
+HELM helm/central-dashboard/*
 CRD plural/crds/* helm/kubeflow
 RECIPE plural/recipes/*
-TAG plural/tags/helm/*
-TAG plural/tags/terraform/*
+TAG plural/tags/**/*

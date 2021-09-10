@@ -1,9 +1,9 @@
 variable "namespace" {
   type = string
-  default = "airflow"
+  default = "kubeflow"
 }
 
-variable "wal_bucket" {
+variable "pipelines_bucket" {
   type = string
 }
 

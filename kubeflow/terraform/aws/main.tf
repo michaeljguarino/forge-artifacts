@@ -4,6 +4,8 @@ resource "kubernetes_namespace" "kubeflow" {
 
     labels = {
       "app.kubernetes.io/managed-by" = "plural"
+      "istio-injection" = "disabled"
+      "app.plural.sh/name" = "kubeflow"
     }
   }
 }
@@ -31,8 +33,8 @@ resource "aws_iam_policy" "kubeflow" {
   policy      = data.aws_iam_policy_document.kubeflow.json
 }
 
-resource "aws_s3_bucket" "wal" {
-  bucket = var.wal_bucket
+resource "aws_s3_bucket" "pipelines" {
+  bucket = var.pipelines_bucket
   acl    = "private"
 }
 
@@ -43,8 +45,8 @@ data "aws_iam_policy_document" "kubeflow" {
     actions = ["s3:*"]
 
     resources = [
-      "arn:aws:s3:::${var.wal_bucket}",
-      "arn:aws:s3:::${var.wal_bucket}/*"
+      "arn:aws:s3:::${var.pipelines_bucket}",
+      "arn:aws:s3:::${var.pipelines_bucket}/*"
     ]
   }
 }
