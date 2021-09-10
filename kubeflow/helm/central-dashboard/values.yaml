@@ -8,6 +8,20 @@ global:
   userIDHeader: kubeflow-userid
   userIDPrefix: ""
 
+kubeflowComponents:
+  notebooks:
+    enabled: true
+  tensorboards:
+    enabled: false
+  volumes:
+    enabled: false
+  katib:
+    enabled: false
+  pipelines:
+    enabled: false
+  serving:
+    enabled: false
+
 replicaCount: 1
 
 image:

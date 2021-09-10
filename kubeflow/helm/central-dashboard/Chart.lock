@@ -1,0 +1,9 @@
+dependencies:
+- name: profile-controller
+  repository: file://../profile-controller
+  version: 0.1.0
+- name: notebooks
+  repository: file://../notebooks
+  version: 0.1.0
+digest: sha256:09b65170e5b03c8ca76da11de6ce5ada078cd2bf41d369df067eed4068b5c6f8
+generated: "2021-07-06T16:35:13.605539952+02:00"
