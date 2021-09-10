@@ -40,7 +40,6 @@ spec:
           imagePullPolicy: {{ .Values.controller.image.pullPolicy }}
           args:
             - --metrics-addr=0.0.0.0:8080
-            - --enable-leader-election
           command:
             - /manager
           env:
