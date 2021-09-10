@@ -12,7 +12,7 @@ helm:
   helm/operators/tensorflow: h1:toqrsNF9bD96nYXAu5N9wHnmJcfOhnBa7yBxYaXJ7aw=
   helm/operators/xgboost: h1:KaitX2yztaulcHy63YJ9gogrBf6K+97ApMc1pFJzYs4=
   helm/pipelines: h1:KhEuBg0+kEi5moT/h8MZZoCBMdDLR8lJi3zkrcBtoJc=
-  helm/profile-controller: h1:jK6yAPfmWl6Eyv8n/S4W7bgtkmapqV3YJvd7vIwOPao=
+  helm/profile-controller: h1:f7tl0NpLVrUXaIeNFnYS03mT9ZSf1sfYl86kdJ/TlzM=
   helm/serving: h1:1bruQzFSmjYZ3XJKm35bd4BAxOI4/oipbNog1AsD/rg=
   helm/tensorboards: h1:e+2xTYX53JCJ+0gIMvpcNJRTXqUzUrkoVnp9dscn+IE=
   helm/volumes: h1:416qzMUu2Ho+jBRoSYk1oOoKKkbtigAhOWpl0AhfKaI=
@@ -20,7 +20,7 @@ recipe:
   plural/recipes/kubeflow-aws.yaml: d3d50cbe5ec5d749ddaa8ef95cc0266311b1fcef77cdd692a7c4abc511df87fc
 integration: {}
 crd:
-  plural/crds/profile-controller/profiles.yaml: b3097e7bce72e61f2f0eca692594fc5301e681c36f08ed38e205d406af99f6d4:h1:jK6yAPfmWl6Eyv8n/S4W7bgtkmapqV3YJvd7vIwOPao=
+  plural/crds/profile-controller/profiles.yaml: b3097e7bce72e61f2f0eca692594fc5301e681c36f08ed38e205d406af99f6d4:h1:f7tl0NpLVrUXaIeNFnYS03mT9ZSf1sfYl86kdJ/TlzM=
   plural/crds/profiles.yaml: b3097e7bce72e61f2f0eca692594fc5301e681c36f08ed38e205d406af99f6d4:h1:93j96nnXsNghvBD0sKNWoSPnNA7RDVtLRAoaPYAVaOg=
 ird: {}
 tag: {}

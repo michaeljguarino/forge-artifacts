@@ -210,12 +210,12 @@ data:
             - name: AWS_ACCESS_KEY_ID
               valueFrom:
                 secretKeyRef:
-                  key: S3_ACCESSKEY
+                  key: username
                   name: pipelines-s3-secret
             - name: AWS_SECRET_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
-                  key: S3_SECRETKEY
+                  key: password
                   name: pipelines-s3-secret
             resources:
               requests:
