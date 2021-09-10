@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "volumes.fullname" . }}-web-app
+  namespace: kubeflow
+  labels:
+    {{- include "volumes.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: website
+      protocol: TCP
+      name: tcp-website
+  selector:
+    {{- include "volumes.selectorLabels" . | nindent 4 }}

@@ -1,4 +1,4 @@
-# Default values for tensorboards.
+# Default values for volumes.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
@@ -11,10 +11,10 @@ global:
   userIDPrefix: ""
 
 image:
-  repository: public.ecr.aws/j1r0q0g6/notebooks/tensorboards-web-app
+  repository: davidspek/volumes-web-app
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: v1.3.0
+  tag: 0.5.2 # newer version with snapshot support causes error due to missing snapshot class
 
 imagePullSecrets: []
 nameOverride: ""
@@ -33,10 +33,10 @@ controller:
   rwoScheduling:
     enabled: true
   image:
-    repository: public.ecr.aws/j1r0q0g6/notebooks/tensorboard-controller
+    repository: davidspek/kubeflow-pvcviewer-controller
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
-    tag: master-18264c8f
+    tag: 0.7
   service:
     port: 8080
 
@@ -59,7 +59,7 @@ service:
 
 virtualService:
   annotations: {}
-  prefix: /tensorboards
+  prefix: /volumes
   gateways:
     - kubeflow-gateway
   hosts:

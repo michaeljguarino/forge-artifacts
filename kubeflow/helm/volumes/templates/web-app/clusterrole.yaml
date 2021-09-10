@@ -1,0 +1,174 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels: {{- include "volumes.labels" . | nindent 4 }}
+  name: {{ include "volumes.fullname" . }}-web-app-cluster-role
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - namespaces
+      - pods
+    verbs:
+      - get
+      - list
+  - apiGroups:
+      - authorization.k8s.io
+    resources:
+      - subjectaccessreviews
+    verbs:
+      - create
+  - apiGroups:
+      - ""
+    resources:
+      - persistentvolumeclaims
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - watch
+      - update
+      - patch
+  - apiGroups:
+      - snapshot.storage.k8s.io
+    resources:
+      - volumesnapshots
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - watch
+      - update
+      - patch
+  - apiGroups:
+      - storage.k8s.io
+    resources:
+      - storageclasses
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - snapshot.storage.k8s.io
+    resources:
+      - volumesnapshotclasses
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - events
+    verbs:
+      - list
+  - apiGroups:
+      - pvcviewer.kubeflow.org
+    resources:
+      - pvcviewers
+      - pvcviewers/finalizers
+    verbs:
+      - get
+      - list
+      - create
+      - delete
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels: {{- include "volumes.labels" . | nindent 4 }}
+    rbac.authorization.kubeflow.org/aggregate-to-kubeflow-admin: "true"
+  name: volumes-web-app-kubeflow-volume-ui-admin
+rules: []
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels: {{- include "volumes.labels" . | nindent 4 }}
+    rbac.authorization.kubeflow.org/aggregate-to-kubeflow-edit: "true"
+  name: volumes-web-app-kubeflow-volume-ui-edit
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - persistentvolumeclaims
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - watch
+      - update
+      - patch
+  - apiGroups:
+      - snapshot.storage.k8s.io
+    resources:
+      - volumesnapshots
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - watch
+      - update
+      - patch
+  - apiGroups:
+      - pvcviewer.kubeflow.org
+    resources:
+      - pvcviewers
+      - pvcviewers/finalizers
+    verbs:
+      - get
+      - list
+      - create
+      - delete
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels: {{- include "volumes.labels" . | nindent 4 }}
+    rbac.authorization.kubeflow.org/aggregate-to-kubeflow-view: "true"
+  name: volumes-web-app-kubeflow-volume-ui-view
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - persistentvolumeclaims
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - snapshot.storage.k8s.io
+    resources:
+      - volumesnapshots
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - storage.k8s.io
+    resources:
+      - storageclasses
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - snapshot.storage.k8s.io
+    resources:
+      - volumesnapshotclasses
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - pvcviewer.kubeflow.org
+    resources:
+      - pvcviewers
+      - pvcviewers/finalizers
+    verbs:
+      - get
+      - list
