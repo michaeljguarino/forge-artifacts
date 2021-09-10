@@ -1,7 +1,7 @@
 artifact: {}
 terraform:
   terraform/aws-bootstrap: h1:R0hvS6Cp6anQuXekqYMTfEgd5qze8jLJnAZS+S+4IAw=
-  terraform/azure-bootstrap: h1:2UyEpxL4Cu0WouCG1CD11rFUTsgDWhz2ZFLp0A6Upzc=
+  terraform/azure-bootstrap: h1:WYr7vvxKSO7EsawUQzrkgTNTK6k2TqRIVggmsa91lN8=
   terraform/gcp-bootstrap: h1:LxsVCmKZgE2mBnoYkN5/INCSMcbq8ar2J7TAvVybYKc=
   terraform/kube: h1:2VSsMe5CpTm5NWnVWzGWwD7RT48UXmvgM1/6D+P4xPE=
 helm:
@@ -56,4 +56,4 @@ tag:
   plural/tags/terraform/azure-bootstrap.yml: f6508ff83bc4d8dcd270253250ad9f11aa67b89e38537386051e6fdb7a9301b4
   plural/tags/terraform/gcp-bootstrap.yml: 706154868c9fc77df5a7f407c185b3f582986d30c18db41d4b64ba9387c450f3
 attrs:
-  repository.yaml_Plural: nMC8gTHp9aMChxlnMA_vQkuzykbTObVKAT5G9ZXSLAo=
+  repository.yaml_Plural: vdd2K75FmwnoU6sE4KeWz96DQyOA9KzkPwvfedQlYZw=
