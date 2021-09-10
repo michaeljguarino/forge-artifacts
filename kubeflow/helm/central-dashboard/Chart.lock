@@ -1,39 +1,39 @@
 dependencies:
 - name: profile-controller
   repository: file://../profile-controller
-  version: 0.1.0
+  version: 0.1.1
 - name: notebooks
   repository: file://../notebooks
-  version: 0.1.0
+  version: 0.1.1
 - name: volumes
   repository: file://../volumes
-  version: 0.1.0
+  version: 0.1.1
 - name: tensorboards
   repository: file://../tensorboards
-  version: 0.1.0
+  version: 0.1.1
 - name: katib
   repository: file://../katib
-  version: 0.1.0
+  version: 0.1.2
 - name: serving
   repository: file://../serving
-  version: 0.1.0
+  version: 0.1.2
 - name: mysql-cluster
   repository: file://../mysql-cluster
-  version: 0.1.0
+  version: 0.1.2
 - name: mpi
   repository: file://../operators/mpi
-  version: 0.1.0
+  version: 0.1.1
 - name: mxnet
   repository: file://../operators/mxnet
-  version: 0.1.0
+  version: 0.1.1
 - name: pytorch
   repository: file://../operators/pytorch
-  version: 0.1.0
+  version: 0.1.1
 - name: tensorflow
   repository: file://../operators/tensorflow
-  version: 0.1.0
+  version: 0.1.1
 - name: xgboost
   repository: file://../operators/xgboost
-  version: 0.1.0
-digest: sha256:1b917fe1c04d064b31f211dfee9b91eb39b9e4e633c765edbeedd2f5b955dffb
-generated: "2021-08-13T14:41:55.290925732+02:00"
+  version: 0.1.1
+digest: sha256:6b84025d7665a48869a6c2a7f0e21b434535325bb0d37a3ca3c7eac7c1c132dd
+generated: "2021-08-15T13:36:45.14989733+02:00"
