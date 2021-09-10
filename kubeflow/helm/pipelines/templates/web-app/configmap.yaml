@@ -5,9 +5,10 @@ data:
   ARGO_ARCHIVE_BUCKETNAME: pipelines-bucket
   ARGO_ARCHIVE_PREFIX: pipelines
   VIEWER_TENSORBOARD_POD_TEMPLATE_SPEC_PATH: /etc/config/viewer-tensorboard-template.json
-  METADATA_ENVOY_SERVICE_SERVICE_HOST: kubeflow-pipelines-metadata-envoy
+  VIEWER_TENSORBOARD_TF_IMAGE_NAME: tensorflow/tensorflow
+  METADATA_ENVOY_SERVICE_SERVICE_HOST: kubeflow-pipelines-metadata-envoy.kubeflow.svc.cluster.local
   METADATA_ENVOY_SERVICE_SERVICE_PORT: "9090"
-  ML_PIPELINE_SERVICE_HOST: kubeflow-pipelines-api-server
+  ML_PIPELINE_SERVICE_HOST: kubeflow-pipelines-api-server.kubeflow.svc.cluster.local
   ML_PIPELINE_SERVICE_PORT: "8888"
   DISABLE_GKE_METADATA: "true"
   DEPLOYMENT: KUBEFLOW
