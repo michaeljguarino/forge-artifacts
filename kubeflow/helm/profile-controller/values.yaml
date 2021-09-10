@@ -59,7 +59,10 @@ config:
     app.kubernetes.io/part-of: 'kubeflow-profile'
 
 service:
-  port: 8081
+  controller:
+    port: 8080
+  kfam:
+    port: 8081
 
 virtualService:
   annotations: {}

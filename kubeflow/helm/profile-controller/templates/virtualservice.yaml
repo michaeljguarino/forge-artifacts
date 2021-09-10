@@ -31,4 +31,4 @@ spec:
         - destination:
             host: {{ include "profile-controller.fullname" . }}-kfam.kubeflow.svc.{{ .Values.global.clusterDomain }}
             port:
-              number: {{ .Values.service.port }}
+              number: {{ .Values.service.kfam.port }}

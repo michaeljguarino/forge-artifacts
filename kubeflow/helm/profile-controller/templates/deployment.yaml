@@ -43,19 +43,19 @@ spec:
             - -workload-identity
             - $(WORKLOAD_IDENTITY)
           ports:
-            - name: controller
+            - name: metrics
               containerPort: 8080
               protocol: TCP
           livenessProbe:
             httpGet:
               path: /metrics
-              port: 8080
+              port: metrics
             initialDelaySeconds: 30
             periodSeconds: 30
           readinessProbe:
             httpGet:
               path: /metrics
-              port: 8080
+              port: metrics
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           envFrom:
@@ -85,13 +85,13 @@ spec:
           livenessProbe:
             httpGet:
               path: /metrics
-              port: 8081
+              port: kfam
             initialDelaySeconds: 30
             periodSeconds: 30
           readinessProbe:
             httpGet:
               path: /metrics
-              port: 8081
+              port: kfam
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           envFrom:

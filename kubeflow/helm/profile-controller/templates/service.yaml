@@ -8,7 +8,11 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-    - port: {{ .Values.service.port }}
+    - port: {{ .Values.service.controller.port }}
+      targetPort: metrics
+      protocol: TCP
+      name: http-metrics
+    - port: {{ .Values.service.kfam.port }}
       targetPort: kfam
       protocol: TCP
       name: http-kfam
