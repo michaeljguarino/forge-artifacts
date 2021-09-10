@@ -61,6 +61,7 @@ spec:
     name: profile-controller
     repo: kubeflow
     version: '>= 0.1.1'
+    optional: true
   - type: helm
     name: serving
     repo: kubeflow

@@ -2,7 +2,7 @@ artifact: {}
 terraform:
   terraform/aws: h1:HKGxov4e9cTgonYfa/D4woOw+hvXCYP0axIv8yHW0Kc=
 helm:
-  helm/central-dashboard: h1:emK8lgElcoEuT1aetpVO1Jbgn9MaF0ePNUMUNkdJp24=
+  helm/central-dashboard: h1:BeDLEkZoJGv+lnvcM4kqa1FwYO6w4luN2lnui8+SZrE=
   helm/katib: h1:PKVRzR/88IGmjJyxQ1XHEFefseO7Cpe2vhPzNyEyu94=
   helm/mysql-cluster: h1:/8aLTIucTYC5pdD1Bzy1IoUlmfUxr0CoSH4Ycd/1z08=
   helm/notebooks: h1:t7Ff/4V21Z/QDnSeZ2Ufd65kD5gIkZyPIS57f2eEWZk=
@@ -17,7 +17,7 @@ helm:
   helm/tensorboards: h1:msmgVDZE26n/4edZq7XiOrYgd37j5JjD9f9hakPFOcg=
   helm/volumes: h1:2X1zm3d8mgrjwYvbzdh1x0icEJavDMoQmmyzAhfu1Nk=
 recipe:
-  plural/recipes/kubeflow-aws.yaml: 27f5be0841453093b97ef39ec8e362fd47428d9a5bde5978fa266a3248cc2e2f
+  plural/recipes/kubeflow-aws.yaml: dd217bc9816d20fd1cfa33adc18d2515f5251b7e7095891cf8bbde0dc32f0c6b
 integration: {}
 crd: {}
 ird: {}
