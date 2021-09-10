@@ -10,7 +10,7 @@ spec:
     repo: bootstrap
     version: '>= 0.5.1'
   - type: helm
-    name: knative
+    name: knative-serving
     repo: knative
     version: '>= 0.1.1'
   - type: terraform
