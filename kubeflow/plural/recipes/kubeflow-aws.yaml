@@ -23,9 +23,6 @@ sections:
     name: katib
     configuration: []
   - type: HELM
-    name: mysql-cluster
-    configuration: []
-  - type: HELM
     name: notebooks
     configuration: []
   - type: HELM
