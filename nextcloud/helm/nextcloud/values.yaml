@@ -419,7 +419,8 @@ nextcloud:
     ## Metrics exporter pod Annotation and Labels
     # podAnnotations: {}
 
-    # podLabels: {}
+    podLabels:
+      nextcloud: metrics-exporter
 
     service:
       type: ClusterIP
@@ -429,7 +430,8 @@ nextcloud:
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "9205"
-      labels: {}
+      labels:
+        nextcloud: metrics-exporter
 
   rbac:
     enabled: true
