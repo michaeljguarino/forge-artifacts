@@ -76,7 +76,15 @@ controller:
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
     tag: v1.3.0
-  
+
+podDefaults:
+  image:
+    repository: public.ecr.aws/j1r0q0g6/notebooks/admission-webhook
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: v1.3.0
+  service:
+    port: 443
 
 podAnnotations:
   sidecar.istio.io/inject: "true"

@@ -1,6 +1,7 @@
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
+  labels: {{- include "tensorboards.labels" . | nindent 4 }}
   name: tensorboards.tensorboard.kubeflow.org
 spec:
   group: tensorboard.kubeflow.org

@@ -1,7 +1,7 @@
 apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
 metadata:
-  labels: {{- include "central-dashboard.labels" . | nindent 4 }}
+  labels: {{- include "tensorboards.labels" . | nindent 4 }}
   name: {{ include "tensorboards.fullname" . }}-web-app
   namespace: kubeflow
 spec:

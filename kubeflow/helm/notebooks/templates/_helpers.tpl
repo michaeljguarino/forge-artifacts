@@ -59,6 +59,14 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
+Pod Defaults selector labels
+*/}}
+{{- define "notebooks.podDefaultsSelectorLabels" -}}
+app.kubernetes.io/name: {{ include "notebooks.name" . }}-pod-defaults
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+
+{{/*
 Create the name of the service account to use
 */}}
 {{- define "notebooks.serviceAccountName" -}}

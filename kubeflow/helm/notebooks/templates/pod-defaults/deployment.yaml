@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "notebooks.fullname" . }}-pod-defaults
+  labels:
+    {{- include "notebooks.labels" . | nindent 4 }}
+  namespace: kubeflow
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "notebooks.podDefaultsSelectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "notebooks.podDefaultsSelectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "notebooks.serviceAccountName" . }}-pod-defaults
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}-pod-defaults
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.podDefaults.image.repository }}:{{ .Values.podDefaults.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.podDefaults.image.pullPolicy }}
+          args:
+            - --tlsCertFile=/etc/webhook/certs/tls.crt
+            - --tlsKeyFile=/etc/webhook/certs/tls.key
+          ports:
+            - name: webhook
+              containerPort: 4443
+              protocol: TCP
+          # livenessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: webhook
+          # readinessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: webhook
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - mountPath: /etc/webhook/certs
+              name: webhook-cert
+              readOnly: true
+      volumes:
+        - name: webhook-cert
+          secret:
+            secretName: {{ include "notebooks.fullname" . }}-pod-defaults-certs
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
