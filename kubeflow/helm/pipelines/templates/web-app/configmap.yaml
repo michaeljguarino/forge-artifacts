@@ -1,0 +1,63 @@
+apiVersion: v1
+data:
+  ARGO_ARCHIVE_LOGS: "true"
+  ARGO_ARCHIVE_ARTIFACTORY: s3
+  ARGO_ARCHIVE_BUCKETNAME: <<__s3.bucket.pipelines__>>
+  ARGO_ARCHIVE_PREFIX: <<__s3.key_prefix.pipelines__>>
+  VIEWER_TENSORBOARD_POD_TEMPLATE_SPEC_PATH: /etc/config/viewer-tensorboard-template.json
+  METADATA_ENVOY_SERVICE_SERVICE_HOST: metadata-envoy-service
+  ML_PIPELINE_SERVICE_HOST: ml-pipeline
+  DISABLE_GKE_METADATA: "true"
+  DEPLOYMENT: KUBEFLOW
+  ARTIFACTS_SERVICE_PROXY_NAME: ml-pipeline-ui-artifact
+  ARTIFACTS_SERVICE_PROXY_PORT: "80"
+  ARTIFACTS_SERVICE_PROXY_ENABLED: "true"
+  ENABLE_AUTHZ: "true"
+  KUBEFLOW_USERID_HEADER: kubeflow-userid
+  KUBEFLOW_USERID_PREFIX: ""
+  ALLOW_CUSTOM_VISUALIZATIONS: "true"
+kind: ConfigMap
+metadata:
+  labels: {{- include "pipelines.labels" . | nindent 4 }}
+  name: {{ include "pipelines.fullname" . }}web-app-parameters
+  namespace: kubeflow
+---
+apiVersion: v1
+data:
+  viewer-tensorboard-template.json: |
+    {
+        "spec": {
+            "containers": [
+                {
+                    "env": [
+                        {
+                            "name": "AWS_ACCESS_KEY_ID",
+                            "valueFrom": {
+                                "secretKeyRef": {
+                                    "name": "pipelines-s3-secret",
+                                    "key": "S3_ACCESSKEY"
+                                }
+                            }
+                        },
+                        {
+                            "name": "AWS_SECRET_ACCESS_KEY",
+                            "valueFrom": {
+                                "secretKeyRef": {
+                                    "name": "pipelines-s3-secret",
+                                    "key": "S3_SECRETKEY"
+                                }
+                            }
+                        },
+                        {
+                            "name": "AWS_REGION",
+                            "value": "<<__aws_region__>>"
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+kind: ConfigMap
+metadata:
+  name: {{ include "pipelines.fullname" . }}-web-app-viewer-template
+  namespace: kubeflow

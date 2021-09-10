@@ -1,0 +1,101 @@
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  labels:
+    application-crd-id: kubeflow-pipelines
+  name: metadata-grpc-service
+  namespace: kubeflow
+spec:
+  action: ALLOW
+  rules:
+    - {}
+  selector:
+    matchLabels:
+      {{- include "pipelines.metadataGRPCServerSelectorLabels" . | nindent 6 }}
+---
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  labels:
+    app.kubernetes.io/component: ml-pipeline
+    app.kubernetes.io/name: kubeflow-pipelines
+    application-crd-id: kubeflow-pipelines
+  name: ml-pipeline
+  namespace: kubeflow
+spec:
+  rules:
+    - from:
+        - source:
+            principals:
+              - cluster.local/ns/kubeflow/sa/ml-pipeline
+              - cluster.local/ns/kubeflow/sa/ml-pipeline-ui
+              - cluster.local/ns/kubeflow/sa/ml-pipeline-persistenceagent
+              - cluster.local/ns/kubeflow/sa/ml-pipeline-scheduledworkflow
+              - cluster.local/ns/kubeflow/sa/ml-pipeline-viewer-crd-service-account
+              - cluster.local/ns/kubeflow/sa/kubeflow-pipelines-cache
+    - when:
+        - key: request.headers[kubeflow-userid]
+          notValues:
+            - '*'
+  selector:
+    matchLabels:
+      {{- include "pipelines.controllerSelectorLabels" . | nindent 6 }}
+---
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  labels:
+    app.kubernetes.io/component: ml-pipeline
+    app.kubernetes.io/name: kubeflow-pipelines
+    application-crd-id: kubeflow-pipelines
+  name: ml-pipeline-ui
+  namespace: kubeflow
+spec:
+  rules:
+    - from:
+        - source:
+            namespaces:
+              - istio-system
+  selector:
+    matchLabels:
+      {{- include "pipelines.selectorLabels" . | nindent 6 }}
+---
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  labels:
+    app.kubernetes.io/component: ml-pipeline
+    app.kubernetes.io/name: kubeflow-pipelines
+    application-crd-id: kubeflow-pipelines
+  name: ml-pipeline-visualizationserver
+  namespace: kubeflow
+spec:
+  rules:
+    - from:
+        - source:
+            principals:
+              - cluster.local/ns/kubeflow/sa/ml-pipeline
+              - cluster.local/ns/kubeflow/sa/ml-pipeline-ui
+              - cluster.local/ns/kubeflow/sa/ml-pipeline-persistenceagent
+              - cluster.local/ns/kubeflow/sa/ml-pipeline-scheduledworkflow
+              - cluster.local/ns/kubeflow/sa/ml-pipeline-viewer-crd-service-account
+              - cluster.local/ns/kubeflow/sa/kubeflow-pipelines-cache
+  selector:
+    matchLabels:
+      {{- include "pipelines.visualizationServerSelectorLabels" . | nindent 6 }}
+---
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  labels:
+    app.kubernetes.io/component: ml-pipeline
+    app.kubernetes.io/name: kubeflow-pipelines
+    application-crd-id: kubeflow-pipelines
+  name: service-cache-server
+  namespace: kubeflow
+spec:
+  rules:
+    - {}
+  selector:
+    matchLabels:
+      {{- include "pipelines.cacheServerSelectorLabels" . | nindent 6 }}
