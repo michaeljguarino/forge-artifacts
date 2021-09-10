@@ -1,0 +1,9 @@
+apiVersion: security.istio.io/v1beta1
+kind: RequestAuthentication
+metadata:
+  name: kubeflow-request-auth
+  namespace: kubeflow
+spec:
+  jwtRules:
+  - issuer: https://oidc.plural.sh/
+    jwksUri: https://oidc.plural.sh/.well-known/jwks.json
