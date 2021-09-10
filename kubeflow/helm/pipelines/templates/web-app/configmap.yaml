@@ -5,16 +5,16 @@ data:
   ARGO_ARCHIVE_BUCKETNAME: <<__s3.bucket.pipelines__>>
   ARGO_ARCHIVE_PREFIX: <<__s3.key_prefix.pipelines__>>
   VIEWER_TENSORBOARD_POD_TEMPLATE_SPEC_PATH: /etc/config/viewer-tensorboard-template.json
-  METADATA_ENVOY_SERVICE_SERVICE_HOST: metadata-envoy-service
-  ML_PIPELINE_SERVICE_HOST: ml-pipeline
+  METADATA_ENVOY_SERVICE_SERVICE_HOST: kubeflow-pipelines-metadata-envoy
+  ML_PIPELINE_SERVICE_HOST: kubeflow-pipelines-api-server
   DISABLE_GKE_METADATA: "true"
   DEPLOYMENT: KUBEFLOW
   ARTIFACTS_SERVICE_PROXY_NAME: ml-pipeline-ui-artifact
   ARTIFACTS_SERVICE_PROXY_PORT: "80"
   ARTIFACTS_SERVICE_PROXY_ENABLED: "true"
   ENABLE_AUTHZ: "true"
-  KUBEFLOW_USERID_HEADER: kubeflow-userid
-  KUBEFLOW_USERID_PREFIX: ""
+  KUBEFLOW_USERID_HEADER: {{ .Values.global.userIDHeader }}
+  KUBEFLOW_USERID_PREFIX: {{ .Values.global.userIDPrefix | quote }}
   ALLOW_CUSTOM_VISUALIZATIONS: "true"
 kind: ConfigMap
 metadata:
@@ -27,7 +27,7 @@ data:
   viewer-tensorboard-template.json: |
     {
         "spec": {
-            "serviceAccountName": "default-editor"
+            "serviceAccountName": "default-editor",
             "containers": [
                 {
                     "env": [
