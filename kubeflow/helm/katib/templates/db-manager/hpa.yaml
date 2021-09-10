@@ -1,0 +1,28 @@
+{{- if .Values.dbManager.autoscaling.enabled }}
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "katib.fullname" . }}-db-manager
+  labels:
+    {{- include "katib.labels" . | nindent 4 }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "katib.fullname" . }}-db-manager
+  minReplicas: {{ .Values.dbManager.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.dbManager.autoscaling.maxReplicas }}
+  metrics:
+    {{- if .Values.dbManager.autoscaling.targetCPUUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: cpu
+        targetAverageUtilization: {{ .Values.dbManager.autoscaling.targetCPUUtilizationPercentage }}
+    {{- end }}
+    {{- if .Values.autoscaling.dbManager.targetMemoryUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: memory
+        targetAverageUtilization: {{ .Values.dbManager.autoscaling.targetMemoryUtilizationPercentage }}
+    {{- end }}
+{{- end }}

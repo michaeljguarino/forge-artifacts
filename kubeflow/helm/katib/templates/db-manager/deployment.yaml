@@ -5,17 +5,16 @@ metadata:
   labels:
     {{- include "katib.labels" . | nindent 4 }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.replicaCount }}
+  {{- if not .Values.dbManager.autoscaling.enabled }}
+  replicas: {{ .Values.dbManager.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
       {{- include "katib.dbManagerSelectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
+      {{- with .Values.dbManager.podAnnotations }}
       annotations:
-        cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
@@ -27,11 +26,11 @@ spec:
       {{- end }}
       serviceAccountName: {{ include "katib.serviceAccountName" . }}-db-manager
       securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+        {{- toYaml .Values.dbManager.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
+            {{- toYaml .Values.dbManager.securityContext | nindent 12 }}
           image: "{{ .Values.dbManager.image.repository }}:{{ .Values.dbManager.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.dbManager.image.pullPolicy }}
           command:
@@ -55,7 +54,7 @@ spec:
                 - -addr=:6789
             initialDelaySeconds: 5
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+            {{- toYaml .Values.dbManager.resources | nindent 12 }}
           env:
             - name: DB_NAME
               value: mysql
@@ -75,15 +74,15 @@ spec:
               value: {{ .Values.dbManager.config.database.host }}
             - name: KATIB_MYSQL_DB_PORT
               value: {{ .Values.dbManager.config.database.port | quote }}
-      {{- with .Values.nodeSelector }}
+      {{- with .Values.dbManager.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.affinity }}
+      {{- with .Values.dbManager.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.tolerations }}
+      {{- with .Values.dbManager.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
