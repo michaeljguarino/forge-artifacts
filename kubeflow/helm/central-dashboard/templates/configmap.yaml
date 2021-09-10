@@ -3,8 +3,8 @@ data:
   links: |-
     {
       "menuLinks": [
-        {{ if eq .Values.kubeflowComponents.notebooks.enabled true }}
         {
+        {{ if eq .Values.kubeflowComponents.notebooks.enabled true }}
           "type": "item",
           "link": "/jupyter/",
           "text": "Notebooks",
@@ -85,6 +85,12 @@ data:
       "externalLinks": [ ],
         "quickLinks": [
           {
+          {{ if eq .Values.kubeflowComponents.notebooks.enabled true }}
+            "text": "Create a new Notebook server",
+            "desc": "Notebook Servers",
+            "link": "/jupyter/new?namespace=kubeflow"
+          {{ end }}
+          {{ if eq .Values.kubeflowComponents.pipelines.enabled true }}
             "text": "Upload a pipeline",
             "desc": "Pipelines",
             "link": "/pipeline/"
@@ -93,16 +99,14 @@ data:
             "text": "View all pipeline runs",
             "desc": "Pipelines",
             "link": "/pipeline/#/runs"
-          },
-          {
-            "text": "Create a new Notebook server",
-            "desc": "Notebook Servers",
-            "link": "/jupyter/new?namespace=kubeflow"
+          {{ end }}
+          {{ if eq .Values.kubeflowComponents.katib.enabled true }}
           },
           {
             "text": "View Katib Experiments",
             "desc": "Katib",
             "link": "/katib/"
+          {{ end }}
           }
         ],
         "documentationItems": [
