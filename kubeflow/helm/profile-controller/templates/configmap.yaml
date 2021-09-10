@@ -102,7 +102,7 @@ data:
       name: metadata-grpc-configmap
       namespace: {{ .Namespace }}
     data:
-      METADATA_GRPC_SERVICE_HOST: "metadata-grpc-service.kubeflow"
+      METADATA_GRPC_SERVICE_HOST: "kubeflow-pipelines-metadata-grpc-server.kubeflow"
       METADATA_GRPC_SERVICE_PORT: "8080"
     ---
     # Visualization server related manifests below
