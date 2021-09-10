@@ -1,2 +1,2 @@
 dbManager:
-  dbPassword: {{ dedupe . "kubeflow.katib.secrets.rootPassword" (randAlphaNum 20) }}
+  dbPassword: {{ dedupe . "katib.dbManager.dbPassword" (randAlphaNum 20) }}

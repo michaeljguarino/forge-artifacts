@@ -1,2 +1,2 @@
 secrets:
-  rootPassword: {{ dedupe . "kubeflow.mysql-cluster.secrets.rootPassword" (randAlphaNum 20) }}
+  rootPassword: {{ dedupe . "mysql-cluster.secrets.rootPassword" (randAlphaNum 20) }}

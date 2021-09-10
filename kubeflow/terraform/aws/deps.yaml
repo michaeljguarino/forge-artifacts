@@ -2,7 +2,7 @@ apiVersion: plural.sh/v1alpha1
 kind: Dependencies
 metadata:
   description: kubeflow aws setup
-  version: 0.1.4
+  version: 0.1.5
 spec:
   dependencies:
   - name: aws-bootstrap
@@ -11,6 +11,3 @@ spec:
     version: '>= 0.1.1'
   providers:
   - aws
-  outputs:
-    s3_access_key: s3_access_key
-    s3_access_secret: s3_access_secret
