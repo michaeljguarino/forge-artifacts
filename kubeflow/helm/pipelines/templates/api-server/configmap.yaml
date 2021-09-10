@@ -5,7 +5,7 @@ data:
   DEFAULTPIPELINERUNNERSERVICEACCOUNT: default-editor
   MULTIUSER: "true"
   VISUALIZATIONSERVICE_NAME: {{ include "pipelines.fullname" . }}-visualization-server
-  VISUALIZATIONSERVICE_PORT: {{ .Values.visualizationServer.service.port }}
+  VISUALIZATIONSERVICE_PORT: {{ .Values.visualizationServer.service.port | quote }}
 kind: ConfigMap
 metadata:
   labels: {{- include "pipelines.labels" . | nindent 4 }}
