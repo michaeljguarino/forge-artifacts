@@ -1,0 +1,16 @@
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  labels:
+    {{- include "pipelines.labels" . | nindent 4 }}
+  name: {{ include "pipelines.fullname" . }}-web-app
+  namespace: kubeflow
+spec:
+  rules:
+    - from:
+        - source:
+            namespaces:
+              - istio-system
+  selector:
+    matchLabels:
+      {{- include "pipelines.selectorLabels" . | nindent 6 }}

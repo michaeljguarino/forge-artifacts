@@ -65,6 +65,12 @@ data:
               app: prometheus
         - namespaceSelector:
             matchLabels:
+              app.plural.sh/name: kubeflow
+          podSelector:
+            matchLabels:
+              app: notebooks-controller
+        - namespaceSelector:
+            matchLabels:
               app.plural.sh/name: knative
       egress:
       - to:
