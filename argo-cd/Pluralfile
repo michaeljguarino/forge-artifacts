@@ -1,4 +1,5 @@
 REPO argo-cd
+ATTRIBUTES Plural repository.yaml
 
 TF terraform/*
 HELM helm/argo-cd

@@ -4,16 +4,16 @@ terraform:
   terraform/azure: h1:yZyl+PThZHBDNxIvKUx9V5C4wM8m+xmh4HFYmXJHGwg=
   terraform/gcp: h1:Er6eTB0w67NTjpK3WV/L149BWG4iQTO2Ru4YwjeEtQg=
 helm:
-  helm/argo-cd: h1:AC2BqNGGx3R44WPn/rw80oY71uOkiMYiURErOrZcluY=
+  helm/argo-cd: h1:F2jJNUy57PUDgMNHghCyTtN5LsROXstHBN+zficfE9Q=
   helm/argocd: h1:ekOxLom9wLnGvjVcvCZU1cGpbS+uEiTm/LAq8ZM0Vz4=
 recipe:
-  plural/recipes/argo-cd-aws.yaml: dc802cdc331d3367343424bfcdc428cc0f7cf829cea577c7327512ac2b72ae45
-  plural/recipes/argo-cd-azure.yaml: b440950346d3463fab666bf8a39c3a256877a5376c36d0ebb6350b2c1160a496
-  plural/recipes/argo-cd-gcp.yaml: f7efe324f71ad1154c684c1ff8cf2b6e2facec8b86509ecdfeb9447ccc62a6bb
+  plural/recipes/argo-cd-aws.yaml: cf6855f390a5ead8c1048d76f9dd8e7bd925e3efe0053c04623f1850f4402722
+  plural/recipes/argo-cd-azure.yaml: 0014e6c5143fe70aed709064368d7955e007fb65269d4d79d50b362d3888af51
+  plural/recipes/argo-cd-gcp.yaml: 67d5b34bf5d3554db529aa9251ee7389265a5fcf5aecadc69c9757c2ceb10e1a
 integration: {}
 crd:
-  plural/crds/crd-application.yaml: b947869a3c2ebe23658bbc7fbaa859356ffdf4c43ff4e6a97afc6882f983e361:h1:AC2BqNGGx3R44WPn/rw80oY71uOkiMYiURErOrZcluY=
-  plural/crds/crd-project.yaml: db83363cb8cfe305fc3bcfbbff07a09a288068ccb182f2e0a3cd1d762dd0dae4:h1:AC2BqNGGx3R44WPn/rw80oY71uOkiMYiURErOrZcluY=
+  plural/crds/crd-application.yaml: b947869a3c2ebe23658bbc7fbaa859356ffdf4c43ff4e6a97afc6882f983e361:h1:F2jJNUy57PUDgMNHghCyTtN5LsROXstHBN+zficfE9Q=
+  plural/crds/crd-project.yaml: db83363cb8cfe305fc3bcfbbff07a09a288068ccb182f2e0a3cd1d762dd0dae4:h1:F2jJNUy57PUDgMNHghCyTtN5LsROXstHBN+zficfE9Q=
 ird: {}
 tag:
   plural/tags/helm/argo-cd.yaml: bc8716bed26920a22fd5b0126a3968c65cdfabe20518a3c257ce001e9513fd3b
@@ -21,3 +21,5 @@ tag:
   plural/tags/terraform/aws.yaml: 01c402c260cc7fe359d1ebc4302ff11539cfabbd5a82745907ad445914153bb7
   plural/tags/terraform/azure.yaml: 86b17dc5dcbc7d877dddbda68b790231f9f7eaa025d00471360108ccd5f42a07
   plural/tags/terraform/gcp.yaml: 3761f7e078206cf85f48969d231071adfb3b68ee68b7c68a2b50045e896a3288
+attrs:
+  repository.yaml_Plural: 48xJNnot9zJGW0eMUFOrk0m-4mx-o6py_-5G9A-nN4A=

@@ -1,4 +1,4 @@
-{{ $hostname := default "example.com" .Values.hostname }}
+{{ $hostname := .Values.hostname }}
 {{ $redisNamespace := namespace "redis" }}
 argo-cd:
   controller:

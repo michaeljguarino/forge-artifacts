@@ -1,0 +1,10 @@
+name: argo-cd
+description: Declarative continuous deployment for Kubernetes.
+category: DEVOPS
+icon: plural/icons/argo-stacked-color-square.png
+notes: plural/notes.tpl
+oauthSettings:
+  uriFormat: https://{domain}/auth/callback
+  authMethod: POST
+tags:
+- tag: gitops
