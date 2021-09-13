@@ -15,10 +15,12 @@ create-template:
 	echo "apiVersion: plural.sh/v1alpha1\nkind: Dependencies\nmetadata:\n  application: true\n  description: Deploys $$application crafted for the target cloud\nspec:\n  dependencies:\n  - type: helm\n    name: bootstrap\n    repo: bootstrap\n    version: '>= 0.5.1'\n  - type: terraform\n    name: aws\n    repo: $$application\n    version: '>= 0.1.0'\n    optional: true\n  - type: terraform\n    name: azure\n    repo: $$application\n    version: '>= 0.1.0'\n    optional: true\n  - type: terraform\n    name: gcp\n    repo: $$application\n    version: '>= 0.1.0'\n    optional: true" > ./$$application/helm/$$application/deps.yaml; \
 	echo "# $$application\n\nInstalls $$application using Plural." > ./$$application/helm/$$application/README.md; \
 	echo "{}" > ./$$application/helm/$$application/values.yaml.tpl; \
+	mkdir -p ./$$application/plural/icons; \
 	mkdir -p ./$$application/plural/crds; \
 	mkdir -p ./$$application/plural/recipes; \
 	mkdir -p ./$$application/plural/tags/helm; \
 	mkdir -p ./$$application/plural/tags/terraform; \
+	echo "{}" > ./$$application/plural/notes.tpl; \
 	echo "name: $$application-aws\ndescription: Installs $$application on an aws eks cluster\nprovider: AWS\ndependencies:\n- repo: bootstrap\n  name: aws-k8s\nsections:\n- name: $$application\n  items:\n  - type: TERRAFORM\n    name: aws\n    configuration: []\n  - type: HELM\n    name: $$application\n    configuration: []" > ./$$application/plural/recipes/$$application-aws.yaml; \
 	echo "name: $$application-azure\ndescription: Installs $$application on an azure aks cluster\nprovider: AZURE\ndependencies:\n- repo: bootstrap\n  name: azure-k8s\nsections:\n- name: $$application\n  items:\n  - type: TERRAFORM\n    name: azure\n    configuration: []\n  - type: HELM\n    name: $$application\n    configuration: []" > ./$$application/plural/recipes/$$application-azure.yaml; \
 	echo "name: $$application-gcp\ndescription: Installs $$application on a gcp gke cluster\nprovider: GCP\ndependencies:\n- repo: bootstrap\n  name: gcp-kubernetes\nsections:\n- name: $$application\n  items:\n  - type: TERRAFORM\n    name: gcp\n    configuration: []\n  - type: HELM\n    name: $$application\n    configuration: []" > ./$$application/plural/recipes/$$application-gcp.yaml; \
@@ -41,7 +43,8 @@ create-template:
 	echo "variable \"namespace\" {\n  type = string\n  default = \"$$application\"\n}" > ./$$application/terraform/aws/variables.tf; \
 	echo "variable \"namespace\" {\n  type = string\n  default = \"$$application\"\n}" > ./$$application/terraform/azure/variables.tf; \
 	echo "variable \"namespace\" {\n  type = string\n  default = \"$$application\"\n}" > ./$$application/terraform/gcp/variables.tf; \
-	echo "REPO $$application\n\nTF terraform/*\nHELM helm/*\nRECIPE plural/recipes/*\nTAG plural/tags/**/*" > ./$$application/Pluralfile; \
+	echo "name: $$application\ndescription: PLACEHOLDER\ncategory: PLACEHOLDER\nicon: plural/icons/PLACEHOLDER\ndarkIcon: plural/icons/PLACEHOLDER\nnotes: plural/notes.tpl\noauthSettings:\n  uriFormat: PLACEHOLDER\n  authMethod: PLACEHOLDER\ntags:\n- tag: PLACEHOLDER" > ./$$application/repository.yaml; \
+	echo "REPO $$application\nATTRIBUTES Plural repository.yaml\n\nTF terraform/*\nHELM helm/*\nRECIPE plural/recipes/*\nTAG plural/tags/**/*" > ./$$application/Pluralfile; \
 	echo "\nupload-$$application: # uploads $$application artifacts\n	plural apply -f $$application/Pluralfile" >> ./Makefile
 
 upload-airflow: # uploads airflow artifacts 
