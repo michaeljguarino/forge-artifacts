@@ -1,4 +1,5 @@
 REPO etcd
+ATTRIBUTES Plural repository.yaml
 
 TF terraform/*
 HELM helm/*
