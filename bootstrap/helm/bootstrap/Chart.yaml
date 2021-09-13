@@ -15,7 +15,7 @@ dependencies:
   version: 4.11.0
   repository: https://charts.bitnami.com/bitnami
 - name: metrics-server
-  version: 5.8.7
+  version: 5.8.15
   condition: metrics-server.enabled
   repository: https://charts.bitnami.com/bitnami
 - name: ingress-nginx
