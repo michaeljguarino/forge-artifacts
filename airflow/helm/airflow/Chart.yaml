@@ -11,5 +11,5 @@ maintainers:
   email: mjg@plural.sh
 dependencies:
 - name: airflow
-  version: 8.1.1
+  version: 8.5.2
   repository: https://airflow-helm.github.io/charts
