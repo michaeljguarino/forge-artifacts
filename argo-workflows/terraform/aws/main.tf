@@ -40,7 +40,7 @@ data "aws_iam_policy_document" "argo_workflows" {
     sid = "AllowListingBuckets"
     effect = "Allow"
     actions = ["s3:ListAllMyBuckets", "s3:GetBucketLocation"]
-    Resources = ["arn:aws:s3:::*"]
+    resources = ["arn:aws:s3:::*"]
   }
   statement {
     sid    = "admin"
