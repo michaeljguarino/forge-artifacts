@@ -12,4 +12,7 @@ sections:
     configuration: []
   - type: HELM
     name: istio
-    configuration: []
+    configuration:
+    - name: kialiHostname
+      documentation: FQDN to use for the Kiali installation
+      type: STRING

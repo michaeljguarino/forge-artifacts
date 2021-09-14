@@ -28,6 +28,31 @@ kiali-server:
       - "openid"
       - "profile"
   {{ end }} */}}
+  deployment:
+    override_ingress_yaml:
+      metadata:
+        annotations:
+          kubernetes.io/tls-acme: "true"
+          kubernetes.io/ingress.class: "nginx"
+          cert-manager.io/cluster-issuer: letsencrypt-prod
+          nginx.ingress.kubernetes.io/force-ssl-redirect: 'true'
+          nginx.ingress.kubernetes.io/use-regex: "true"
+      spec:
+        tls:
+        - hosts:
+          - {{ .Values.kialiHostname }}
+          secretName: kiali-tls
+        rules:
+        - host: {{ .Values.kialiHostname }}
+          http:
+            paths:
+            - path: /.*
+              pathType: Prefix
+              backend:
+                service:
+                  name: kiali
+                  port:
+                    name: http
   namespace: {{ namespace "istio" }}
   istio_namespace: {{ namespace "istio" }}
   external_services:
