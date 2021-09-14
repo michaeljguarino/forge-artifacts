@@ -5,6 +5,7 @@ helm:
   helm/istio: h1:ymJxuPdxXpmkr5kteYWyNzZLlPtQLXrZhfLo6qkSoho=
 recipe:
   plural/recipes/istio-aws.yaml: e13c66295deced76a374a5a5c1e3b6c4df0a77bb150fe7eb1cb77a60f315318c
+  plural/recipes/istio-azure.yaml: 3d0793005ff3b5c49ce1df39daaaa3c6f9cd5e7429dcd782ed4c4b15bc504b56
 integration: {}
 crd:
   plural/crds/crd-all.gen.yaml: 108d7ce9a38ab7e40a2c899c2a29caaae25198f7c556cbfe7e3539f37d4ec415:h1:ymJxuPdxXpmkr5kteYWyNzZLlPtQLXrZhfLo6qkSoho=
@@ -14,4 +15,4 @@ tag:
   plural/tags/helm/istio.yaml: 7a04928ccc1ff18dfd45847813fdbf5006ac7b2f3a325080cb336141ab0b3b72
   plural/tags/terraform/kube.yaml: 92ef5c9d1ec51bcf6d917cf7bd8032649bda7e894cc2f47c398250c237c2b1a9
 attrs:
-  repository.yaml_Plural: qava14MzprjErTTj6mFxYkNwCf5Wh0FDnfErbRODID4=
+  repository.yaml_Plural: M7EiaDeix-CD_jH9-Dlrwuu1oH8Bi-WCm4zax5Z8_OU=

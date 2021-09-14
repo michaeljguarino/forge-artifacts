@@ -1,0 +1,15 @@
+name: istio-azure
+description: Installs istio on an azure aks cluster
+provider: AZURE
+dependencies:
+- repo: bootstrap
+  name: azure-k8s
+sections:
+- name: istio
+  items:
+  - type: TERRAFORM
+    name: kube
+    configuration: []
+  - type: HELM
+    name: istio
+    configuration: []
