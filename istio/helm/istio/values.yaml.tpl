@@ -1,5 +1,4 @@
 istio-operator:
-  operatorNamespace: {{ namespace "istio" }}
   watchedNamespaces: {{ namespace "istio" }}
 istio:
   namespace: {{ namespace "istio" }}

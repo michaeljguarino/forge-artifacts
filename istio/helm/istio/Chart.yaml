@@ -2,7 +2,7 @@ apiVersion: v2
 name: istio
 description: A chart bundling the istio operator for plural
 type: application
-version: 0.1.71
+version: 0.1.72
 appVersion: "1.10.3"
 dependencies:
 - name: istio-operator
