@@ -1,0 +1,15 @@
+name: argo-workflows-azure
+description: Installs argo-workflows on an azure aks cluster
+provider: AZURE
+dependencies:
+- repo: bootstrap
+  name: azure-k8s
+sections:
+- name: argo-workflows
+  items:
+  - type: TERRAFORM
+    name: azure
+    configuration: []
+  - type: HELM
+    name: argo-workflows
+    configuration: []

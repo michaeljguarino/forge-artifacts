@@ -1,0 +1,15 @@
+name: argo-workflows-gcp
+description: Installs argo-workflows on a gcp gke cluster
+provider: GCP
+dependencies:
+- repo: bootstrap
+  name: gcp-kubernetes
+sections:
+- name: argo-workflows
+  items:
+  - type: TERRAFORM
+    name: gcp
+    configuration: []
+  - type: HELM
+    name: argo-workflows
+    configuration: []

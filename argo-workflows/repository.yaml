@@ -1,0 +1,11 @@
+name: argo-workflows
+description: PLACEHOLDER
+category: PLACEHOLDER
+icon: plural/icons/PLACEHOLDER
+darkIcon: plural/icons/PLACEHOLDER
+notes: plural/notes.tpl
+oauthSettings:
+  uriFormat: PLACEHOLDER
+  authMethod: PLACEHOLDER
+tags:
+- tag: PLACEHOLDER
