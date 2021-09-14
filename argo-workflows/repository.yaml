@@ -1,11 +1,11 @@
 name: argo-workflows
-description: PLACEHOLDER
-category: PLACEHOLDER
-icon: plural/icons/PLACEHOLDER
-darkIcon: plural/icons/PLACEHOLDER
+description: The workflow engine for Kubernetes
+category: DEVOPS
+icon: plural/icons/argo-stacked-color-square.png
 notes: plural/notes.tpl
 oauthSettings:
-  uriFormat: PLACEHOLDER
-  authMethod: PLACEHOLDER
+  uriFormat: https://{domain}/oauth2/callback
+  authMethod: POST
 tags:
-- tag: PLACEHOLDER
+- tag: argo
+- tag: ci

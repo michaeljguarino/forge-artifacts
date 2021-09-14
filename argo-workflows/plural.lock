@@ -1,0 +1,19 @@
+artifact: {}
+terraform:
+  terraform/aws: h1:nnBaTLJmP3ore/L37C14OfFME2gFLpslh0JfpL+6Cvw=
+  terraform/azure: h1:DetDny1rHAQJRhc1CnEvlvlWCRcG1AQo5plMfJPodXw=
+  terraform/gcp: h1:kRFA+ue6GS04365alSLyh2D0ukI/6DBANFz+HevMNIA=
+helm:
+  helm/argo-workflows: h1:NTB7pskY/QjPb6u0E/Ce+l3QkthlWCNyZUmEMj8Cb4k=
+recipe:
+  plural/recipes/argo-workflows-aws.yaml: cdf041b10773ba6cd01f2438ad0b54531a52c513226b618c409e7d7e19f43d50
+integration: {}
+crd: {}
+ird: {}
+tag:
+  plural/tags/helm/argo-workflows.yaml: 53baf2e109a289044205e1cfc87ac260d424ea3ec4da835375b5e1bfe5eba58a
+  plural/tags/terraform/aws.yaml: 01c402c260cc7fe359d1ebc4302ff11539cfabbd5a82745907ad445914153bb7
+  plural/tags/terraform/azure.yaml: 86b17dc5dcbc7d877dddbda68b790231f9f7eaa025d00471360108ccd5f42a07
+  plural/tags/terraform/gcp.yaml: 3761f7e078206cf85f48969d231071adfb3b68ee68b7c68a2b50045e896a3288
+attrs:
+  repository.yaml_Plural: Cxf_UwUJuSrSFA8FlOkHTqqVg5cR6_jsi90inhbbgdo=

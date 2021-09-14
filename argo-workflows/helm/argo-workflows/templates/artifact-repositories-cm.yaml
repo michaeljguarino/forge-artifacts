@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: artifact-repositories
+  annotations:
+    workflows.argoproj.io/default-artifact-repository: default
+data:
+  default: |
+  {{ toYaml .Values.artifactRepository | nindent 4 }}
