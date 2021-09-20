@@ -9,7 +9,7 @@ dependencies:
   version: 1.7.0
   repository: file://../../../../istio/manifests/charts/istio-operator
 - name: jaeger
-  version: 0.46.4
+  version: 0.46.7
   repository: https://jaegertracing.github.io/helm-charts
   condition: monitoring.tracing.enabled
 - name: kiali-server
