@@ -3,3 +3,18 @@ serviceAccount:
     eks.amazonaws.com/role-arn: arn:aws:iam::test:role/test-crossplane
 
 clusterName: ""
+
+resourcesCrossplane:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+
+resourcesRBACManager:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+
+packageCache:
+  medium: ""
+  sizeLimit: 1Mi
+  pvc: ""

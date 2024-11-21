@@ -1,0 +1,71 @@
+<root gap='medium'>
+    <box pad='small' gap='medium' direction='row' align='center'>
+        <button label='Scale' action='scale' primary='true' headline='true' />
+        <box direction='row' align='center' gap='small'>
+            <box gap='small' align='center'>
+                <timeseries datasource="crossplane-cpu" label="Crossplane CPU Usage" />
+                <text size='small'>You should set a reservation to
+                    roughly correspond to 60% utilization</text>
+            </box>
+            <box gap='small' align='center'>
+                <timeseries datasource="crossplane-memory" label="Crossplane Memory Usage" />
+                <text size='small'>You should set a reservation to
+                    roughly correspond to 80% utilization</text>
+            </box>
+        </box>
+        <box gap='xsmall'>
+            <box gap='xsmall'>
+                <input placeholder="250m" label='Crossplane CPU Request' name='crossplane-cpu'>
+                    <valueFrom
+                            datasource="crossplane"
+                            doc="kubernetes.raw"
+                            path="spec.template.spec.containers[0].resources.requests.cpu" />
+                </input>
+                <input placeholder="1Gi" label='Crossplane Memory Request' name='crossplane-memory'>
+                    <valueFrom
+                            datasource="crossplane"
+                            doc="kubernetes.raw"
+                            path="spec.template.spec.containers[0].resources.requests.memory" />
+                </input>
+            </box>
+        </box>
+    </box>
+    <box pad='small' gap='medium' direction='row' align='center'>
+        <box direction='row' align='center' gap='small'>
+            <box gap='small' align='center'>
+                <timeseries datasource="crossplane-rbac-cpu" label="Crossplane RBAC Manager CPU Usage" />
+                <text size='small'>You should set a reservation to
+                    roughly correspond to 60% utilization</text>
+            </box>
+            <box gap='small' align='center'>
+                <timeseries datasource="crossplane-rbac-memory" label="Crossplane RBAC Manager Memory Usage" />
+                <text size='small'>You should set a reservation to
+                    roughly correspond to 80% utilization</text>
+            </box>
+        </box>
+        <box gap='xsmall'>
+            <box gap='xsmall'>
+                <input placeholder="250m" label='Crossplane RBAC Manager CPU Request' name='crossplane-rbac-cpu'>
+                    <valueFrom
+                            datasource="crossplane-rbac"
+                            doc="kubernetes.raw"
+                            path="spec.template.spec.containers[0].resources.requests.cpu" />
+                </input>
+                <input placeholder="1Gi" label='Crossplane RBAC Manager Memory Request' name='crossplane-rbac-memory'>
+                    <valueFrom
+                            datasource="crossplane-rbac"
+                            doc="kubernetes.raw"
+                            path="spec.template.spec.containers[0].resources.requests.memory" />
+                </input>
+            </box>
+        </box>
+    </box>
+    <box width='100%' gap='small'>
+        <text size='small'>Be sure to scale your crossplane components within your node's capacity, listed here:</text>
+        <table width='100%' datasource='nodes' path='nodes'>
+            <tableColumn path='metadata.name' header='name' width='33%' />
+            <tableColumn path='status.capacity.cpu' header='cpu' width='33%' />
+            <tableColumn path='status.capacity.memory' header='memory' width='33%' />
+        </table>
+    </box>
+</root>

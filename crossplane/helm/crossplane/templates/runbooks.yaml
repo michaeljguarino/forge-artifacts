@@ -1,0 +1,79 @@
+apiVersion: platform.plural.sh/v1alpha1
+kind: Runbook
+metadata:
+  name: scaling-manual
+  labels:
+    platform.plural.sh/pinned: 'true'
+{{ include "crossplane.labels" . | indent 4 }}
+spec:
+  name: Crossplane Scaling
+  description: overview of how to optimally scale your crossplane cluster
+  display: |-
+{{ .Files.Get "runbooks/scaling-manual.xml" | indent 4 }}
+  datasources:
+  - name: crossplane-cpu
+    type: prometheus
+    prometheus:
+      format: cpu
+      legend: $pod
+      query: sum(rate(container_cpu_usage_seconds_total{namespace="{{ .Release.Namespace }}",pod=~"crossplane.+"}[5m])) by (pod)
+  - name: crossplane-memory
+    type: prometheus
+    prometheus:
+      format: memory
+      legend: $pod
+      query: sum(container_memory_working_set_bytes{namespace="{{ .Release.Namespace }}",pod=~"crossplane.+"}) by (pod)
+  - name: crossplane-rbac-cpu
+    type: prometheus
+    prometheus:
+      format: cpu
+      legend: $pod
+      query: sum(rate(container_cpu_usage_seconds_total{namespace="{{ .Release.Namespace }}",pod=~"crossplane-rbac.+"}[5m])) by (pod)
+  - name: crossplane-rbac-memory
+    type: prometheus
+    prometheus:
+      format: memory
+      legend: $pod
+      query: sum(container_memory_working_set_bytes{namespace="{{ .Release.Namespace }}",pod=~"crossplane-rbac.+"}) by (pod)
+  - name: crossplane
+    type: kubernetes
+    kubernetes:
+      resource: deployment
+      name: crossplane
+  - name: crossplane-rbac
+    type: kubernetes
+    kubernetes:
+      resource: deployment
+      name: crossplane-rbac-manager
+  - name: nodes
+    type: nodes
+  actions:
+  - name: scale
+    action: config
+    redirectTo: '/'
+    configuration:
+      updates:
+        - path:
+            - resourcesCrossplane
+            - resources
+            - requests
+            - cpu
+          valueFrom: crossplane-cpu
+        - path:
+            - resourcesCrossplane
+            - resources
+            - requests
+            - memory
+          valueFrom: crossplane-memory
+        - path:
+            - resourcesRBACManager
+            - resources
+            - requests
+            - cpu
+          valueFrom: crossplane-rbac-cpu
+        - path:
+            - resourcesRBACManager
+            - resources
+            - requests
+            - memory
+          valueFrom: crossplane-rbac-memory
