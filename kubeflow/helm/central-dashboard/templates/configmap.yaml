@@ -26,6 +26,14 @@ data:
           "text": "Tensorboards",
           "icon": "assessment"
         {{ end }}
+        {{ if eq .Values.kubeflowComponents.serving.enabled true }}
+        },
+        {
+          "type": "item",
+          "link": "/kserve-endpoints/",
+          "text": "Endpoints",
+          "icon": "kubeflow:models"
+        {{ end }}
         {{ if eq .Values.kubeflowComponents.katib.enabled true }}
         },
         {
@@ -71,14 +79,6 @@ data:
           "link": "/pipeline/#/executions",
           "text": "Executions",
           "icon": "av:play-arrow"
-        {{ end }}
-        {{ if eq .Values.kubeflowComponents.serving.enabled true }}
-        },
-        {
-          "type": "item",
-          "link": "/models/",
-          "text": "Models",
-          "icon": "kubeflow:models"
         {{ end }}
         }
       ],
@@ -127,7 +127,6 @@ kind: ConfigMap
 metadata:
   labels: {{- include "central-dashboard.labels" . | nindent 4 }}
   name: {{ include "central-dashboard.fullname" . }}-config
-  namespace: kubeflow
 ---
 apiVersion: v1
 data:
@@ -137,8 +136,14 @@ data:
   PROFILES_KFAM_SERVICE_HOST: {{ .Values.config.profileControllerService }}
   PROFILES_KFAM_SERVICE_PORT: {{ .Values.config.kfamPort | quote }}
   DASHBOARD_CONFIGMAP: {{ include "central-dashboard.fullname" . }}-config
+  LOGOUT_URL: {{ .Values.config.logoutURL | quote }}
+  {{- if .Values.config.prometheusURL }}
+  PROMETHEUS_URL: {{ .Values.config.prometheusURL | quote }}
+  {{- end }}
+  {{- if .Values.config.metricsDashboard }}
+  METRICS_DASHBOARD: {{ .Values.config.metricsDashboard | quote }}
+  {{- end }}
 kind: ConfigMap
 metadata:
   labels: {{- include "central-dashboard.labels" . | nindent 4 }}
   name: {{ include "central-dashboard.fullname" . }}-parameters
-  namespace: kubeflow

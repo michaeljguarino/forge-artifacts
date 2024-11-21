@@ -2,9 +2,8 @@ apiVersion: mysql.presslabs.org/v1alpha1
 kind: MysqlDatabase
 metadata:
   name: katib-database
-  namespace: kubeflow
 spec:
   database: {{ .Values.dbManager.config.database.name }}
   clusterRef:
     name: kubeflow-mysql-cluster
-    namespace: kubeflow
+    namespace: {{ .Release.Namespace }}

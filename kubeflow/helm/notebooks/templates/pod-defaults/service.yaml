@@ -4,7 +4,6 @@ metadata:
   name: {{ include "notebooks.fullname" . }}-pod-defaults
   labels:
     {{- include "notebooks.labels" . | nindent 4 }}
-  namespace: kubeflow
 spec:
   type: ClusterIP
   ports:

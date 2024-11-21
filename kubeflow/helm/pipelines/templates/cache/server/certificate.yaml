@@ -1,0 +1,17 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "pipelines.fullname" . }}-cache-certs
+  labels:
+    {{- include "pipelines.labels" . | nindent 4 }}
+spec:
+  commonName: kfp-cache-cert
+  dnsNames:
+  - {{ include "pipelines.fullname" . }}-cache-server
+  - {{ include "pipelines.fullname" . }}-cache-server.{{ .Release.Namespace }}
+  - {{ include "pipelines.fullname" . }}-cache-server.{{ .Release.Namespace }}.svc
+  isCA: true
+  issuerRef:
+    kind: ClusterIssuer
+    name: kubeflow-self-signing-issuer
+  secretName: {{ include "pipelines.fullname" . }}-cache-server-tls

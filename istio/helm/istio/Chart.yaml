@@ -3,13 +3,13 @@ name: istio
 description: A chart bundling the istio operator for plural
 type: application
 version: 0.2.1
-appVersion: "1.19.0"
+appVersion: "1.20.1"
 dependencies:
 - name: base
-  version: 1.19.0
+  version: 1.20.1
   repository: https://istio-release.storage.googleapis.com/charts
   condition: base.enabled
 - name: istiod
-  version: 1.19.0
+  version: 1.20.1
   repository: https://istio-release.storage.googleapis.com/charts
   condition: istiod.enabled

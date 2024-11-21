@@ -2,21 +2,19 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "pipelines.fullname" . }}-cache-server
-  namespace: kubeflow
   labels:
     {{- include "pipelines.labels" . | nindent 4 }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.replicaCount }}
+  {{- if not .Values.cache.server.autoscaling.enabled }}
+  replicas: {{ .Values.cache.server.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
       {{- include "pipelines.cacheServerSelectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
+      {{- with .Values.cache.server.podAnnotations }}
       annotations:
-        cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
@@ -28,11 +26,11 @@ spec:
       {{- end }}
       serviceAccountName: {{ include "pipelines.serviceAccountName" . }}-cache-server
       securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+        {{- toYaml .Values.cache.server.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}-cache-server
           securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
+            {{- toYaml .Values.cache.server.securityContext | nindent 12 }}
           image: "{{ .Values.cache.server.image.repository }}:{{ .Values.cache.server.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.cache.server.image.pullPolicy }}
           args:
@@ -43,9 +41,22 @@ spec:
             - --db_user=$(DBCONFIG_USER)
             - --db_password=$(DBCONFIG_PASSWORD)
             - --namespace_to_watch=$(NAMESPACE_TO_WATCH)
+            - --listen_port=$(WEBHOOK_PORT)
+            - --tls_cert_filename=tls.crt
+            - --tls_key_filename=tls.key
           env:
             - name: NAMESPACE_TO_WATCH
               value: ""
+            - name: DEFAULT_CACHE_STALENESS
+              valueFrom:
+                configMapKeyRef:
+                  key: defaultCacheStaleness
+                  name: pipeline-install-config
+            - name: MAXIMUM_CACHE_STALENESS
+              valueFrom:
+                configMapKeyRef:
+                  key: maximumCacheStaleness
+                  name: pipeline-install-config
             - name: CACHE_IMAGE
               valueFrom:
                 configMapKeyRef:
@@ -57,7 +68,10 @@ spec:
                   key: cacheNodeRestrictions
                   name: pipeline-install-config
             - name: DBCONFIG_DRIVER
-              value: mysql
+              valueFrom:
+                configMapKeyRef:
+                  key: dbDriverName
+                  name: pipeline-install-config
             - name: DBCONFIG_DB_NAME
               valueFrom:
                 configMapKeyRef:
@@ -83,29 +97,31 @@ spec:
                 secretKeyRef:
                   key: PASSWORD
                   name: pipelines-db-user
+            - name: WEBHOOK_PORT
+              value: "8443"
           ports:
             - name: webhook-api
               containerPort: 8443
               protocol: TCP
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+            {{- toYaml .Values.cache.server.resources | nindent 12 }}
           volumeMounts:
             - mountPath: /etc/webhook/certs
               name: webhook-tls-certs
               readOnly: true
       volumes:
         - secret:
-            secretName: webhook-server-tls
+            secretName: {{ include "pipelines.fullname" . }}-cache-server-tls
           name: webhook-tls-certs
-      {{- with .Values.nodeSelector }}
+      {{- with .Values.cache.server.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.affinity }}
+      {{- with .Values.cache.server.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.tolerations }}
+      {{- with .Values.cache.server.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}

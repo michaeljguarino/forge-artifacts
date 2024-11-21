@@ -2,6 +2,7 @@ name: kubeflow-aws
 description: Installs Kubeflow on an EKS cluster
 provider: AWS
 primary: true
+private: true
 oidcSettings:
   uriFormat: https://{domain}/oauth2/callback
   authMethod: POST
@@ -42,6 +43,8 @@ sections:
     name: aws
   - type: HELM
     name: aws-iam-controller
+  - type: HELM
+    name: gateway
   - type: HELM
     name: central-dashboard
   - type: HELM

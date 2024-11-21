@@ -3,7 +3,6 @@ kind: Role
 metadata:
   labels: {{- include "profile-controller.labels" . | nindent 4 }}
   name: {{ include "profile-controller.fullname" . }}-leader-election-role
-  namespace: kubeflow
 rules:
   - apiGroups:
       - ""

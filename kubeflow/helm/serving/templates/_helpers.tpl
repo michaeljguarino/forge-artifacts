@@ -59,7 +59,6 @@ Controller selector labels
 app: {{ include "serving.name" . }}-controller
 app.kubernetes.io/name: {{ include "serving.name" . }}-controller
 app.kubernetes.io/instance: {{ .Release.Name }}
-version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
 {{/*

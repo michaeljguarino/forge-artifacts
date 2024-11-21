@@ -1,27 +1,56 @@
 apiVersion: v1
 data:
-  pvcviewer.yaml: |
-    apiVersion: pvcviewer.kubeflow.org/v1alpha1
-    kind: PVCViewer
-    metadata:
-      name: {name}
-      namespace: {namespace}
-    spec:
-      viewerimage: davidspek/kubeflow-filebrowser:0.31
-      pvcname: {name}
+  viewer-spec.yaml: |
+    # Note: the volumes-web-app allows expanding strings using ${VAR_NAME}
+    # You may use any environment variable. This lets us e.g. specify images that can be modified using kustomize's image transformer.
+    # Additionally, 'PVC_NAME', 'NAME' and 'NAMESPACE' are defined
+    # Name of the pvc is set by the volumes web app
+    pvc: $NAME
+    podTemplate:
+      containers:
+        - name: main
+          image: $VOLUME_VIEWER_IMAGE
+          env:
+            - name: FB_ADDRESS
+              value: "0.0.0.0"
+            - name: FB_PORT
+              value: "8080"
+            - name: FB_DATABASE
+              value: /tmp/filebrowser.db
+            - name: FB_NOAUTH
+              value: "true"
+            - name: FB_BASEURL
+              value: /pvcviewers/$NAMESPACE/$NAME/ # TODO: should this be configurable?
+          readinessProbe:
+            tcpSocket:
+              port: 8080
+            initialDelaySeconds: 2
+            periodSeconds: 10
+          # viewer-volume is provided automatically by the volumes web app
+          volumeMounts:
+            - name: viewer-volume
+              mountPath: /data
+          workingDir: /data
+          serviceAccountName: default-editor
+    networking:
+      targetPort: 8080
+      basePrefix: "/pvcviewers" # TODO: should this be configurable?
+      rewrite: "/"
+      timeout: 30s
+    rwoScheduling: {{ .Values.config.rwoScheduling.enabled }}
 kind: ConfigMap
 metadata:
   labels: {{- include "volumes.labels" . | nindent 4 }}
   name: {{ include "volumes.fullname" . }}-web-app-config
-  namespace: kubeflow
 ---
 apiVersion: v1
 data:
   APP_PREFIX: {{ .Values.webApp.virtualService.prefix }}
   USERID_HEADER: {{ .Values.global.userIDHeader }}
   USERID_PREFIX: {{ .Values.global.userIDPrefix | quote }}
+  VOLUME_VIEWER_IMAGE: {{ .Values.config.volumeViewerImage.repository }}:{{ .Values.config.volumeViewerImage.tag }}
+  APP_SECURE_COOKIES: "true" # TODO: don't hardcode this
 kind: ConfigMap
 metadata:
   labels: {{- include "volumes.labels" . | nindent 4 }}
   name: {{ include "volumes.fullname" . }}-web-app-parameters
-  namespace: kubeflow

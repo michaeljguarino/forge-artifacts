@@ -1,21 +1,23 @@
 apiVersion: v1
 data:
   appName: pipeline
-  appVersion: 1.8.1
-  autoUpdatePipelineDefaultVersion: "true"
+  defaultCacheStaleness: "" # TODO: make configurable
+  maximumCacheStaleness: "" # TODO: make configurable
+  appVersion: {{ .Chart.AppVersion }}
+  autoUpdatePipelineDefaultVersion: "true" # TODO: make configurable
   bucketHost: {{ .Values.config.objectStore.bucketHost }}
   bucketRegion: {{ .Values.config.objectStore.bucketRegion }}
   bucketName: {{ .Values.config.objectStore.bucketName }}
   defaultPipelineRoot: s3://{{ .Values.config.objectStore.bucketName }}/pipelines
   cacheDb: {{ .Values.config.databases.cacheDB }}
-  cacheImage: gcr.io/google-containers/busybox
-  cacheNodeRestrictions: "false"
-  cronScheduleTimezone: UTC
+  cacheImage: gcr.io/google-containers/busybox # TODO: make configurable
+  cacheNodeRestrictions: "false" # TODO: make configurable
+  cronScheduleTimezone: UTC # TODO: make configurable
   dbHost: {{ .Values.config.databases.connection.host }}
   dbPort: {{ .Values.config.databases.connection.port | quote }}
-  dbConMaxLifeTime: 120s
-  dbDriverName: mysql
-  dbGroupConcatMaxLen: "4194304"
+  dbConMaxLifeTime: 120s # TODO: make configurable
+  dbDriverName: mysql # TODO: make configurable
+  dbGroupConcatMaxLen: "4194304" # TODO: make configurable
   mlmdDb: {{ .Values.config.databases.metadataDB }}
   pipelineDb: {{ .Values.config.databases.pipelineDB }}
 kind: ConfigMap
@@ -24,5 +26,4 @@ metadata:
     app.kubernetes.io/component: ml-pipeline
     app.kubernetes.io/name: kubeflow-pipelines
     application-crd-id: kubeflow-pipelines
-  name: pipeline-install-config
-  namespace: kubeflow
+  name: pipeline-install-config # TODO: don't hardcode name

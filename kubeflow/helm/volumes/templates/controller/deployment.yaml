@@ -35,27 +35,39 @@ spec:
           image: "{{ .Values.controller.image.repository }}:{{ .Values.controller.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.controller.image.pullPolicy }}
           args:
-            - --metrics-addr=0.0.0.0:8080
-            - --enable-leader-election
+            - --metrics-bind-address=0.0.0.0:8080
+            - --leader-elect
           command:
             - /manager
           ports:
+            - name: webhook
+              containerPort: 9443
+              protocol: TCP
             - name: metrics
               containerPort: 8080
               protocol: TCP
+            - name: probe
+              containerPort: 8081
+              protocol: TCP
           livenessProbe:
             httpGet:
-              path: /metrics
-              port: metrics
+              path: /healthz
+              port: probe
           readinessProbe:
             httpGet:
-              path: /metrics
-              port: metrics
+              path: /readyz
+              port: probe
           resources:
             {{- toYaml .Values.controller.resources | nindent 12 }}
-          envFrom:
-            - configMapRef:
-                name: {{ include "volumes.fullname" . }}-controller-config
+          volumeMounts:
+            - mountPath: /tmp/k8s-webhook-server/serving-certs
+              name: cert
+              readOnly: true
+      volumes:
+        - name: cert
+          secret:
+            defaultMode: 420
+            secretName: {{ include "volumes.fullname" . }}-controller-certs
       {{- with .Values.controller.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

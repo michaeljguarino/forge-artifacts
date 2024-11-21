@@ -1,0 +1,28 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  annotations:
+    cert-manager.io/inject-ca-from: kubeflow/{{ include "volumes.fullname" . }}-controller-certs
+  name: pvcviewers.kubeflow.org
+  labels: {{- include "volumes.labels" . | nindent 4 }}
+webhooks:
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: {{ include "volumes.fullname" . }}-controller
+      namespace: {{ .Release.Namespace }}
+      path: /validate-kubeflow-org-v1alpha1-pvcviewer
+  failurePolicy: Fail
+  name: vpvcviewer.kb.io
+  rules:
+  - apiGroups:
+    - kubeflow.org
+    apiVersions:
+    - v1alpha1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - pvcviewers
+  sideEffects: None

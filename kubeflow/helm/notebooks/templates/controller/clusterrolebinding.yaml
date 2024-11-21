@@ -10,4 +10,4 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: {{ include "notebooks.serviceAccountName" . }}-controller
-    namespace: kubeflow
+    namespace: {{ .Release.Namespace }}

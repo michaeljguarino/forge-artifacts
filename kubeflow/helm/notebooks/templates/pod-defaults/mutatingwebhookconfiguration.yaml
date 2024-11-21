@@ -4,16 +4,16 @@ metadata:
   annotations:
     cert-manager.io/inject-ca-from: kubeflow/{{ include "notebooks.fullname" . }}-pod-defaults-certs
   labels: {{- include "notebooks.labels" . | nindent 4 }}
-  name: admission-webhook-mutating-webhook-configuration
+  name: poddefaults.kubeflow.org
 webhooks:
   - clientConfig:
       caBundle: ""
       service:
         name: {{ include "notebooks.fullname" . }}-pod-defaults
-        namespace: kubeflow
+        namespace: {{ .Release.Namespace }}
         path: /apply-poddefault
-    name: admission-webhook-deployment.kubeflow.org
-    admissionReviewVersions: ["v1beta1"]
+    name: {{ include "notebooks.fullname" . }}-pod-defaults.kubeflow.org
+    admissionReviewVersions: ["v1beta1", "v1"]
     sideEffects: None
     namespaceSelector:
       matchLabels:

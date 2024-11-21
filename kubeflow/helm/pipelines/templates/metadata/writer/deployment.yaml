@@ -2,21 +2,19 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "pipelines.fullname" . }}-metadata-writer
-  namespace: kubeflow
   labels:
     {{- include "pipelines.labels" . | nindent 4 }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.replicaCount }}
+  {{- if not .Values.metadata.writer.autoscaling.enabled }}
+  replicas: {{ .Values.metadata.writer.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
       {{- include "pipelines.metadataWriterSelectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
+      {{- with .Values.metadata.writer.podAnnotations }}
       annotations:
-        cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
@@ -28,11 +26,11 @@ spec:
       {{- end }}
       serviceAccountName: {{ include "pipelines.serviceAccountName" . }}-metadata-writer
       securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+        {{- toYaml .Values.metadata.writer.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}-metadata-writer
           securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
+            {{- toYaml .Values.metadata.writer.securityContext | nindent 12 }}
           image: "{{ .Values.metadata.writer.image.repository }}:{{ .Values.metadata.writer.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.metadata.writer.image.pullPolicy }}
           env:
@@ -42,16 +40,16 @@ spec:
             - configMapRef:
                 name: {{ include "pipelines.fullname" . }}-metadata-writer-parameters
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
-      {{- with .Values.nodeSelector }}
+            {{- toYaml .Values.metadata.writer.resources | nindent 12 }}
+      {{- with .Values.metadata.writer.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.affinity }}
+      {{- with .Values.metadata.writer.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.tolerations }}
+      {{- with .Values.metadata.writer.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}

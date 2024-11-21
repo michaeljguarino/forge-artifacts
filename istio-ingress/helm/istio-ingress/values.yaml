@@ -10,6 +10,8 @@ gateway:
     labelSelector:
       matchLabels:
         istio: ingress
+  service:
+    externalTrafficPolicy: Local
 
 istioGateway:
   enabled: true

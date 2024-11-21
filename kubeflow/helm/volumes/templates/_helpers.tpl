@@ -37,6 +37,7 @@ Common labels
 helm.sh/chart: {{ include "volumes.chart" . }}
 {{ include "volumes.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
+version: {{ .Chart.AppVersion | quote }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
@@ -49,7 +50,6 @@ Selector labels
 app: {{ include "volumes.name" . }}
 app.kubernetes.io/name: {{ include "volumes.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
-version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
 {{/*
@@ -59,7 +59,6 @@ Controller selector labels
 app: {{ include "volumes.name" . }}-controller
 app.kubernetes.io/name: {{ include "volumes.name" . }}-controller
 app.kubernetes.io/instance: {{ .Release.Name }}
-version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
 {{/*

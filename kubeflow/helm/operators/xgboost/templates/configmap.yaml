@@ -1,6 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  labels: {{- include "xgboost.labels" . | nindent 4 }}
-  name: {{ include "xgboost.fullname" . }}-config
-  namespace: kubeflow

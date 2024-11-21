@@ -1,0 +1,6 @@
+dependencies:
+- name: knative-serving
+  repository: oci://ghcr.io/davidspek/charts
+  version: 0.1.17
+digest: sha256:7305a706142cd119f96f3a77ea47d426712c97a579172498ff672447a16d07f0
+generated: "2023-12-20T17:18:44.037453+01:00"

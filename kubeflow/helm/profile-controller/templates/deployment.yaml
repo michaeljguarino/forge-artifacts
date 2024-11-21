@@ -4,7 +4,6 @@ metadata:
   name: {{ include "profile-controller.fullname" . }}
   labels:
     {{- include "profile-controller.labels" . | nindent 4 }}
-  namespace: kubeflow
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
@@ -62,10 +61,6 @@ spec:
           envFrom:
             - configMapRef:
                 name: {{ include "profile-controller.fullname" . }}-config
-          volumeMounts:
-            - mountPath: /templates
-              name: profile-templates
-              readOnly: true
         - name: kfam
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
@@ -98,10 +93,8 @@ spec:
           envFrom:
             - configMapRef:
                 name: {{ include "profile-controller.fullname" . }}-config
-      volumes:
-        - configMap:
-            name: {{ include "profile-controller.fullname" . }}-templates
-          name: profile-templates
+            - secretRef:
+                name: {{ include "profile-controller.fullname" . }}-kfam-secret
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

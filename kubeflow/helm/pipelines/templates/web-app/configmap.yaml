@@ -7,7 +7,7 @@ data:
   AWS_REGION: {{ .Values.config.objectStore.bucketRegion }}
   VIEWER_TENSORBOARD_POD_TEMPLATE_SPEC_PATH: /etc/config/viewer-tensorboard-template.json
   VIEWER_TENSORBOARD_TF_IMAGE_NAME: tensorflow/tensorflow
-  METADATA_ENVOY_SERVICE_SERVICE_HOST: kubeflow-pipelines-metadata-envoy.kubeflow.svc.cluster.local
+  METADATA_ENVOY_SERVICE_SERVICE_HOST: kubeflow-pipelines-metadata-envoy.kubeflow.svc.cluster.local # TODO: don't hardcode these values
   METADATA_ENVOY_SERVICE_SERVICE_PORT: "9090"
   ML_PIPELINE_SERVICE_HOST: kubeflow-pipelines-api-server.kubeflow.svc.cluster.local
   ML_PIPELINE_SERVICE_PORT: "8888"
@@ -24,7 +24,6 @@ kind: ConfigMap
 metadata:
   labels: {{- include "pipelines.labels" . | nindent 4 }}
   name: {{ include "pipelines.fullname" . }}-web-app-parameters
-  namespace: kubeflow
 ---
 apiVersion: v1
 data:
@@ -65,4 +64,3 @@ data:
 kind: ConfigMap
 metadata:
   name: {{ include "pipelines.fullname" . }}-web-app-viewer-template
-  namespace: kubeflow

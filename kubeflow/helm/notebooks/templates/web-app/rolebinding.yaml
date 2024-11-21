@@ -3,11 +3,10 @@ kind: RoleBinding
 metadata:
   labels: {{- include "notebooks.labels" . | nindent 4 }}
   name: {{ include "notebooks.fullname" . }}-web-app-notebook-role-binding
-  namespace: kubeflow
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
   name: {{ include "notebooks.fullname" . }}-web-app-notebook-role
 subjects:
   - kind: ServiceAccount
-    name: jupyter-notebook # this SA doesn't exist. Where is this role and rolebinding used?
+    name: jupyter-notebook # TODO: this SA doesn't exist. Where is this role and rolebinding used?

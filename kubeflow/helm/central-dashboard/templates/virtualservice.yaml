@@ -2,7 +2,6 @@ apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: {{ include "central-dashboard.fullname" . }}
-  namespace: kubeflow
   labels:
     {{- include "central-dashboard.selectorLabels" . | nindent 4 }}
   {{- with .Values.virtualService.annotations }}
@@ -16,6 +15,9 @@ spec:
     {{- end }}
   hosts:
     - {{ .Values.global.domain }}
+    {{- range .Values.virtualService.hosts }}
+    - {{ . | quote }}
+    {{- end }}
   http:
     - match:
         - uri:
@@ -24,6 +26,6 @@ spec:
         uri: /
       route:
         - destination:
-            host: {{ include "central-dashboard.fullname" . }}.kubeflow.svc.{{ .Values.global.clusterDomain }}
+            host: {{ include "central-dashboard.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.global.clusterDomain }}
             port:
               number: {{ .Values.service.port }}

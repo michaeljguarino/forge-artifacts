@@ -3,7 +3,6 @@ kind: RoleBinding
 metadata:
   labels: {{- include "central-dashboard.labels" . | nindent 4 }}
   name: {{ include "central-dashboard.fullname" . }}-role-binding
-  namespace: kubeflow
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -11,4 +10,4 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: {{ include "central-dashboard.serviceAccountName" . }}
-    namespace: kubeflow
+    namespace: {{ .Release.Namespace }}

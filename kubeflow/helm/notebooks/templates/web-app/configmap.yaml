@@ -43,127 +43,35 @@ data:
         # The list of available standard container Images
         options: {{- toYaml .Values.webApp.config.images.rstudioImages | nindent 8 }}
       allowCustomImage: {{ .Values.webApp.config.images.allowCustomImage }}
+      hideRegistry: {{ .Values.webApp.config.images.hideRegistry }}
+      hideTag: {{ .Values.webApp.config.images.hideTag }}
       imagePullPolicy:
         value: {{ .Values.webApp.config.images.imagePullPolicy.value }}
         readOnly: {{ .Values.webApp.config.images.imagePullPolicy.readOnly }}
       cpu:
-        # CPU for user's Notebook
-        value: {{ .Values.webApp.config.cpu.value }}
-        # Factor by with to multiply request to calculate limit
-        # if no limit is set, to disable set "none"
-        limitFactor: {{ .Values.webApp.config.cpu.limitFactor }}
-        readOnly: {{ .Values.webApp.config.cpu.readOnly }}
+        {{- toYaml .Values.webApp.config.cpu | nindent 8 }}
       memory:
-        # Memory for user's Notebook
-        value: {{ .Values.webApp.config.memory.value }}
-        # Factor by with to multiply request to calculate limit
-        # if no limit is set, to disable set "none"
-        limitFactor: {{ .Values.webApp.config.memory.limitFactor }}
-        readOnly: {{ .Values.webApp.config.memory.readOnly }}
+        {{- toYaml .Values.webApp.config.memory | nindent 8 }}
       environment:
-        value: {}
-        readOnly: false
+        {{- toYaml .Values.webApp.config.environment | nindent 8 }}
       workspaceVolume:
-        # Workspace Volume to be attached to user's Notebook
-        # Each Workspace Volume is declared with the following attributes:
-        # Type, Name, Size, MountPath and Access Mode
-        value:
-          type:
-            # The Type of the Workspace Volume
-            # Supported values: 'New', 'Existing'
-            value: New
-          name:
-            # The Name of the Workspace Volume
-            # Note that this is a templated value. Special values:
-            # {notebook-name}: Replaced with the name of the Notebook. The frontend
-            #                  will replace this value as the user types the name
-            value: 'workspace-{notebook-name}'
-          size:
-            # The Size of the Workspace Volume (in Gi)
-            value: '5Gi'
-          mountPath:
-            # The Path that the Workspace Volume will be mounted
-            value: /home/jovyan
-          accessModes:
-            # The Access Mode of the Workspace Volume
-            # Supported values: 'ReadWriteOnce', 'ReadWriteMany', 'ReadOnlyMany'
-            value: ReadWriteOnce
-          class:
-            # The StrageClass the PVC will use if type is New. Special values are:
-            # {none}: default StorageClass
-            # {empty}: empty string ""
-            value: '{none}'
-        readOnly: false
+        {{- toYaml .Values.webApp.config.workspaceVolume | nindent 8 }}
       dataVolumes:
-        # List of additional Data Volumes to be attached to the user's Notebook
-        value: []
-        # Each Data Volume is declared with the following attributes:
-        # Type, Name, Size, MountPath and Access Mode
-        #
-        # For example, a list with 2 Data Volumes:
-        # value:
-        #   - value:
-        #       type:
-        #         value: New
-        #       name:
-        #         value: '{notebook-name}-vol-1'
-        #       size:
-        #         value: '10Gi'
-        #       class:
-        #         value: standard
-        #       mountPath:
-        #         value: /home/jovyan/vol-1
-        #       accessModes:
-        #         value: ReadWriteOnce
-        #       class:
-        #         value: {none}
-        #   - value:
-        #       type:
-        #         value: New
-        #       name:
-        #         value: '{notebook-name}-vol-2'
-        #       size:
-        #         value: '10Gi'
-        #       mountPath:
-        #         value: /home/jovyan/vol-2
-        #       accessModes:
-        #         value: ReadWriteMany
-        #       class:
-        #         value: {none}
-        readOnly: false
+        {{- toYaml .Values.webApp.config.dataVolumes | nindent 8 }}
       gpus:
-        # Number of GPUs to be assigned to the Notebook Container
-        value:
-          # values: "none", "1", "2", "4", "8"
-          num: "none"
-          # Determines what the UI will show and send to the backend
-          vendors:
-            - limitsKey: "nvidia.com/gpu"
-              uiName: "NVIDIA"
-            - limitsKey: "amd.com/gpu"
-              uiName: "AMD"
-          # Values: "" or a `limits-key` from the vendors list
-          vendor: ""
-        readOnly: false
+        {{- toYaml .Values.webApp.config.gpus | nindent 8 }}
       affinityConfig:
         {{- toYaml .Values.webApp.config.affinityConfig | nindent 8 }}
       tolerationGroup:
         {{- toYaml .Values.webApp.config.tolerationGroup | nindent 8 }}
       shm:
-        value: true
-        readOnly: false
+        {{- toYaml .Values.webApp.config.shm | nindent 8 }}
       configurations:
-        # List of labels to be selected, these are the labels from PodDefaults
-        # value:
-        #   - add-gcp-secret
-        #   - default-editor
-        value: []
-    readOnly: false
+        {{- toYaml .Values.webApp.config.configurations | nindent 8 }}
 kind: ConfigMap
 metadata:
   labels: {{- include "notebooks.labels" . | nindent 4 }}
   name: {{ include "notebooks.fullname" . }}-web-app-config
-  namespace: kubeflow
 ---
 apiVersion: v1
 data:
@@ -423,7 +331,6 @@ kind: ConfigMap
 metadata:
   labels: {{- include "notebooks.labels" . | nindent 4 }}
   name: {{ include "notebooks.fullname" . }}-web-app-logos
-  namespace: kubeflow
 ---
 apiVersion: v1
 data:
@@ -431,8 +338,8 @@ data:
   UI: default
   USERID_HEADER: {{ .Values.global.userIDHeader }}
   USERID_PREFIX: {{ .Values.global.userIDPrefix | quote }}
+  APP_SECURE_COOKIES: "true"
 kind: ConfigMap
 metadata:
   labels: {{- include "notebooks.labels" . | nindent 4 }}
   name: {{ include "notebooks.fullname" . }}-web-app-parameters
-  namespace: kubeflow

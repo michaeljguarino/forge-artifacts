@@ -10,6 +10,6 @@ spec:
     - port: {{ .Values.service.port }}
       targetPort: metrics
       protocol: TCP
-      name: http
+      name: http-metrics
   selector:
     {{- include "training-operator.selectorLabels" . | nindent 4 }}

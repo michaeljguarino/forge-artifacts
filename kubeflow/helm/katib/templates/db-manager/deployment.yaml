@@ -40,24 +40,22 @@ spec:
               containerPort: 6789
               protocol: TCP
           livenessProbe:
-            exec:
-              command:
-                - /bin/grpc_health_probe
-                - -addr=:6789
-            failureThreshold: 5
+            grpc:
+              port: 6789
             initialDelaySeconds: 10
             periodSeconds: 60
+            failureThreshold: 5
           readinessProbe:
-            exec:
-              command:
-                - /bin/grpc_health_probe
-                - -addr=:6789
-            initialDelaySeconds: 5
+            grpc:
+              port: 6789
+            initialDelaySeconds: 10
+            periodSeconds: 60
+            failureThreshold: 5
           resources:
             {{- toYaml .Values.dbManager.resources | nindent 12 }}
           env:
             - name: DB_NAME
-              value: mysql
+              value: {{ .Values.dbManager.config.database.type }}
             - name: DB_USER
               valueFrom:
                 secretKeyRef:
@@ -68,12 +66,21 @@ spec:
                 secretKeyRef:
                   key: {{ .Values.dbManager.config.secret.passwordKey }}
                   name: {{ .Values.dbManager.config.secret.name }}
+            {{- if eq .Values.dbManager.config.database.type "mysql" }}
             - name: KATIB_MYSQL_DB_DATABASE
               value: {{ .Values.dbManager.config.database.name }}
             - name: KATIB_MYSQL_DB_HOST
               value: {{ .Values.dbManager.config.database.host }}
             - name: KATIB_MYSQL_DB_PORT
               value: {{ .Values.dbManager.config.database.port | quote }}
+            {{- else if eq .Values.dbManager.config.database.type "postgres" }}
+            - name: KATIB_POSTGRESQL_DB_DATABASE
+              value: {{ .Values.dbManager.config.database.name }}
+            - name: KATIB_POSTGRESQL_DB_HOST
+              value: {{ .Values.dbManager.config.database.host }}
+            - name: KATIB_POSTGRESQL_DB_PORT
+              value: {{ .Values.dbManager.config.database.port | quote }}
+            {{- end }}
       {{- with .Values.dbManager.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

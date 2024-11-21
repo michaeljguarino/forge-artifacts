@@ -1,2 +1,6 @@
 kserve:
-  kserve: {}
+  kserve:
+    controller:
+      gateway:
+        domainTemplate: '{{ .Name }}-{{ .Namespace }}.{{ .IngressDomain }}` }}'
+        urlScheme: https

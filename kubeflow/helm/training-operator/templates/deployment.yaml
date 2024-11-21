@@ -45,22 +45,22 @@ spec:
               fieldRef:
                 fieldPath: metadata.name
           ports:
-            - name: healthz
-              containerPort: 8081
-              protocol: TCP
             - name: metrics
               containerPort: 8080
+              protocol: TCP
+            - name: probe
+              containerPort: 8081
               protocol: TCP
           livenessProbe:
             httpGet:
               path: /healthz
-              port: healthz
+              port: probe
             initialDelaySeconds: 15
             periodSeconds: 20
           readinessProbe:
             httpGet:
-              path: /healthz
-              port: healthz
+              path: /readyz
+              port: probe
             initialDelaySeconds: 5
             periodSeconds: 10
           resources:

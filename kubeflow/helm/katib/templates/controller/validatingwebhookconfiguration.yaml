@@ -6,16 +6,16 @@ metadata:
   name: katib.kubeflow.org
   labels: {{- include "katib.labels" . | nindent 4 }}
 webhooks:
-  - admissionReviewVersions:
-      - v1beta1
+  - name: validator.experiment.katib.kubeflow.org
+    sideEffects: None
+    admissionReviewVersions:
+      - v1
     clientConfig:
       caBundle: Cg==
       service:
         name: {{ include "katib.fullname" . }}-controller
-        namespace: kubeflow
+        namespace: {{ .Release.Namespace }}
         path: /validate-experiment
-    failurePolicy: Ignore
-    name: validator.experiment.katib.kubeflow.org
     rules:
       - apiGroups:
           - kubeflow.org
@@ -26,4 +26,3 @@ webhooks:
           - UPDATE
         resources:
           - experiments
-    sideEffects: None

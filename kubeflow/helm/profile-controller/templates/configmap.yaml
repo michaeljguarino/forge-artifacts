@@ -1,20 +1,20 @@
 apiVersion: v1
 data:
   WORKLOAD_IDENTITY: ""
+  USERID_HEADER: {{ .Values.global.userIDHeader | quote }}
+  USERID_PREFIX: {{ .Values.global.userIDPrefix | quote }}
+  ADMIN: {{ .Values.kfam.adminEmail | quote }}
 kind: ConfigMap
 metadata:
   labels: {{- include "profile-controller.labels" . | nindent 4 }}
   name: {{ include "profile-controller.fullname" . }}-config
-  namespace: kubeflow
 ---
 apiVersion: v1
-data:
-  network-policy.yaml: |
-{{ .Files.Get "profile-templates/network-policy.yaml" | indent 4 }}
-  test-template.yaml: |
-{{ .Files.Get "profile-templates/test-template.yaml" | indent 4 }}
 kind: ConfigMap
 metadata:
   labels: {{- include "profile-controller.labels" . | nindent 4 }}
-  name: {{ include "profile-controller.fullname" . }}-templates
-  namespace: kubeflow
+  name: kubeflow-profiles
+  namespace: {{ .Values.argocd.namespace }}
+data:
+  token: "${{ include "profile-controller.fullname" . }}-kfam-secret:plugin.kubeflow-profiles.token"
+  baseUrl: "http://{{ include "profile-controller.fullname" . }}-kfam.{{ .Release.Namespace }}.svc:{{ .Values.service.kfam.port }}"

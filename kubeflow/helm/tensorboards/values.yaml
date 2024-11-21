@@ -3,10 +3,18 @@
 # Declare variables to be passed into your templates.
 
 global:
-  istioNamespace: istio
+  domain: ""
+  istioIngress:
+    namespace: istio-ingress
+    serviceAccount: istio-ingress
   clusterDomain: cluster.local
   userIDHeader: kubeflow-userid
   userIDPrefix: ""
+  oidc:
+    issuer: ""
+    jwksURI: ""
+    authEndpoint: ""
+    tokenEndpoint: ""
 
 imagePullSecrets: []
 nameOverride: ""
@@ -24,10 +32,10 @@ serviceAccount:
 webApp:
   replicaCount: 1
   image:
-    repository: public.ecr.aws/j1r0q0g6/notebooks/tensorboards-web-app
+    repository: docker.io/kubeflownotebookswg/tensorboards-web-app
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
-    tag: v1.3.0
+    tag: v1.8.0-rc.0
 
   podAnnotations:
     sidecar.istio.io/inject: "true"
@@ -52,8 +60,8 @@ webApp:
     prefix: /tensorboards
     gateways:
       - kubeflow-gateway
-    hosts:
-      - '*'
+    # hosts to add additional to the value of global.domain
+    hosts: []
 
   resources:
     requests:
@@ -78,16 +86,19 @@ webApp:
 
 controller:
 
-  rwoScheduling:
-    enabled: true
+  config:
+    rwoScheduling:
+      enabled: true
+    istioGateway: kubeflow/kubeflow-gateway
+    tensorboardImage: tensorflow/tensorflow:2.5.1
 
   replicaCount: 1
 
   image:
-    repository: public.ecr.aws/j1r0q0g6/notebooks/tensorboard-controller
+    repository: docker.io/kubeflownotebookswg/tensorboard-controller
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
-    tag: master-18264c8f
+    tag: v1.8.0-rc.0
 
   podAnnotations:
     sidecar.istio.io/inject: "true"
@@ -97,10 +108,13 @@ controller:
     prometheus.io/scrape: "true"
     prometheus.io/path: /metrics
 
-  podSecurityContext: {}
+  podSecurityContext:
+    runAsNonRoot: true
+    runAsUser: 999
     # fsGroup: 2000
 
-  securityContext: {}
+  securityContext:
+    allowPrivilegeEscalation: false
     # capabilities:
     #   drop:
     #   - ALL

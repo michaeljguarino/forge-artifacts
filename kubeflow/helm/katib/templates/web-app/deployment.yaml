@@ -4,7 +4,6 @@ metadata:
   name: {{ include "katib.fullname" . }}-web-app
   labels:
     {{- include "katib.labels" . | nindent 4 }}
-  namespace: kubeflow
 spec:
   {{- if not .Values.webApp.autoscaling.enabled }}
   replicas: {{ .Values.webApp.replicaCount }}
@@ -42,6 +41,13 @@ spec:
             - name: website
               containerPort: 8080
               protocol: TCP
+          env:
+            - name: KATIB_CORE_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: APP_DISABLE_AUTH
+              value: "false" # TODO: should this be configurable?
           # livenessProbe:
           #   httpGet:
           #     path: / # TODO: check if this is correct

@@ -1,0 +1,15 @@
+apiVersion: plural.sh/v1alpha1
+kind: Dependencies
+metadata:
+  application: true
+  description: Deploys kubeflow crafted for the target cloud
+spec:
+  dependencies:
+  - type: helm
+    name: bootstrap
+    repo: bootstrap
+    version: '>= 0.7.12'
+  - type: helm
+    name: istio
+    repo: istio
+    version: '>= 0.2.1'

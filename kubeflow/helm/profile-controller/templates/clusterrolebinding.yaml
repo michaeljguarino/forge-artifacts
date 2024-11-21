@@ -10,4 +10,4 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: {{ include "profile-controller.serviceAccountName" . }}
-    namespace: kubeflow
+    namespace: {{ .Release.Namespace }}

@@ -3,10 +3,18 @@
 # Declare variables to be passed into your templates.
 
 global:
-  istioNamespace: istio
+  domain: ""
+  istioIngress:
+    namespace: istio-ingress
+    serviceAccount: istio-ingress
   clusterDomain: cluster.local
   userIDHeader: kubeflow-userid
   userIDPrefix: ""
+  oidc:
+    issuer: ""
+    jwksURI: ""
+    authEndpoint: ""
+    tokenEndpoint: ""
 
 imagePullSecrets: []
 nameOverride: ""
@@ -24,10 +32,10 @@ serviceAccount:
 webApp:
   replicaCount: 1
   image:
-    repository: docker.io/kubeflowkatib/katib-new-ui
+    repository: docker.io/kubeflowkatib/katib-ui
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
-    tag: v0.11.1
+    tag: v0.16.0-rc.1
   podAnnotations:
     cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
     sidecar.istio.io/inject: "true"
@@ -51,8 +59,9 @@ webApp:
     prefix: /katib
     gateways:
       - kubeflow-gateway
-    hosts:
-      - '*'
+    # hosts to add additional to the value of global.domain
+    hosts: []
+
   resources:
     requests:
       cpu: 32m
@@ -83,7 +92,7 @@ controller:
     repository: docker.io/kubeflowkatib/katib-controller
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
-    tag: v0.11.1
+    tag: v0.16.0-rc.1
 
   replicaCount: 1
 
@@ -104,7 +113,7 @@ controller:
     # readOnlyRootFilesystem: true
     # runAsNonRoot: true
     # runAsUser: 1000
-  
+
   resources:
     requests:
       cpu: 32m
@@ -128,7 +137,7 @@ controller:
 
   service:
     webhook:
-      port: 8443
+      port: 443
     metrics:
       port: 8080
 
@@ -137,7 +146,7 @@ dbManager:
     repository: docker.io/kubeflowkatib/katib-db-manager
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
-    tag: v0.11.1
+    tag: v0.16.0-rc.1
 
   replicaCount: 1
 
@@ -173,7 +182,7 @@ dbManager:
     maxReplicas: 100
     targetCPUUtilizationPercentage: 80
     # targetMemoryUtilizationPercentage: 80
-  
+
   nodeSelector: {}
 
   tolerations: []
@@ -189,6 +198,7 @@ dbManager:
       userKey: USERNAME
       passwordKey: PASSWORD
     database:
+      type: mysql # mysql or postgres
       name: katib
       host: kubeflow-mysql-cluster-mysql-master.kubeflow.svc.cluster.local
       port: 3306

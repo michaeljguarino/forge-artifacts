@@ -1,0 +1,67 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: kubeflow-profile
+  namespace: {{ .Values.argocd.namespace }}
+spec:
+  generators:
+  - plugin:
+      configMapRef:
+        name: kubeflow-profiles
+      requeueAfterSeconds: 10
+  template:
+    metadata:
+      name: {{ `"kubeflow-profile-{{metadata.name}}"` }}
+      annotations:
+        owner: {{ `"{{spec.owner.name}}"` }}
+    spec:
+      project: default
+      syncPolicy:
+        # syncOptions:
+        # - ServerSideApply=true
+        automated:
+          prune: true
+          selfHeal: true
+      source:
+        helm:
+          parameters:
+          - name: email
+            value: {{ `"{{spec.owner.name}}"` }}
+          - name: provider
+            value: {{ lower .Values.config.infrastructure.provider }}
+          - name: pipelines.storage.bucketName
+            value: {{ .Values.config.infrastructure.storage.bucketName }}
+          - name: pipelines.storage.provider
+            value: {{ lower .Values.config.infrastructure.storage.provider }}
+          - name: istio.ingressNamespace
+            value: {{ .Release.Namespace }}
+          - name: istio.ingressServiceAccount
+            value: {{ .Values.global.istioIngressServiceAccount }}
+          - name: istio.clusterDomain
+            value: {{ .Values.global.clusterDomain }}
+          - name: istio.oidc.issuer
+            value: {{ .Values.global.oidc.issuer }}
+          - name: istio.oidc.jwksURI
+            value: {{ .Values.global.oidc.jwksURI }}
+          - name: kubeflow.namespace
+            value: {{ .Release.Namespace }}
+          - name: knative.namespace
+            value: {{ .Values.knative.namespace }}
+          {{- if eq (lower .Values.config.infrastructure.provider) "aws" }}
+          - name: aws.region
+            value: {{ .Values.config.infrastructure.providerConfig.region }}
+          - name: aws.iam.create
+            value: "true"
+          - name: aws.iam.accountID
+            value: {{ .Values.config.infrastructure.providerConfig.accountID | quote }}
+          - name: aws.iam.oidcIssuer
+            value: {{ .Values.config.infrastructure.providerConfig.clusterOIDCIssuer }}
+          - name: aws.iam.clusterName
+            value: {{ .Values.config.infrastructure.clusterName }}
+          {{- end }}
+        repoURL: https://github.com/DavidSpek/kubeflow-profile.git
+        targetRevision: HEAD
+        path: kubeflow-profile
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: {{ `"{{metadata.name}}"` }}

@@ -3,12 +3,11 @@ kind: Certificate
 metadata:
   labels: {{- include "katib.labels" . | nindent 4 }}
   name: {{ include "katib.fullname" . }}-controller-certs
-  namespace: kubeflow
 spec:
-  commonName: {{ include "katib.fullname" . }}-controller.kubeflow.svc
+  commonName: {{ include "katib.fullname" . }}-controller.{{ .Release.Namespace }}.svc
   dnsNames:
-    - {{ include "katib.fullname" . }}-controller.kubeflow.svc
-    - {{ include "katib.fullname" . }}-controller.kubeflow.svc.cluster.local
+    - {{ include "katib.fullname" . }}-controller.{{ .Release.Namespace }}.svc
+    - {{ include "katib.fullname" . }}-controller.{{ .Release.Namespace }}.svc.cluster.local
   isCA: true
   issuerRef:
     kind: ClusterIssuer

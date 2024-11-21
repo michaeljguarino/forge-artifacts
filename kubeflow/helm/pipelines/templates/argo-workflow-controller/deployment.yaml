@@ -2,12 +2,11 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "pipelines.fullname" . }}-argo-workflow-controller
-  namespace: kubeflow
   labels:
     {{- include "pipelines.labels" . | nindent 4 }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.replicaCount }}
+  {{- if not .Values.argoWorkflowController.autoscaling.enabled }}
+  replicas: {{ .Values.argoWorkflowController.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
@@ -39,7 +38,7 @@ spec:
             - --configmap
             - {{ include "pipelines.fullname" . }}-argo-workflow-controller
             - --executor-image
-            - gcr.io/ml-pipeline/argoexec:v3.2.3-license-compliance
+            - "{{ .Values.argoWorkflowController.executorImage.repository }}:{{ .Values.argoWorkflowController.executorImage.tag }}"
           command:
             - workflow-controller
           env:
@@ -65,16 +64,17 @@ spec:
             timeoutSeconds: 30
           resources:
             {{- toYaml .Values.argoWorkflowController.resources | nindent 12 }}
-      {{- with .Values.nodeSelector }}
+      priorityClassName: {{ include "pipelines.fullname" . }}-argo-workflow-controller
+      {{- with .Values.argoWorkflowController.nodeSelector }}
       nodeSelector:
         kubernetes.io/os: linux
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.affinity }}
+      {{- with .Values.argoWorkflowController.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.tolerations }}
+      {{- with .Values.argoWorkflowController.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}

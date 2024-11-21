@@ -2,21 +2,19 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "pipelines.fullname" . }}-visualization-server
-  namespace: kubeflow
   labels:
     {{- include "pipelines.labels" . | nindent 4 }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.replicaCount }}
+  {{- if not .Values.visualizationServer.autoscaling.enabled }}
+  replicas: {{ .Values.visualizationServer.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
       {{- include "pipelines.visualizationServerSelectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
+      {{- with .Values.visualizationServer.podAnnotations }}
       annotations:
-        cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
@@ -28,11 +26,11 @@ spec:
       {{- end }}
       serviceAccountName: {{ include "pipelines.serviceAccountName" . }}-visualization-server
       securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+        {{- toYaml .Values.visualizationServer.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}-visualization-server
           securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
+            {{- toYaml .Values.visualizationServer.securityContext | nindent 12 }}
           image: "{{ .Values.visualizationServer.image.repository }}:{{ .Values.visualizationServer.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.visualizationServer.image.pullPolicy }}
           ports:
@@ -64,16 +62,16 @@ spec:
             periodSeconds: 5
             timeoutSeconds: 2
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
-      {{- with .Values.nodeSelector }}
+            {{- toYaml .Values.visualizationServer.resources | nindent 12 }}
+      {{- with .Values.visualizationServer.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.affinity }}
+      {{- with .Values.visualizationServer.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.tolerations }}
+      {{- with .Values.visualizationServer.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}

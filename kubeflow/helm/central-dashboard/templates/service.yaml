@@ -4,7 +4,6 @@ metadata:
   name: {{ include "central-dashboard.fullname" . }}
   labels:
     {{- include "central-dashboard.labels" . | nindent 4 }}
-  namespace: kubeflow
 spec:
   type: ClusterIP
   ports:
@@ -12,13 +11,5 @@ spec:
       targetPort: website
       protocol: TCP
       name: http-website
-    - port: 4180
-      targetPort: 4180
-      protocol: TCP
-      name: http-oauth
-    - port: 44180
-      targetPort: 44180
-      protocol: TCP
-      name: metrics-oauth
   selector:
     {{- include "central-dashboard.selectorLabels" . | nindent 4 }}

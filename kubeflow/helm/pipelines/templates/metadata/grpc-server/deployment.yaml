@@ -2,21 +2,19 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "pipelines.fullname" . }}-metadata-grpc-server
-  namespace: kubeflow
   labels:
     {{- include "pipelines.labels" . | nindent 4 }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.replicaCount }}
+  {{- if not .Values.metadata.grpc.autoscaling.enabled }}
+  replicas: {{ .Values.metadata.grpc.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
       {{- include "pipelines.metadataGRPCServerSelectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
+      {{- with .Values.metadata.grpc.podAnnotations }}
       annotations:
-        cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
@@ -28,11 +26,11 @@ spec:
       {{- end }}
       serviceAccountName: {{ include "pipelines.serviceAccountName" . }}-metadata-grpc-server
       securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+        {{- toYaml .Values.metadata.grpc.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}-metadata-grpc-server
           securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
+            {{- toYaml .Values.metadata.grpc.securityContext | nindent 12 }}
           image: "{{ .Values.metadata.grpc.image.repository }}:{{ .Values.metadata.grpc.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.metadata.grpc.image.pullPolicy }}
           args:
@@ -88,16 +86,16 @@ spec:
               port: api
             timeoutSeconds: 2
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
-      {{- with .Values.nodeSelector }}
+            {{- toYaml .Values.metadata.grpc.resources | nindent 12 }}
+      {{- with .Values.metadata.grpc.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.affinity }}
+      {{- with .Values.metadata.grpc.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.tolerations }}
+      {{- with .Values.metadata.grpc.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}

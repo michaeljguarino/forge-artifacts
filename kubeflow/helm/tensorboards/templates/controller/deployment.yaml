@@ -34,23 +34,23 @@ spec:
             {{- toYaml .Values.controller.securityContext | nindent 12 }}
           image: "{{ .Values.controller.image.repository }}:{{ .Values.controller.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.controller.image.pullPolicy }}
-          args:
-            - --metrics-addr=0.0.0.0:8080
-            - --enable-leader-election
           command:
             - /manager
           ports:
             - name: metrics
               containerPort: 8080
               protocol: TCP
+            - name: probe
+              containerPort: 8081
+              protocol: TCP
           livenessProbe:
             httpGet:
-              path: /metrics
-              port: metrics
+              path: /healthz
+              port: probe
           readinessProbe:
             httpGet:
-              path: /metrics
-              port: metrics
+              path: /readyz
+              port: probe
           resources:
             {{- toYaml .Values.controller.resources | nindent 12 }}
           envFrom:

@@ -1,0 +1,14 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: {{ include "volumes.fullname" . }}-web-app
+  labels: {{- include "volumes.labels" . | nindent 4 }}
+  {{- with .Values.webApp.virtualService.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  host: {{ include "volumes.fullname" . }}-web-app.{{ .Release.Namespace }}.svc.{{ .Values.global.clusterDomain }}
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL

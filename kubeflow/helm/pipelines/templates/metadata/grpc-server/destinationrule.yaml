@@ -3,9 +3,19 @@ kind: DestinationRule
 metadata:
   labels: {{- include "pipelines.labels" . | nindent 4 }}
   name: {{ include "pipelines.fullname" . }}-metadata-grpc-server
-  namespace: kubeflow
 spec:
-  host: {{ include "pipelines.fullname" . }}-metadata-grpc-server.kubeflow.svc.{{ .Values.global.clusterDomain }}
+  host: {{ include "pipelines.fullname" . }}-metadata-grpc-server.{{ .Release.Namespace }}.svc.{{ .Values.global.clusterDomain }}
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+---
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  labels: {{- include "pipelines.labels" . | nindent 4 }}
+  name: metadata-grpc-service
+spec:
+  host: metadata-grpc-service.{{ .Release.Namespace }}.svc.{{ .Values.global.clusterDomain }}
   trafficPolicy:
     tls:
       mode: ISTIO_MUTUAL

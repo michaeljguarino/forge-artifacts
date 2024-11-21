@@ -1,5 +1,5 @@
 {{- if .Values.webApp.autoscaling.enabled }}
-apiVersion: autoscaling/v2beta1
+apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ include "volumes.fullname" . }}-web-app
@@ -17,12 +17,16 @@ spec:
     - type: Resource
       resource:
         name: cpu
-        targetAverageUtilization: {{ .Values.webApp.autoscaling.targetCPUUtilizationPercentage }}
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.webApp.autoscaling.targetCPUUtilizationPercentage }}
     {{- end }}
     {{- if .Values.webApp.autoscaling.targetMemoryUtilizationPercentage }}
     - type: Resource
       resource:
         name: memory
-        targetAverageUtilization: {{ .Values.webApp.autoscaling.targetMemoryUtilizationPercentage }}
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.webApp.autoscaling.targetMemoryUtilizationPercentage }}
     {{- end }}
 {{- end }}

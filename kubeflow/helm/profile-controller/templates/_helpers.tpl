@@ -37,6 +37,7 @@ Common labels
 helm.sh/chart: {{ include "profile-controller.chart" . }}
 {{ include "profile-controller.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
+version: {{ .Chart.AppVersion | quote }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
@@ -49,7 +50,6 @@ Selector labels
 app: {{ include "profile-controller.name" . }}
 app.kubernetes.io/name: {{ include "profile-controller.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
-version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
 {{/*

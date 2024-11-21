@@ -1,16 +1,19 @@
-apiVersion: security.istio.io/v1beta1
+apiVersion: security.istio.io/v1
 kind: AuthorizationPolicy
 metadata:
   labels: {{- include "profile-controller.labels" . | nindent 4 }}
   name: {{ include "profile-controller.fullname" . }}-kfam
-  namespace: kubeflow
 spec:
   action: ALLOW
   rules:
-    - from:
-        - source:
-            principals:
-              - cluster.local/ns/kubeflow/sa/{{ .Release.Name }}-central-dashboard
+  - from:
+    - source:
+        principals:
+        - cluster.local/ns/{{ .Release.Namespace }}/sa/{{ .Release.Name }}-central-dashboard #TODO: make this more robust
+  - to:
+    - operation:
+        methods: ["POST"]
+        paths: ["/api/v1/getparams.execute"]
   selector:
     matchLabels:
       {{- include "profile-controller.selectorLabels" . | nindent 6 }}

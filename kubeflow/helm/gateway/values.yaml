@@ -1,0 +1,66 @@
+global:
+  domain: ""
+  istioIngress:
+    namespace: istio-ingress
+    serviceAccount: istio-ingress
+  clusterDomain: cluster.local
+  userIDHeader: kubeflow-userid
+  userIDPrefix: ""
+  oidc:
+    issuer: ""
+    jwksURI: ""
+    authEndpoint: ""
+    tokenEndpoint: ""
+
+nameOverride: ""
+fullnameOverride: ""
+
+provider: ""
+
+# TODO: investigate XSRF filter in envoy
+# TODO: check if we should be passing the access token through in the Authorization header or just the JWT
+
+oidc:
+  clientID: ""
+  clientSecret: ""
+  hmacSecret: ""
+  scopes:
+  - openid
+  - profile
+  - offline
+  - offline_access
+
+gateway:
+  enabled: false
+  labels:
+    istio: ingress
+  name: kubeflow-gateway
+  autoscaling:
+    minReplicas: 2
+  topologySpreadConstraints:
+  - maxSkew: 1
+    topologyKey: topology.kubernetes.io/zone
+    whenUnsatisfiable: ScheduleAnyway
+    labelSelector:
+      matchLabels:
+        istio: kubeflow-gateway
+  volumes:
+  - name: oauth-creds
+    secret:
+      secretName: oauth2-secret
+      defaultMode: 420
+  volumeMounts:
+  - name: oauth-creds
+    mountPath: /etc/istio/config/
+    readOnly: true
+  service:
+    externalTrafficPolicy: Local
+
+istioGateway:
+  enabled: true
+  hosts: []
+  tls:
+    enabled: true
+    issuerRef:
+      name: letsencrypt-prod
+      kind: ClusterIssuer

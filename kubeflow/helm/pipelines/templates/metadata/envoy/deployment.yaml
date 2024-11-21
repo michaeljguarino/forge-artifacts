@@ -2,21 +2,21 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "pipelines.fullname" . }}-metadata-envoy
-  namespace: kubeflow
   labels:
     {{- include "pipelines.labels" . | nindent 4 }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.replicaCount }}
+  {{- if not .Values.metadata.envoy.autoscaling.enabled }}
+  replicas: {{ .Values.metadata.envoy.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
       {{- include "pipelines.metadataEnvoySelectorLabels" . | nindent 6 }}
   template:
     metadata:
+      {{- with .Values.metadata.envoy.podAnnotations }}
       annotations:
-        sidecar.istio.io/inject: "false"
-        cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       labels:
         {{- include "pipelines.metadataEnvoySelectorLabels" . | nindent 8 }}
     spec:
@@ -26,11 +26,11 @@ spec:
       {{- end }}
       serviceAccountName: {{ include "pipelines.serviceAccountName" . }}-metadata-envoy
       securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+        {{- toYaml .Values.metadata.envoy.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}-metadata-envoy
           securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
+            {{- toYaml .Values.metadata.envoy.securityContext | nindent 12 }}
           image: "{{ .Values.metadata.envoy.image.repository }}:{{ .Values.metadata.envoy.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.metadata.envoy.image.pullPolicy }}
           args:
@@ -43,7 +43,7 @@ spec:
               containerPort: 9901
               protocol: TCP
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+            {{- toYaml .Values.metadata.envoy.resources | nindent 12 }}
           volumeMounts:
             - mountPath: /config
               name: config-volume
@@ -51,15 +51,15 @@ spec:
         - configMap:
             name: {{ include "pipelines.fullname" . }}-metadata-envoy-config
           name: config-volume
-      {{- with .Values.nodeSelector }}
+      {{- with .Values.metadata.envoy.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.affinity }}
+      {{- with .Values.metadata.envoy.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.tolerations }}
+      {{- with .Values.metadata.envoy.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}

@@ -2,6 +2,7 @@ name: kubeflow-gcp
 description: Installs Kubeflow on a GKE cluster
 provider: GCP
 primary: true
+private: true
 oidcSettings:
   uriFormat: https://{domain}/oauth2/callback
   authMethod: POST

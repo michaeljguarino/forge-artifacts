@@ -2,7 +2,6 @@ apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: {{ include "pipelines.fullname" . }}-metadata-grpc-server
-  namespace: kubeflow
   labels: {{- include "pipelines.labels" . | nindent 4 }}
   {{- with .Values.metadata.grpc.virtualService.annotations }}
   annotations:
@@ -14,6 +13,7 @@ spec:
     - {{ . | quote }}
     {{- end }}
   hosts:
+    - {{ .Values.global.domain }}
     {{- range .Values.metadata.grpc.virtualService.hosts }}
     - {{ . | quote }}
     {{- end }}
@@ -29,6 +29,6 @@ spec:
         uri: {{ .Values.metadata.grpc.virtualService.prefix }}
       route:
         - destination:
-            host: {{ include "pipelines.fullname" . }}-metadata-envoy.kubeflow.svc.{{ .Values.global.clusterDomain }}
+            host: {{ include "pipelines.fullname" . }}-metadata-envoy.{{ .Release.Namespace }}.svc.{{ .Values.global.clusterDomain }}
             port:
               number: {{ .Values.metadata.envoy.service.port }}

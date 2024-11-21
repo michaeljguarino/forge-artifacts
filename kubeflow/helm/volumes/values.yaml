@@ -3,10 +3,18 @@
 # Declare variables to be passed into your templates.
 
 global:
-  istioNamespace: istio
+  domain: ""
+  istioIngress:
+    namespace: istio-ingress
+    serviceAccount: istio-ingress
   clusterDomain: cluster.local
   userIDHeader: kubeflow-userid
   userIDPrefix: ""
+  oidc:
+    issuer: ""
+    jwksURI: ""
+    authEndpoint: ""
+    tokenEndpoint: ""
 
 imagePullSecrets: []
 nameOverride: ""
@@ -21,15 +29,22 @@ serviceAccount:
   # If not set and create is true, a name is generated using the fullname template
   name: ""
 
+config:
+  volumeViewerImage:
+    repository: filebrowser/filebrowser
+    tag: v2.25.0 # TODO: The `viewer-spec.yaml` template doesn't seem to be working properly, making the defaulting webhook set the image to latest
+  rwoScheduling:
+    enabled: true
+
 webApp:
   replicaCount: 1
 
   image:
-    repository: davidspek/volumes-web-app
+    repository: docker.io/kubeflownotebookswg/volumes-web-app
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
-    tag: 0.5.2 # newer version with snapshot support causes error due to missing snapshot class
-  
+    tag: v1.8.0-rc.0 # TODO: possibly contribute snapshot support upstream
+
   podAnnotations:
     sidecar.istio.io/inject: "true"
     cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
@@ -53,8 +68,8 @@ webApp:
     prefix: /volumes
     gateways:
       - kubeflow-gateway
-    hosts:
-      - '*'
+    # hosts to add additional to the value of global.domain
+    hosts: []
 
   resources:
     requests:
@@ -78,20 +93,19 @@ webApp:
   affinity: {}
 
 controller:
-
-  rwoScheduling:
-    enabled: true
-
   replicaCount: 1
 
   image:
-    repository: davidspek/kubeflow-pvcviewer-controller
+    repository: docker.io/kubeflownotebookswg/pvcviewer-controller
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
-    tag: 0.7
+    tag: v1.8.0-rc.0
 
   service:
-    port: 8080
+    metrics:
+      port: 8080
+    webhook:
+      port: 443
 
   podAnnotations:
     sidecar.istio.io/inject: "true"

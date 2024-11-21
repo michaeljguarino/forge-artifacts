@@ -5,25 +5,40 @@
 replicaCount: 1
 
 global:
-  istioNamespace: istio
+  domain: ""
+  istioIngress:
+    namespace: istio-ingress
+    serviceAccount: istio-ingress
   clusterDomain: cluster.local
   userIDHeader: kubeflow-userid
   userIDPrefix: ""
-  oidcIssuer: https://oidc.plural.sh/
-  jwksURI: https://oidc.plural.sh/.well-known/jwks.json
+  oidc:
+    issuer: ""
+    jwksURI: ""
+    authEndpoint: ""
+    tokenEndpoint: ""
 
 image:
   repository: ghcr.io/pluralsh/kubeflow-profile-controller
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: 0.1.13
+  tag: 0.1.14
 
 kfam:
+  adminEmail: ""
+  secret:
+    argoToken: ""
   image:
     repository: davidspek/kfam
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
-    tag: 0.1.1
+    tag: 0.2.0
+
+argocd:
+  namespace: argo-cd
+
+knative:
+  namespace: knative
 
 imagePullSecrets: []
 nameOverride: ""
@@ -99,8 +114,8 @@ virtualService:
   prefix: /kfam
   gateways:
     - kubeflow-gateway
-  hosts:
-    - '*'
+  # hosts to add additional to the value of global.domain
+  hosts: []
 
 resources:
   requests:

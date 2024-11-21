@@ -3,7 +3,6 @@ kind: Role
 metadata:
   labels: {{- include "notebooks.labels" . | nindent 4 }}
   name: {{ include "notebooks.fullname" . }}-controller-leader-election-role
-  namespace: kubeflow
 rules:
   - apiGroups:
       - ""

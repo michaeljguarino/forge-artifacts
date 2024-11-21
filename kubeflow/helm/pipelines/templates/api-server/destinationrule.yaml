@@ -3,9 +3,8 @@ kind: DestinationRule
 metadata:
   labels: {{- include "pipelines.labels" . | nindent 4 }}
   name: {{ include "pipelines.fullname" . }}-api-server
-  namespace: kubeflow
 spec:
-  host: {{ include "pipelines.fullname" . }}-api-server.kubeflow.svc.{{ .Values.global.clusterDomain }}
+  host: {{ include "pipelines.fullname" . }}-api-server.{{ .Release.Namespace }}.svc.{{ .Values.global.clusterDomain }}
   trafficPolicy:
     tls:
       mode: ISTIO_MUTUAL

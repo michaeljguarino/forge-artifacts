@@ -2,21 +2,19 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "pipelines.fullname" . }}-persistence-agent
-  namespace: kubeflow
   labels:
     {{- include "pipelines.labels" . | nindent 4 }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.replicaCount }}
+  {{- if not .Values.persistenceAgent.autoscaling.enabled }}
+  replicas: {{ .Values.persistenceAgent.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
       {{- include "pipelines.persistenceAgentSelectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
+      {{- with .Values.persistenceAgent.podAnnotations }}
       annotations:
-        cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
@@ -28,15 +26,15 @@ spec:
       {{- end }}
       serviceAccountName: {{ include "pipelines.serviceAccountName" . }}-persistence-agent
       securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+        {{- toYaml .Values.persistenceAgent.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}-persistence-agent
           securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
+            {{- toYaml .Values.persistenceAgent.securityContext | nindent 12 }}
           image: "{{ .Values.persistenceAgent.image.repository }}:{{ .Values.persistenceAgent.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.persistenceAgent.image.pullPolicy }}
           args:
-            - --logtostderr=true
+            - --logtostderr=true # TODO: why are we specifying this while the upstream manifest doesn't?
             - --namespace=$(NAMESPACE)
             - --ttlSecondsAfterWorkflowFinish=$(TTL_SECONDS_AFTER_WORKFLOW_FINISH)
             - --numWorker=$(NUM_WORKERS)
@@ -48,20 +46,34 @@ spec:
             - --clientBurst=$(MAX_CLIENT_BURST)
           command:
             - persistence_agent
+          env:
+            - name: NAMESPACE # TODO: should this be specified? Or should it only be specified in single user mode?
+              value: ""
           envFrom:
             - configMapRef:
                 name: {{ include "pipelines.fullname" . }}-persistence-agent-parameters
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
-      {{- with .Values.nodeSelector }}
+            {{- toYaml .Values.persistenceAgent.resources | nindent 12 }}
+          volumeMounts:
+            - mountPath: /var/run/secrets/kubeflow/tokens
+              name: persistenceagent-sa-token
+      volumes:
+        - name: persistenceagent-sa-token
+          projected:
+            sources:
+              - serviceAccountToken:
+                  audience: pipelines.kubeflow.org
+                  expirationSeconds: 3600
+                  path: persistenceagent-sa-token
+      {{- with .Values.persistenceAgent.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.affinity }}
+      {{- with .Values.persistenceAgent.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.tolerations }}
+      {{- with .Values.persistenceAgent.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}

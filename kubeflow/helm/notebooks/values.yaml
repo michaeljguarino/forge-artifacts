@@ -3,10 +3,18 @@
 # Declare variables to be passed into your templates.
 
 global:
-  istioNamespace: istio
+  domain: ""
+  istioIngress:
+    namespace: istio-ingress
+    serviceAccount: istio-ingress
   clusterDomain: cluster.local
   userIDHeader: kubeflow-userid
   userIDPrefix: ""
+  oidc:
+    issuer: ""
+    jwksURI: ""
+    authEndpoint: ""
+    tokenEndpoint: ""
 
 imagePullSecrets: []
 nameOverride: ""
@@ -24,11 +32,11 @@ serviceAccount:
 webApp:
   replicaCount: 1
   image:
-    repository: public.ecr.aws/j1r0q0g6/notebooks/jupyter-web-app
+    repository: docker.io/kubeflownotebookswg/jupyter-web-app
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
-    tag: v1.4
-  
+    tag: v1.8.0-rc.0
+
   podAnnotations:
     sidecar.istio.io/inject: "true"
     cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
@@ -52,8 +60,8 @@ webApp:
     prefix: /jupyter
     gateways:
       - kubeflow-gateway
-    hosts:
-      - '*'
+    # hosts to add additional to the value of global.domain
+    hosts: []
 
   resources:
     requests:
@@ -80,21 +88,22 @@ webApp:
   config:
     images:
       allowCustomImage: true
+      hideRegistry: true
+      hideTag: false
       imagePullPolicy:
         value: IfNotPresent
         readOnly: false
       jupyterImages:
-        - ghcr.io/pluralsh/kubeflow-notebooks-jupyter-scipy:v1.0.55
-        - ghcr.io/pluralsh/kubeflow-notebooks-jupyter-pytorch-full:v1.0.55
-        - ghcr.io/pluralsh/kubeflow-notebooks-jupyter-pytorch-full-cuda:v1.0.55
-        - ghcr.io/pluralsh/kubeflow-notebooks-jupyter-tensorflow-full:v1.0.54
-        - ghcr.io/pluralsh/kubeflow-notebooks-jupyter-tensorflow-full-cuda:v1.0.54
-        - ghcr.io/pluralsh/kubeflow-notebooks-jupyter-go:v1.0.11
-        - ghcr.io/pluralsh/kubeflow-notebooks-jupyter-elixir:v1.0.12
+        - ghcr.io/pluralsh/kubeflow-notebooks-jupyter-scipy:2.5.0
+        - ghcr.io/pluralsh/kubeflow-notebooks-jupyter-pytorch-full:2.5.0
+        - ghcr.io/pluralsh/kubeflow-notebooks-jupyter-pytorch-full-cuda:2.5.0
+        - ghcr.io/pluralsh/kubeflow-notebooks-jupyter-tensorflow-full:2.6.0
+        - ghcr.io/pluralsh/kubeflow-notebooks-jupyter-tensorflow-full-cuda:2.6.0
+        - ghcr.io/pluralsh/kubeflow-notebooks-jupyter-go:2.5.0
       vscodeImages:
-        - ghcr.io/pluralsh/kubeflow-notebooks-codeserver-python:v1.0.8
+        - ghcr.io/pluralsh/kubeflow-notebooks-codeserver-python:2.4.0
       rstudioImages:
-        - ghcr.io/pluralsh/kubeflow-notebooks-rstudio-tidyverse:v1.0.1
+        - ghcr.io/pluralsh/kubeflow-notebooks-rstudio-tidyverse:2.3.0
     cpu:
       # CPU for user's Notebook
       value: '0.5'
@@ -109,7 +118,82 @@ webApp:
       # if no limit is set, to disable set "none"
       limitFactor: "1.2"
       readOnly: false
+    gpus:
+      readOnly: false
+      # configs for gpu/device-plugin limits of the container
+      # https://kubernetes.io/docs/tasks/manage-gpus/scheduling-gpus/#using-device-plugins
+      value:
+        # the `limitKey` of the default vendor
+        # (to have no default, set as "")
+        vendor: ""
+
+        # the list of available vendors in the dropdown
+        #  `limitsKey` - what will be set as the actual limit
+        #  `uiName` - what will be displayed in the dropdown UI
+        vendors:
+        - limitsKey: "nvidia.com/gpu"
+          uiName: "NVIDIA"
+        # - limitsKey: "amd.com/gpu"
+        #   uiName: "AMD"
+
+        # the default value of the limit
+        # (possible values: "none", "1", "2", "4", "8")
+        num: "none"
+    environment:
+      readOnly: false
+      value: {}
+    workspaceVolume:
+      readOnly: false
+      # the default workspace volume to be created and mounted
+      # (to have no default, set `value: null`)
+      value:
+        mount: /home/jovyan
+        # pvc configs for creating new workspace volumes
+        # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#persistentvolumeclaim-v1-core
+        newPvc:
+          metadata:
+            # "{notebook-name}" is replaced with the Notebook name
+            name: "{notebook-name}-workspace"
+          spec:
+            storageClassName: null
+            resources:
+              requests:
+                storage: 5Gi
+            accessModes:
+              - ReadWriteOnce
+    dataVolumes:
+      readOnly: false
+      # a list of additional data volumes to be created and/or mounted
+      value: []
+      #value:
+      #  - mount: /home/jovyan/datavol-1
+      #    newPvc:
+      #      metadata:
+      #        name: "{notebook-name}-datavol-1"
+      #      spec:
+      #        resources:
+      #          requests:
+      #            storage: 5Gi
+      #        accessModes:
+      #          - ReadWriteOnce
+      #
+      #  - mount: /home/jovyan/datavol-1
+      #    existingSource:
+      #      persistentVolumeClaim:
+      #        claimName: "test-pvc"
+    shm:
+      readOnly: false
+      # the default state of the "Enable Shared Memory" toggle
+      value: true
+    configurations:
+      readOnly: false
+      # the list of PodDefault names that are selected by default
+      # (take care to ensure these PodDefaults exist in Profile Namespaces)
+      value: []
+      #value:
+      #  - my-pod-default
     affinityConfig:
+      readOnly: false
       # If readonly, the default value will be the only option
       # value is a list of `configKey`s that we want to be selected by default
       value: ""
@@ -191,8 +275,8 @@ webApp:
                         operator: "Exists"
                   namespaces: []
                   topologyKey: "kubernetes.io/hostname"
-      readOnly: false
     tolerationGroup:
+      readOnly: false
       # The default `groupKey` from the options list
       # If readonly, the default value will be the only option
       value: ""
@@ -221,7 +305,6 @@ webApp:
               operator: "Equal"
               value: "SPOT"
               effect: "NoSchedule"
-      readOnly: false
 
 controller:
   replicaCount: 1
@@ -236,15 +319,15 @@ controller:
     # The idle time after which to cull the notebook (minutes)
     idleTime: 1440 # 1 day
   image:
-    repository: public.ecr.aws/j1r0q0g6/notebooks/notebook-controller
+    repository: docker.io/kubeflownotebookswg/notebook-controller
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
-    tag: v1.5.0
+    tag: v1.8.0-rc.0
 
   service:
     metrics:
       port: 8080
-  
+
   podAnnotations:
     sidecar.istio.io/inject: "true"
     cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
@@ -263,7 +346,7 @@ controller:
     # readOnlyRootFilesystem: true
     # runAsNonRoot: true
     # runAsUser: 1000
-  
+
   resources:
     requests:
       cpu: 100m
@@ -289,10 +372,10 @@ controller:
 podDefaults:
   replicaCount: 1
   image:
-    repository: public.ecr.aws/j1r0q0g6/notebooks/admission-webhook
+    repository: docker.io/kubeflownotebookswg/poddefaults-webhook
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
-    tag: v1.5.0
+    tag: v1.8.0-rc.0
   service:
     port: 443
 

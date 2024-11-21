@@ -51,12 +51,13 @@ spec:
             - configMapRef:
                 name: {{ include "volumes.fullname" . }}-web-app-parameters
           volumeMounts:
-            - mountPath: /etc/config
-              name: config-volume
+            - name: viewer-spec
+              mountPath: /etc/config/viewer-spec.yaml
+              subPath: viewer-spec.yaml
       volumes:
-        - configMap:
+        - name: viewer-spec
+          configMap:
             name: {{ include "volumes.fullname" . }}-web-app-config
-          name: config-volume
       {{- with .Values.webApp.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

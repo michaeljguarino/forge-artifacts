@@ -2,9 +2,10 @@ apiVersion: mysql.presslabs.org/v1alpha1
 kind: MysqlCluster
 metadata:
   name: kubeflow-mysql-cluster
-  namespace: kubeflow
 spec:
   replicas: 2
+  mysqlVersion: "5.7" # update to 8.0 once https://github.com/kubeflow/pipelines/issues/9549 is released or working
+  image: dkr.plural.sh/mysql/library/percona:5.7.39
   secretName: kubeflow-mysql-cluster-root
   volumeSpec:
     persistentVolumeClaim:

@@ -2,7 +2,6 @@ apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: {{ include "profile-controller.fullname" . }}-kfam
-  namespace: kubeflow
   labels: {{- include "profile-controller.labels" . | nindent 4 }}
   {{- with .Values.virtualService.annotations }}
   annotations:
@@ -14,6 +13,7 @@ spec:
     - {{ . | quote }}
     {{- end }}
   hosts:
+    - {{ .Values.global.domain }}
     {{- range .Values.virtualService.hosts }}
     - {{ . | quote }}
     {{- end }}
@@ -29,6 +29,6 @@ spec:
         uri: /
       route:
         - destination:
-            host: {{ include "profile-controller.fullname" . }}-kfam.kubeflow.svc.{{ .Values.global.clusterDomain }}
+            host: {{ include "profile-controller.fullname" . }}-kfam.{{ .Release.Namespace }}.svc.{{ .Values.global.clusterDomain }}
             port:
               number: {{ .Values.service.kfam.port }}

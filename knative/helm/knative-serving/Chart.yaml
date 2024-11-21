@@ -3,4 +3,8 @@ name: knative-serving
 description: Installs knative for plural
 type: application
 version: 0.1.25
-appVersion: "0.26.0"
+appVersion: "1.12.2"
+dependencies:
+- name: knative-serving
+  repository: oci://ghcr.io/davidspek/charts
+  version: 0.1.17

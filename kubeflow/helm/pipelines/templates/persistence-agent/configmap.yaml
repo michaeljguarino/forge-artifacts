@@ -13,3 +13,6 @@ data:
   API_SERVER_BASE_PATH: "/apis/v1beta1"
   MAX_CLIENT_QPS: "5"
   MAX_CLIENT_BURST: "10"
+  KUBEFLOW_USERID_HEADER: {{ .Values.global.userIDHeader | quote }}
+  KUBEFLOW_USERID_PREFIX: {{ .Values.global.userIDPrefix | quote }}
+  MULTIUSER: "true" # TODO: should this be configurable?

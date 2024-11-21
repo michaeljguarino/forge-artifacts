@@ -3,8 +3,8 @@ data:
   APP_PREFIX: {{ .Values.webApp.virtualService.prefix }}
   USERID_HEADER: {{ .Values.global.userIDHeader }}
   USERID_PREFIX: {{ .Values.global.userIDPrefix | quote }}
+  APP_SECURE_COOKIES: "true" # TODO: don't hardcode this
 kind: ConfigMap
 metadata:
   labels: {{- include "tensorboards.labels" . | nindent 4 }}
   name: {{ include "tensorboards.fullname" . }}-web-app-parameters
-  namespace: kubeflow

@@ -3,8 +3,8 @@ name: kserve
 description: helm chart for kserve
 type: application
 version: 0.1.4
-appVersion: "v0.8.0"
+appVersion: v0.11.2
 dependencies:
 - name: kserve
-  version: 0.8.0
-  repository: https://pluralsh.github.io/plural-helm-charts
+  version: v0.11.2
+  repository: oci://ghcr.io/davidspek/charts

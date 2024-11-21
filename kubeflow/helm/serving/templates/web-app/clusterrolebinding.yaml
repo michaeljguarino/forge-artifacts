@@ -9,5 +9,5 @@ roleRef:
   name: {{ include "serving.fullname" . }}-web-app-cluster-role
 subjects:
   - kind: ServiceAccount
-    namespace: kubeflow
+    namespace: {{ .Release.Namespace }}
     name: {{ include "serving.serviceAccountName" . }}-web-app

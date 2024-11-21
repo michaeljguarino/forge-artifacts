@@ -10,4 +10,4 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: {{ include "pipelines.serviceAccountName" . }}-cache-server
-    namespace: kubeflow
+    namespace: {{ .Release.Namespace }}

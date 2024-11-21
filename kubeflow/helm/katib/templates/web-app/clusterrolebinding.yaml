@@ -10,4 +10,4 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: {{ include "katib.serviceAccountName" . }}-web-app
-    namespace: kubeflow
+    namespace: {{ .Release.Namespace }}

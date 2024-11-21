@@ -1,0 +1,18 @@
+{{- if and .Values.istioGateway.enabled .Values.istioGateway.tls.enabled }}
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "gateway-plural.fullname" . }}-ingress-cert
+  namespace: {{ .Values.global.istioIngress.namespace }}
+  labels:
+  {{- include "gateway-plural.labels" . | nindent 4 }}
+spec:
+  secretName: {{ include "gateway-plural.fullname" . }}-ingress-cert
+  commonName: {{ .Values.global.domain }}
+  dnsNames:
+  - {{ .Values.global.domain }}
+  - "*.{{ .Values.global.domain }}"
+  issuerRef:
+    name: {{ .Values.istioGateway.tls.issuerRef.name }}
+    kind: {{ .Values.istioGateway.tls.issuerRef.kind }}
+{{- end }}

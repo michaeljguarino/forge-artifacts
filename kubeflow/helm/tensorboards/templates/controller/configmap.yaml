@@ -1,12 +1,13 @@
 apiVersion: v1
 data:
-  {{ if eq .Values.controller.rwoScheduling.enabled false }}
+  {{ if eq .Values.controller.config.rwoScheduling.enabled false }}
   RWO_PVC_SCHEDULING: "False"
   {{ else }}
   RWO_PVC_SCHEDULING: "True"
   {{ end }}
+  ISTIO_GATEWAY: {{ .Values.controller.config.istioGateway }}
+  TENSORBOARD_IMAGE: {{ .Values.controller.config.tensorboardImage }}
 kind: ConfigMap
 metadata:
   name: {{ include "tensorboards.fullname" . }}-controller-config
-  namespace: kubeflow
   labels: {{- include "tensorboards.labels" . | nindent 4 }}

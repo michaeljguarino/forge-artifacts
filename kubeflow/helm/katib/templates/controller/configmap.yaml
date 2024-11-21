@@ -1,67 +1,76 @@
 apiVersion: v1
-data:
-  early-stopping: |-
-    {
-      "medianstop": {
-        "image": "docker.io/kubeflowkatib/earlystopping-medianstop:v0.11.1"
-      }
-    }
-  metrics-collector-sidecar: |-
-    {
-      "StdOut": {
-        "image": "docker.io/kubeflowkatib/file-metrics-collector:v0.11.1"
-      },
-      "File": {
-        "image": "docker.io/kubeflowkatib/file-metrics-collector:v0.11.1"
-      },
-      "TensorFlowEvent": {
-        "image": "docker.io/kubeflowkatib/tfevent-metrics-collector:v0.11.1",
-        "resources": {
-          "limits": {
-            "memory": "1Gi"
-          }
-        }
-      }
-    }
-  suggestion: |-
-    {
-      "random": {
-        "image": "docker.io/kubeflowkatib/suggestion-hyperopt:v0.11.1"
-      },
-      "tpe": {
-        "image": "docker.io/kubeflowkatib/suggestion-hyperopt:v0.11.1"
-      },
-      "grid": {
-        "image": "docker.io/kubeflowkatib/suggestion-chocolate:v0.11.1"
-      },
-      "hyperband": {
-        "image": "docker.io/kubeflowkatib/suggestion-hyperband:v0.11.1"
-      },
-      "bayesianoptimization": {
-        "image": "docker.io/kubeflowkatib/suggestion-skopt:v0.11.1"
-      },
-      "cmaes": {
-        "image": "docker.io/kubeflowkatib/suggestion-goptuna:v0.11.1"
-      },
-      "enas": {
-        "image": "docker.io/kubeflowkatib/suggestion-enas:v0.11.1",
-        "resources": {
-          "limits": {
-            "memory": "200Mi"
-          }
-        }
-      },
-      "darts": {
-        "image": "docker.io/kubeflowkatib/suggestion-darts:v0.11.1"
-      }
-    }
 kind: ConfigMap
 metadata:
-  name: katib-config
-  namespace: kubeflow
+  name: {{ include "katib.fullname" . }}-config
   labels: {{- include "katib.labels" . | nindent 4 }}
+data:
+  katib-config.yaml: |-
+    apiVersion: config.kubeflow.org/v1beta1
+    kind: KatibConfig
+    init:
+      controller:
+        webhookPort: 8443
+        trialResources:
+          - Job.v1.batch
+          - TFJob.v1.kubeflow.org
+          - PyTorchJob.v1.kubeflow.org
+          - MPIJob.v1.kubeflow.org
+          - XGBoostJob.v1.kubeflow.org
+          - MXJob.v1.kubeflow.org
+    runtime:
+      metricsCollectors:
+        - kind: StdOut
+          image: docker.io/kubeflowkatib/file-metrics-collector:v0.16.0-rc.1
+        - kind: File
+          image: docker.io/kubeflowkatib/file-metrics-collector:v0.16.0-rc.1
+        - kind: TensorFlowEvent
+          image: docker.io/kubeflowkatib/tfevent-metrics-collector:v0.16.0-rc.1
+          resources:
+            limits:
+              memory: 1Gi
+      suggestions:
+        - algorithmName: random
+          image: docker.io/kubeflowkatib/suggestion-hyperopt:v0.16.0-rc.1
+        - algorithmName: tpe
+          image: docker.io/kubeflowkatib/suggestion-hyperopt:v0.16.0-rc.1
+        - algorithmName: grid
+          image: docker.io/kubeflowkatib/suggestion-optuna:v0.16.0-rc.1
+        - algorithmName: hyperband
+          image: docker.io/kubeflowkatib/suggestion-hyperband:v0.16.0-rc.1
+        - algorithmName: bayesianoptimization
+          image: docker.io/kubeflowkatib/suggestion-skopt:v0.16.0-rc.1
+        - algorithmName: cmaes
+          image: docker.io/kubeflowkatib/suggestion-goptuna:v0.16.0-rc.1
+        - algorithmName: sobol
+          image: docker.io/kubeflowkatib/suggestion-goptuna:v0.16.0-rc.1
+        - algorithmName: multivariate-tpe
+          image: docker.io/kubeflowkatib/suggestion-optuna:v0.16.0-rc.1
+        - algorithmName: enas
+          image: docker.io/kubeflowkatib/suggestion-enas:v0.16.0-rc.1
+          resources:
+            limits:
+              memory: 200Mi
+        - algorithmName: darts
+          image: docker.io/kubeflowkatib/suggestion-darts:v0.16.0-rc.1
+        - algorithmName: pbt
+          image: docker.io/kubeflowkatib/suggestion-pbt:v0.16.0-rc.1
+          persistentVolumeClaimSpec:
+            accessModes:
+              - ReadWriteMany
+            resources:
+              requests:
+                storage: 5Gi
+      earlyStoppings:
+        - algorithmName: medianstop
+          image: docker.io/kubeflowkatib/earlystopping-medianstop:v0.16.0-rc.1
 ---
 apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    katib.kubeflow.org/component: trial-templates
+    {{- include "katib.labels" . | nindent 4 }}
+  name: {{ include "katib.fullname" . }}-trial-template
 data:
   defaultTrialTemplate.yaml: |-
     apiVersion: batch/v1
@@ -71,7 +80,7 @@ data:
         spec:
           containers:
             - name: training-container
-              image: docker.io/kubeflowkatib/mxnet-mnist:v1beta1-45c5727
+              image: docker.io/kubeflowkatib/mxnet-mnist:v0.16.0-rc.1
               command:
                 - "python3"
                 - "/opt/mxnet-mnist/mnist.py"
@@ -80,6 +89,7 @@ data:
                 - "--num-layers=${trialParameters.numberLayers}"
                 - "--optimizer=${trialParameters.optimizer}"
           restartPolicy: Never
+  # For ConfigMap templates double quotes must set in commands to correct parse JSON parameters in Trial Template (e.g nn_config, architecture)
   enasCPUTemplate: |-
     apiVersion: batch/v1
     kind: Job
@@ -88,7 +98,7 @@ data:
         spec:
           containers:
             - name: training-container
-              image: docker.io/kubeflowkatib/enas-cnn-cifar10-cpu:v1beta1-45c5727
+              image: docker.io/kubeflowkatib/enas-cnn-cifar10-cpu:v0.16.0-rc.1
               command:
                 - python3
                 - -u
@@ -98,7 +108,7 @@ data:
                 - "--nn_config=\"${trialParameters.neuralNetworkConfig}\""
           restartPolicy: Never
   pytorchJobTemplate: |-
-    apiVersion: "kubeflow.org/v1"
+    apiVersion: kubeflow.org/v1
     kind: PyTorchJob
     spec:
       pytorchReplicaSpecs:
@@ -109,8 +119,7 @@ data:
             spec:
               containers:
                 - name: pytorch
-                  image: docker.io/kubeflowkatib/pytorch-mnist:v1beta1-45c5727
-                  imagePullPolicy: Always
+                  image: docker.io/kubeflowkatib/pytorch-mnist-cpu:v0.16.0-rc.1
                   command:
                     - "python3"
                     - "/opt/pytorch-mnist/mnist.py"
@@ -124,17 +133,10 @@ data:
             spec:
               containers:
                 - name: pytorch
-                  image: docker.io/kubeflowkatib/pytorch-mnist:v1beta1-45c5727
-                  imagePullPolicy: Always
+                  image: docker.io/kubeflowkatib/pytorch-mnist-cpu:v0.16.0-rc.1
                   command:
                     - "python3"
                     - "/opt/pytorch-mnist/mnist.py"
                     - "--epochs=1"
                     - "--lr=${trialParameters.learningRate}"
                     - "--momentum=${trialParameters.momentum}"
-kind: ConfigMap
-metadata:
-  labels:
-    app: katib-trial-templates
-  name: trial-template
-  namespace: kubeflow

@@ -3,7 +3,6 @@ kind: Role
 metadata:
   labels: {{- include "central-dashboard.labels" . | nindent 4 }}
   name: {{ include "central-dashboard.fullname" . }}-role
-  namespace: kubeflow
 rules:
   - apiGroups:
       - ""

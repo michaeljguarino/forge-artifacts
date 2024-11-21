@@ -2,21 +2,19 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "pipelines.fullname" . }}-scheduled-workflow
-  namespace: kubeflow
   labels:
     {{- include "pipelines.labels" . | nindent 4 }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.replicaCount }}
+  {{- if not .Values.scheduledWorkflow.autoscaling.enabled }}
+  replicas: {{ .Values.scheduledWorkflow.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
       {{- include "pipelines.scheduledWorkflowSelectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
+      {{- with .Values.scheduledWorkflow.podAnnotations }}
       annotations:
-        cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
@@ -28,11 +26,11 @@ spec:
       {{- end }}
       serviceAccountName: {{ include "pipelines.serviceAccountName" . }}-scheduled-workflow
       securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+        {{- toYaml .Values.scheduledWorkflow.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}-scheduled-workflow
           securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
+            {{- toYaml .Values.scheduledWorkflow.securityContext | nindent 12 }}
           image: "{{ .Values.scheduledWorkflow.image.repository }}:{{ .Values.scheduledWorkflow.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.scheduledWorkflow.image.pullPolicy }}
           env:
@@ -44,16 +42,16 @@ spec:
                   key: cronScheduleTimezone
                   name: pipeline-install-config
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
-      {{- with .Values.nodeSelector }}
+            {{- toYaml .Values.scheduledWorkflow.resources | nindent 12 }}
+      {{- with .Values.scheduledWorkflow.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.affinity }}
+      {{- with .Values.scheduledWorkflow.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.tolerations }}
+      {{- with .Values.scheduledWorkflow.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}

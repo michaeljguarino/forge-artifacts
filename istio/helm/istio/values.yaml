@@ -39,6 +39,7 @@ istiod:
         memory: 2048Mi
     env:
       PILOT_ENABLE_STATUS: "true" # Needed for KNative
+      PILOT_ENABLE_CONFIG_DISTRIBUTION_TRACKING: "true" # Needed for KNative
       VERIFY_CERTIFICATE_AT_CLIENT: "true" # More secure
       # ENABLE_AUTO_SNI: "true" # Possibly needed for ambient mode
       # PILOT_ENABLE_HBONE: "true" # Needed for ambient mode

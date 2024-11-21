@@ -3,7 +3,6 @@ kind: RoleBinding
 metadata:
   labels: {{- include "tensorboards.labels" . | nindent 4 }}
   name: {{ include "tensorboards.fullname" . }}-controller-leader-election-role-binding
-  namespace: kubeflow
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -11,4 +10,4 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: {{ include "tensorboards.serviceAccountName" . }}-controller
-    namespace: kubeflow
+    namespace: {{ .Release.Namespace }}

@@ -1,9 +1,9 @@
 dependencies:
 - name: cni
   repository: https://istio-release.storage.googleapis.com/charts
-  version: 1.19.0
+  version: 1.20.1
 - name: ztunnel
   repository: https://istio-release.storage.googleapis.com/charts
-  version: 1.19.0
-digest: sha256:5f9e835cde6c2cda3a01add30d38cee44a3c2595306f17914015c3ee3ed6e0d8
-generated: "2023-09-11T12:24:33.670239+02:00"
+  version: 1.20.1
+digest: sha256:8b8e82bd564ae60e514e263ab189d9adb8950ea96328455b8db6942414296dcf
+generated: "2024-01-02T12:39:06.271052+01:00"

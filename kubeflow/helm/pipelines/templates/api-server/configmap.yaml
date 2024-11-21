@@ -11,4 +11,3 @@ kind: ConfigMap
 metadata:
   labels: {{- include "pipelines.labels" . | nindent 4 }}
   name: {{ include "pipelines.fullname" . }}-api-server-parameters
-  namespace: kubeflow

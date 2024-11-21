@@ -11,4 +11,4 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: {{ include "pipelines.serviceAccountName" . }}-web-app
-    namespace: kubeflow
+    namespace: {{ .Release.Namespace }}

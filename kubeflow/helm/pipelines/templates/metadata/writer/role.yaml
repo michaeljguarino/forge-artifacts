@@ -3,7 +3,6 @@ kind: Role
 metadata:
   labels: {{- include "pipelines.labels" . | nindent 4 }}
   name: {{ include "pipelines.fullname" . }}-metadata-writer-role
-  namespace: kubeflow
 rules:
   - apiGroups:
       - ""

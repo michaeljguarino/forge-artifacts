@@ -3,14 +3,33 @@ kind: AuthorizationPolicy
 metadata:
   labels: {{- include "katib.labels" . | nindent 4 }}
   name: {{ include "katib.fullname" . }}-web-app
-  namespace: kubeflow
 spec:
   action: ALLOW
   rules:
-    - from:
-        - source:
-            principals:
-              - cluster.local/ns/{{ .Values.global.istioNamespace }}/sa/istio-ingressgateway-service-account
+  - from:
+    - source:
+        requestPrincipals: ["*"]
   selector:
     matchLabels:
       {{- include "katib.selectorLabels" . | nindent 6 }}
+---
+apiVersion: security.istio.io/v1
+kind: RequestAuthentication
+metadata:
+  name: {{ include "katib.fullname" . }}-oauth2
+  labels:
+  {{- include "katib.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "katib.selectorLabels" . | nindent 6 }}
+  jwtRules:
+  - forwardOriginalToken: true # TODO: needed so the requestauth resource in user namespace works.
+    fromHeaders: # TODO: possibly add this to profile controller setup
+    - name: cookie
+      prefix: IdToken=
+    issuer: {{ .Values.global.oidc.issuer }}
+    jwksUri: {{ .Values.global.oidc.jwksURI }}
+    outputClaimToHeaders:
+    - header: {{ .Values.global.userIDHeader }}
+      claim: email

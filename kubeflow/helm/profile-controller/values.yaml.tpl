@@ -1,3 +1,26 @@
+{{- $argocdNamespace := namespace "argo-cd" -}}
+{{- $knativeNamespace := namespace "knative" -}}
+
+global:
+  {{- if .OIDC }}
+  oidc:
+    issuer: {{ .OIDC.Configuration.Issuer }}
+    jwksURI: {{ .OIDC.Configuration.JwksUri }}
+    authEndpoint: {{ .OIDC.Configuration.AuthorizationEndpoint }}
+    tokenEndpoint: {{ .OIDC.Configuration.TokenEndpoint }}
+  {{- end }}
+
+kfam:
+  adminEmail: {{ .Config.Email }}
+  secret:
+    argoToken: {{ dedupe . "profile-controller.kfam.secret.argoToken" (randAlphaNum 32) }}
+
+argocd:
+  namespace: {{ $argocdNamespace }}
+
+knative:
+  namespace: {{ $knativeNamespace }}
+
 config:
   infrastructure:
     clusterName: {{ .Cluster }}
