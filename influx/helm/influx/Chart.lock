@@ -1,21 +1,21 @@
 dependencies:
 - name: chronograf
   repository: https://helm.influxdata.com/
-  version: 1.1.24
+  version: 1.2.5
 - name: kapacitor
-  repository: file://../../../../influxdata-helm-charts/charts/kapacitor
-  version: 1.3.3
+  repository: https://helm.influxdata.com/
+  version: 1.4.6
 - name: telegraf-ds
   repository: https://helm.influxdata.com/
-  version: 1.0.22
+  version: 1.1.10
 - name: telegraf
   repository: https://helm.influxdata.com/
-  version: 1.8.4
+  version: 1.8.28
 - name: telegraf-operator
   repository: https://helm.influxdata.com/
-  version: 1.3.0
+  version: 1.3.11
 - name: influxdb
   repository: https://helm.influxdata.com/
-  version: 4.10.0
-digest: sha256:b29961fa368153bc272b83693b7e98d9245ebae51f7ccae923210353ca8248b1
-generated: "2021-09-23T20:22:33.396637-04:00"
+  version: 4.12.1
+digest: sha256:e75287b0d78e378efbe0ee4a15e647307d0df64b273a477e70f2aa6a4fcae067
+generated: "2023-06-02T17:12:55.971929+02:00"
