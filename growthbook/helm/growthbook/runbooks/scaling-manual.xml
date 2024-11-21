@@ -1,0 +1,41 @@
+<root gap='medium'>
+    <box pad='small' gap='medium' direction='row' align='center'>
+        <button label='Scale' action='scale' primary='true' headline='true' />
+        <box direction='row' align='center' gap='small'>
+            <box gap='small' align='center'>
+                <timeseries datasource="growthbook-cpu" label="Growthbook CPU Usage" />
+                <text size='small'>You should set a reservation to
+                    roughly correspond to 60% utilization</text>
+            </box>
+            <box gap='small' align='center'>
+                <timeseries datasource="growthbook-memory" label="Growthbook Memory Usage" />
+                <text size='small'>You should set a reservation to
+                    roughly correspond to 80% utilization</text>
+            </box>
+        </box>
+        <box gap='xsmall'>
+            <box gap='xsmall'>
+                <input placeholder="250m" label='Growthbook CPU Request' name='growthbook-cpu'>
+                    <valueFrom
+                            datasource="growthbook"
+                            doc="kubernetes.raw"
+                            path="spec.template.spec.containers[0].resources.requests.cpu" />
+                </input>
+                <input placeholder="1Gi" label='Growthbook Memory Request' name='growthbook-memory'>
+                    <valueFrom
+                            datasource="growthbook"
+                            doc="kubernetes.raw"
+                            path="spec.template.spec.containers[0].resources.requests.memory" />
+                </input>
+            </box>
+        </box>
+    </box>
+    <box width='100%' gap='small'>
+        <text size='small'>Be sure to scale your Growthbook components within your node's capacity, listed here:</text>
+        <table width='100%' datasource='nodes' path='nodes'>
+            <tableColumn path='metadata.name' header='name' width='33%' />
+            <tableColumn path='status.capacity.cpu' header='cpu' width='33%' />
+            <tableColumn path='status.capacity.memory' header='memory' width='33%' />
+        </table>
+    </box>
+</root>

@@ -1,0 +1,50 @@
+apiVersion: platform.plural.sh/v1alpha1
+kind: Runbook
+metadata:
+  name: scaling-manual
+  labels:
+    platform.plural.sh/pinned: 'true'
+{{ include "growthbook.labels" . | indent 4 }}
+spec:
+  name: Growthbook Scaling
+  description: overview of how to optimally scale your Growthbook deployment
+  display: |-
+{{ .Files.Get "runbooks/scaling-manual.xml" | indent 4 }}
+  datasources:
+  - name: growthbook-cpu
+    type: prometheus
+    prometheus:
+      format: cpu
+      legend: $pod
+      query: sum(rate(container_cpu_usage_seconds_total{namespace="{{ .Release.Namespace }}",pod=~"growthbook.+"}[5m])) by (pod)
+  - name: growthbook-memory
+    type: prometheus
+    prometheus:
+      format: memory
+      legend: $pod
+      query: sum(container_memory_working_set_bytes{namespace="{{ .Release.Namespace }}",pod=~"growthbook.+"}) by (pod)
+  - name: growthbook
+    type: kubernetes
+    kubernetes:
+      resource: deployment
+      name: growthbook
+  - name: nodes
+    type: nodes
+  actions:
+  - name: scale
+    action: config
+    redirectTo: '/'
+    configuration:
+      updates:
+        - path:
+            - growthbook
+            - resources
+            - requests
+            - cpu
+          valueFrom: growthbook-cpu
+        - path:
+            - growthbook
+            - resources
+            - requests
+            - memory
+          valueFrom: growthbook-memory
