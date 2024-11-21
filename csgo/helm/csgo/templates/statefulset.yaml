@@ -1,0 +1,110 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "csgo.fullname" . }}
+  labels:
+    {{- include "csgo.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  serviceName: {{ include "csgo.fullname" . }}
+  selector:
+    matchLabels:
+      {{- include "csgo.selectorLabels" . | nindent 6 }}
+  volumeClaimTemplates:
+    - metadata:
+        name: server
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: {{ .Values.storage.size }}
+    - metadata:
+        name: config
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: {{ .Values.storage.config.size }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "csgo.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "csgo.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      volumes:
+        - name: config
+          configMap:
+            name: {{ template "csgo.fullname" . }}
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+          {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          tty: true
+          stdin: true
+          env:
+            - name: CSGO_GSLT
+              value: {{ .Values.config.settings.token }}
+            - name: CSGO_RCON_PW
+              value: {{ .Values.config.settings.rconPassword }}
+            - name: CSGO_PW
+              value: {{ .Values.config.settings.password }}
+            - name: CSGO_PORT
+              value: {{ .Values.service.port | quote }}
+            - name: CSGO_TV_ENABLE
+              value: {{ .Values.tv.enabled | quote }}
+            - name: CSGO_TV_PORT
+              value: {{ .Values.tv.port | quote }}
+            - name: CSGO_TICKRATE
+              value: {{ .Values.config.settings.tickrate | quote }}
+            - name: CSGO_MAX_PLAYERS
+              value: {{ .Values.config.settings.maxPlayers | quote }}
+          {{- if .Values.config.extraEnv }}
+          {{- range $key, $value := .Values.config.extraEnv }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+          {{- end }}
+          {{- end }}
+          ports:
+            - name: game
+              containerPort: {{ .Values.service.port }}
+              protocol: UDP
+            {{- if .Values.tv.enabled }}
+            - name: gotv
+              containerPort: {{ .Values.tv.port }}
+              protocol: UDP
+            {{- end }}
+          volumeMounts:
+            - name: server
+              mountPath: {{ .Values.storage.path }}
+            - name: config
+              mountPath: {{ .Values.storage.config.path }}
+          resources:
+          {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

@@ -1,0 +1,6 @@
+apiVersion: v2
+name: csgo
+description: helm chart for csgo
+type: application
+version: 0.1.1
+appVersion: "v1.0.0"

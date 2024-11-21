@@ -1,0 +1,57 @@
+name: csgo-azure
+description: Installs CSGO game server
+provider: AZURE
+dependencies:
+- repo: bootstrap
+  name: azure-k8s
+
+sections:
+- name: csgo
+  configuration:
+  - name: hostname
+    documentation: domain on which you'd like to host your CS:GO server
+    type: DOMAIN
+  - name: token
+    documentation: "your GSLT token required to expose the server. Can be generated here: https://steamcommunity.com/dev/managegameservers"
+    type: STRING
+  - name: password
+    documentation: password that will be required when joining the server. Minimum 5 characters (leave empty to disable).
+    type: PASSWORD
+    optional: true
+    validation:
+      type: REGEX
+      regex: '^$|^.{5,}$'
+      message: password needs to have at least 5 characters
+  - name: tickrate
+    documentation: tickrate of your server
+    type: STRING
+    default: 128
+    validation:
+      type: REGEX
+      regex: '^(64|128)*$'
+      message: 'must be one of: 64, 128'
+  - name: maxPlayers
+    documentation: how many slots should your server have
+    type: STRING
+    default: 10
+  - name: port
+    documentation: port on which your server will be exposed
+    type: STRING
+    default: 27015
+  - name: tvEnabled
+    documentation: if go tv should be enabled (Y/n)
+    type: STRING
+    validation:
+      type: REGEX
+      regex: '^[yn]*$'
+      message: 'must be one of: y, n'
+    default: y
+  - name: tvPort
+    documentation: port on which your GO TV will be exposed (if enabled)
+    type: STRING
+    default: 27020
+  items:
+  - type: TERRAFORM
+    name: kube
+  - type: HELM
+    name: csgo

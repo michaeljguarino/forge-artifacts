@@ -1,0 +1,58 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "csgo.fullname" . }}
+  labels:
+    {{- include "csgo.labels" . | nindent 4 }}
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: {{ .Values.hostname }}
+    {{- if (eq .Values.provider "aws") }}
+    service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: ip
+    service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
+    service.beta.kubernetes.io/aws-load-balancer-type: external
+    service.beta.kubernetes.io/aws-load-balancer-target-group-attributes: stickiness.enabled=true,stickiness.type=source_ip
+    service.beta.kubernetes.io/aws-load-balancer-healthcheck-protocol: TCP
+    service.beta.kubernetes.io/aws-load-balancer-healthcheck-port: "27015"
+    {{- end }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - name: game
+      port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.port }}
+      protocol: UDP
+    {{- if .Values.tv.enabled }}
+    - name: gotv
+      port: {{ .Values.tv.port }}
+      targetPort: {{ .Values.tv.port }}
+      protocol: UDP
+    {{- end }}
+  selector:
+    {{- include "csgo.selectorLabels" . | nindent 4 }}
+
+---
+
+{{- if .Values.config.settings.rconPassword }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "csgo.fullname" . }}-rcon
+  labels:
+    {{- include "csgo.labels" . | nindent 4 }}
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: rcon.{{ .Values.hostname }}
+    {{- if (eq .Values.provider "aws") }}
+    service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: ip
+    service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
+    service.beta.kubernetes.io/aws-load-balancer-type: external
+    {{- end }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - name: rcon
+      port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.port }}
+      protocol: TCP
+  selector:
+    {{- include "csgo.selectorLabels" . | nindent 4 }}
+{{- end }}

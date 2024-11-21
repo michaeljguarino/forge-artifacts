@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "csgo.fullname" . }}
+  labels:
+    {{- include "csgo.labels" . | nindent 4 }}
+data:
+{{- if .Values.config.autoexec }}
+  autoexec.cfg: |
+{{ .Values.config.autoexec | indent 4 }}
+{{- end }}
+{{- if .Values.config.server }}
+  server.cfg: |
+{{ .Values.config.server | indent 4 }}
+{{- end }}
+{{- if .Values.config.gamemodes }}
+  gamemodes.txt: |
+{{ .Values.config.gamemodes | indent 4 }}
+{{- end }}
+{{- if .Values.config.gamemodes_server }}
+  gamemodes_server.txt: |
+{{ .Values.config.gamemodes_server | indent 4 }}
+{{- end }}
