@@ -1,0 +1,55 @@
+<root gap='medium'>
+    <box pad='small' gap='medium' direction='row' align='center'>
+      <button label='Scale' action='scale' primary='true' headline='true' />
+      <box direction='row' align='center' gap='small'>
+        <box gap='small' align='center'>
+          <timeseries datasource="hasura-cpu" label="hasura CPU Usage" />
+          <text size='small'>You should set a reservation to 
+            roughly correspond to 60% utilization</text>
+        </box>
+        <box gap='small' align='center'>
+          <timeseries datasource="hasura-memory" label="hasura Memory Usage" />
+          <text size='small'>You should set a reservation to 
+            roughly correspond to 80% utilization</text>
+        </box>
+      </box>
+      <box gap='small'>
+        <box gap='xsmall'>
+          <input placeholder="250m" label='hasura CPU Request' name='hasura-cpu'>
+            <valueFrom 
+              datasource="hasura" 
+              doc="kubernetes.raw" 
+              path="spec.template.spec.containers[0].resources.requests.cpu" />
+          </input>
+          <input placeholder="1Gi" label='hasura Memory Request' name='hasura-memory'>
+            <valueFrom 
+              datasource="hasura" 
+              doc="kubernetes.raw" 
+              path="spec.template.spec.containers[0].resources.requests.memory" />
+          </input>
+        </box>
+        <box gap='xsmall'>
+          <input placeholder="250m" label='hasura CPU Limit' name='hasura-cpu-limit'>
+            <valueFrom 
+              datasource="hasura" 
+              doc="kubernetes.raw" 
+              path="spec.template.spec.containers[0].resources.limits.cpu" />
+          </input>
+          <input placeholder="1Gi" label='hasura Memory Limit' name='hasura-memory-limit'>
+            <valueFrom 
+              datasource="hasura" 
+              doc="kubernetes.raw" 
+              path="spec.template.spec.containers[0].resources.limits.memory" />
+          </input>
+        </box>
+      </box>
+    </box>
+    <box width='100%' gap='small'>
+      <text size='small'>Be sure to scale your hasura components within your node's capacity, listed here:</text>
+      <table width='100%' datasource='nodes' path='nodes'>
+        <tableColumn path='metadata.name' header='name' width='33%' />
+        <tableColumn path='status.capacity.cpu' header='cpu' width='33%' />
+        <tableColumn path='status.capacity.memory' header='memory' width='33%' />
+      </table>
+    </box>
+  </root>

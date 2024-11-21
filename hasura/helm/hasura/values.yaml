@@ -18,21 +18,35 @@ ingress:
     nginx.ingress.kubernetes.io/session-cookie-path: /v1/graphql
 
 hasura:
-  console:
-    enabled: true
-  postgresql:
-    enabled: false
-    postgresqlUsername: hasura
-  extraEnv:
-  - name: PGSSLMODE
-    value: require
+  image:
+    repository: dkr.plural.sh/hasura/hasura/graphql-engine
+    tag: v2.26.0
+  enableConsole: 'true'
+  consoleAssetsDir: /srv/console-assets
+  database:
+    name: hasura
+    username: hasurav2
+    hostname: plural-hasura
+    port: 5432
+    secret:
+      name: plural.plural-hasura.credentials.postgresql.acid.zalan.do
+      passwordKey: password
+  extraEnvVarsCM:
+    PGSSLMODE: require
   ingress:
     enabled: false
+  resources:
+    requests:
+      memory: 256Mi
+      cpu: 100m
+    limits:
+      memory: 512Mi
+      cpu: 250m
 
 postgres:
   enabled: true
   team: plural
-  user: hasura
+  user: hasurav2
   dbName: hasura
   ownerChart: hasura
   password: CHANGEME

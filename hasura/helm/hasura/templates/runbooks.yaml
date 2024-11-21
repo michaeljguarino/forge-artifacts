@@ -1,0 +1,67 @@
+apiVersion: platform.plural.sh/v1alpha1
+kind: Runbook
+metadata:
+  name: scaling-manual
+  labels:
+    platform.plural.sh/pinned: 'true'
+{{ include "hasura.labels" . | indent 4 }}
+spec:
+  name: Hasura Scaling
+  description: overview of how to optimally scale your hasura instance
+  display: |-
+{{ .Files.Get "runbooks/scaling-manual.xml" | indent 4 }}
+  datasources:
+  - name: hasura-cpu
+    type: prometheus
+    prometheus:
+      format: cpu
+      legend: $pod
+      query: sum(rate(container_cpu_usage_seconds_total{namespace="{{ .Release.Namespace }}",pod=~"hasura-[a-z0-9]+-[a-z0-9]+"}[5m])) by (pod)
+  - name: hasura-memory
+    type: prometheus
+    prometheus:
+      format: memory
+      legend: $pod
+      query: sum(container_memory_working_set_bytes{namespace="{{ .Release.Namespace }}",pod=~"hasura-[a-z0-9]+-[a-z0-9]+"}) by (pod)
+  - name: hasura
+    type: kubernetes
+    kubernetes:
+      resource: deployment
+      name: {{ template "hasura.fullname" .Subcharts.hasura }}
+  - name: nodes
+    type: nodes
+  actions:
+  - name: scale
+    action: config
+    redirectTo: '/'
+    configuration:
+      updates:
+      - path: 
+        - hasura
+        - hasura
+        - resources
+        - requests
+        - cpu
+        valueFrom: hasura-cpu
+      - path:
+        - hasura
+        - hasura
+        - resources
+        - requests
+        - memory
+        valueFrom: hasura-memory
+      - path: 
+        - hasura
+        - hasura
+        - resources
+        - limits
+        - cpu
+        valueFrom: hasura-cpu-limit
+      - path:
+        - hasura
+        - hasura
+        - resources
+        - limits
+        - memory
+        valueFrom: hasura-memory-limit
+      

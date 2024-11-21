@@ -1,9 +1,9 @@
 dependencies:
 - name: hasura
-  repository: https://charts.platy.plus
-  version: 1.1.6
+  repository: https://pluralsh.github.io/plural-helm-charts
+  version: 2.7.5
 - name: postgres
   repository: https://pluralsh.github.io/module-library
-  version: 0.1.11
-digest: sha256:6d3f7b95128b928098a775a921383623c90b923ec0a11ae70646526b4812a4c1
-generated: "2022-10-21T17:56:10.881956+02:00"
+  version: 0.2.1
+digest: sha256:12577695485cd0372ce5ffefbe5981cf845f20ea86a218e4e256da52e75cf9f0
+generated: "2023-06-02T16:50:31.386145+02:00"

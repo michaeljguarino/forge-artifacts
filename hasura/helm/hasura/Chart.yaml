@@ -2,13 +2,13 @@ apiVersion: v2
 name: hasura
 description: A Helm chart for hasura on plural
 type: application
-version: 0.1.8
-appVersion: "v2.0.9"
+version: 0.1.9
+appVersion: v2.26.0
 dependencies:
 - name: hasura
-  version: 1.1.6
-  repository: https://charts.platy.plus
+  version: 2.7.5
+  repository: https://pluralsh.github.io/plural-helm-charts
 - name: postgres
-  version: 0.1.11
+  version: 0.2.1
   repository: https://pluralsh.github.io/module-library
   condition: postgres.enabled
