@@ -1,0 +1,145 @@
+<root gap='medium'>
+    <box pad='small' gap='medium' direction='row' align='center'>
+        <button label='Scale' action='scale' primary='true' headline='true' />
+        <box direction='row' align='center' gap='small'>
+            <box gap='small' align='center'>
+                <timeseries datasource="external-secrets-cpu" label="External Secrets CPU Usage" />
+                <text size='small'>You should set a requests to
+                    roughly correspond to 80% regular utilization</text>
+                <text size='small'>Normally a CPU limit is not required</text>
+            </box>
+            <box gap='small' align='center'>
+                <timeseries datasource="external-secrets-memory" label="External Secrets Memory Usage" />
+                <text size='small'>You should set a requests to
+                    roughly correspond to 80% regular utilization</text>
+                <text size='small'>A memory limit should be set to avoid resource starvation</text>
+            </box>
+        </box>
+        <box gap='xsmall'>
+            <box gap='xsmall'>
+                <input placeholder="250m" label='External Secrets CPU Request' name='external-secrets-cpu'>
+                    <valueFrom
+                            datasource="external-secrets"
+                            doc="kubernetes.raw"
+                            path="spec.template.spec.containers[0].resources.requests.cpu" />
+                </input>
+                <input placeholder="1Gi" label='External Secrets Memory Request' name='external-secrets-memory'>
+                    <valueFrom
+                            datasource="external-secrets"
+                            doc="kubernetes.raw"
+                            path="spec.template.spec.containers[0].resources.requests.memory" />
+                </input>
+            </box>
+            <box gap='xsmall'>
+                <input placeholder="250m" label='External Secrets CPU Limit' name='external-secrets-cpu-limit'>
+                    <valueFrom
+                            datasource="external-secrets"
+                            doc="kubernetes.raw"
+                            path="spec.template.spec.containers[0].resources.limits.cpu" />
+                </input>
+                <input placeholder="1Gi" label='External Secrets Memory Limit' name='external-secrets-memory-limit'>
+                    <valueFrom
+                            datasource="external-secrets"
+                            doc="kubernetes.raw"
+                            path="spec.template.spec.containers[0].resources.limits.memory" />
+                </input>
+            </box>
+        </box>
+    </box>
+    <box pad='small' gap='medium' direction='row' align='center'>
+        <box direction='row' align='center' gap='small'>
+            <box gap='small' align='center'>
+                <timeseries datasource="external-secrets-controller-cpu" label="External Secrets Controller CPU Usage" />
+                <text size='small'>You should set a requests to
+                    roughly correspond to 80% regular utilization</text>
+                <text size='small'>Normally a CPU limit is not required</text>
+            </box>
+            <box gap='small' align='center'>
+                <timeseries datasource="external-secrets-controller-memory" label="External Secrets Controller Memory Usage" />
+                <text size='small'>You should set a requests to
+                    roughly correspond to 80% regular utilization</text>
+                <text size='small'>A memory limit should be set to avoid resource starvation</text>
+            </box>
+        </box>
+        <box gap='xsmall'>
+            <box gap='xsmall'>
+                <input placeholder="250m" label='External Secrets Controller CPU Request' name='external-secrets-controller-cpu'>
+                    <valueFrom
+                            datasource="external-secrets-controller"
+                            doc="kubernetes.raw"
+                            path="spec.template.spec.containers[0].resources.requests.cpu" />
+                </input>
+                <input placeholder="1Gi" label='External Secrets Controller Memory Request' name='external-secrets-controller-memory'>
+                    <valueFrom
+                            datasource="external-secrets-controller"
+                            doc="kubernetes.raw"
+                            path="spec.template.spec.containers[0].resources.requests.memory" />
+                </input>
+            </box>
+            <box gap='xsmall'>
+                <input placeholder="250m" label='External Secrets Controller CPU Limit' name='external-secrets-controller-cpu-limit'>
+                    <valueFrom
+                            datasource="external-secrets-controller"
+                            doc="kubernetes.raw"
+                            path="spec.template.spec.containers[0].resources.limits.cpu" />
+                </input>
+                <input placeholder="1Gi" label='External Secrets Controller Memory Limit' name='external-secrets-controller-memory-limit'>
+                    <valueFrom
+                            datasource="external-secrets-controller"
+                            doc="kubernetes.raw"
+                            path="spec.template.spec.containers[0].resources.limits.memory" />
+                </input>
+            </box>
+        </box>
+    </box>
+    <box pad='small' gap='medium' direction='row' align='center'>
+        <box direction='row' align='center' gap='small'>
+            <box gap='small' align='center'>
+                <timeseries datasource="external-secrets-webhook-cpu" label="External Secrets Webhook CPU Usage" />
+                <text size='small'>You should set a requests to
+                    roughly correspond to 80% regular utilization</text>
+                <text size='small'>Normally a CPU limit is not required</text>
+            </box>
+            <box gap='small' align='center'>
+                <timeseries datasource="external-secrets-webhook-memory" label="External Secrets Webhook Memory Usage" />
+                <text size='small'>You should set a requests to
+                    roughly correspond to 80% regular utilization</text>
+                <text size='small'>A memory limit should be set to avoid resource starvation</text>
+            </box>
+        </box>
+        <box gap='xsmall'>
+            <box gap='xsmall'>
+                <input placeholder="250m" label='External Secrets Webhook CPU Request' name='external-secrets-webhook-cpu'>
+                    <valueFrom
+                            datasource="external-secrets-webhook"
+                            doc="kubernetes.raw"
+                            path="spec.template.spec.containers[0].resources.requests.cpu" />
+                </input>
+                <input placeholder="1Gi" label='External Secrets Webhook Memory Request' name='external-secrets-webhook-memory'>
+                    <valueFrom
+                            datasource="external-secrets-webhook"
+                            doc="kubernetes.raw"
+                            path="spec.template.spec.containers[0].resources.requests.memory" />
+                </input>
+            </box>
+            <box gap='xsmall'>
+                <input placeholder="250m" label='External Secrets Webhook CPU Limit' name='external-secrets-webhook-cpu-limit'>
+                    <valueFrom
+                            datasource="external-secrets-webhook"
+                            doc="kubernetes.raw"
+                            path="spec.template.spec.containers[0].resources.limits.cpu" />
+                </input>
+                <input placeholder="1Gi" label='External Secrets Webhook Memory Limit' name='external-secrets-webhook-memory-limit'>
+                    <valueFrom
+                            datasource="external-secrets-webhook"
+                            doc="kubernetes.raw"
+                            path="spec.template.spec.containers[0].resources.limits.memory" />
+                </input>
+            </box>
+        </box>
+    </box>
+    <box width='100%' gap='small'>
+        <text size='small'>Be sure to scale your External Secrets components within the capacity of your nodes.</text>
+        <text size='small'>By default this is a maximum of 8 CPU and 32 Gi memory.</text>
+    </box>
+</root>

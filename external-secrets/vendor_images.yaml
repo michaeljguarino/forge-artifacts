@@ -1,0 +1,3 @@
+ghcr.io:
+  images-by-tag-regex:
+    external-secrets/external-secrets: ^v?[0-9]+\.[0-9]+?\.[0-9]+$

@@ -1,0 +1,152 @@
+apiVersion: platform.plural.sh/v1alpha1
+kind: Runbook
+metadata:
+  name: scaling-manual
+  labels:
+    platform.plural.sh/pinned: 'true'
+{{ include "external-secrets-plural.labels" . | indent 4 }}
+spec:
+  name: External Secrets Operator Scaling
+  description: overview of how to optimally scale your External Secrets deployment
+  display: |-
+{{ .Files.Get "runbooks/scaling-manual.xml" | indent 4 }}
+  datasources:
+  - name: external-secrets-cpu
+    type: prometheus
+    prometheus:
+      format: cpu
+      legend: $pod
+      query: sum(rate(container_cpu_usage_seconds_total{namespace="{{ .Release.Namespace }}",pod=~"external-secrets.+",pod!~".+cert.+",pod!~".+webhook.+"}[5m])) by (pod)
+  - name: external-secrets-memory
+    type: prometheus
+    prometheus:
+      format: memory
+      legend: $pod
+      query: sum(container_memory_working_set_bytes{namespace="{{ .Release.Namespace }}",pod=~"external-secrets.+",pod!~".+cert.+",pod!~".+webhook.+"}) by (pod)
+  - name: external-secrets-controller-cpu
+    type: prometheus
+    prometheus:
+      format: cpu
+      legend: $pod
+      query: sum(rate(container_cpu_usage_seconds_total{namespace="{{ .Release.Namespace }}",pod=~"external-secrets-cert-controller.+"}[5m])) by (pod)
+  - name: external-secrets-controller-memory
+    type: prometheus
+    prometheus:
+      format: memory
+      legend: $pod
+      query: sum(container_memory_working_set_bytes{namespace="{{ .Release.Namespace }}",pod=~"external-secrets-cert-controller.+"}) by (pod)
+  - name: external-secrets-webhook-cpu
+    type: prometheus
+    prometheus:
+      format: cpu
+      legend: $pod
+      query: sum(rate(container_cpu_usage_seconds_total{namespace="{{ .Release.Namespace }}",pod=~"external-secrets-webhook.+"}[5m])) by (pod)
+  - name: external-secrets-webhook-memory
+    type: prometheus
+    prometheus:
+      format: memory
+      legend: $pod
+      query: sum(container_memory_working_set_bytes{namespace="{{ .Release.Namespace }}",pod=~"external-secrets-webhook.+"}) by (pod)
+  - name: external-secrets
+    type: kubernetes
+    kubernetes:
+      resource: deployment
+      name: external-secrets
+  - name: external-secrets-controller
+    type: kubernetes
+    kubernetes:
+      resource: deployment
+      name: external-secrets-cert-controller
+  - name: external-secrets-webhook
+    type: kubernetes
+    kubernetes:
+      resource: deployment
+      name: external-secrets-webhook
+  - name: nodes
+    type: nodes
+  actions:
+  - name: scale
+    action: config
+    redirectTo: '/'
+    configuration:
+      updates:
+        - path:
+            - external-secrets
+            - resources
+            - requests
+            - cpu
+          valueFrom: external-secrets-cpu
+        - path:
+            - external-secrets
+            - resources
+            - requests
+            - memory
+          valueFrom: external-secrets-memory
+        - path:
+            - external-secrets
+            - resources
+            - limits
+            - cpu
+          valueFrom: external-secrets-cpu-limit
+        - path:
+            - external-secrets
+            - resources
+            - limits
+            - memory
+          valueFrom: external-secrets-memory-limit
+        - path:
+            - external-secrets
+            - certController
+            - resources
+            - requests
+            - cpu
+          valueFrom: external-secrets-controller-cpu
+        - path:
+            - external-secrets
+            - certController
+            - resources
+            - requests
+            - memory
+          valueFrom: external-secrets-controller-memory
+        - path:
+            - external-secrets
+            - certController
+            - resources
+            - limits
+            - cpu
+          valueFrom: external-secrets-controller-cpu-limit
+        - path:
+            - external-secrets
+            - certController
+            - resources
+            - limits
+            - memory
+          valueFrom: external-secrets-controller-memory-limit
+        - path:
+            - external-secrets
+            - webhook
+            - resources
+            - requests
+            - cpu
+          valueFrom: external-secrets-webhook-cpu
+        - path:
+            - external-secrets
+            - webhook
+            - resources
+            - requests
+            - memory
+          valueFrom: external-secrets-webhook-memory
+        - path:
+            - external-secrets
+            - webhook
+            - resources
+            - limits
+            - cpu
+          valueFrom: external-secrets-webhook-cpu-limit
+        - path:
+            - external-secrets
+            - webhook
+            - resources
+            - limits
+            - memory
+          valueFrom: external-secrets-webhook-memory-limit

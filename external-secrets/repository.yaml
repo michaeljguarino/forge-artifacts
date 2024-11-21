@@ -1,0 +1,6 @@
+name: external-secrets
+description: external-secrets deployed on plural
+category: DEVOPS
+private: false
+icon: plural/icons/external-secrets.png
+notes: plural/notes.tpl

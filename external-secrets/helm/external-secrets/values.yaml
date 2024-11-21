@@ -1,0 +1,44 @@
+clusterSecretStore:
+  create: true
+  provider: {}
+
+external-secrets:
+  image:
+    repository: dkr.plural.sh/external-secrets/external-secrets/external-secrets
+    tag: v0.6.1
+  resources:
+    requests:
+      memory: "64Mi"
+      cpu: "0.1m"
+    limits:
+      memory: "96Mi"
+      cpu: "0.2m"
+  serviceMonitor:
+    enabled: true
+  installCRDs: false
+  webhook:
+    image:
+      repository: dkr.plural.sh/external-secrets/external-secrets/external-secrets
+      tag: v0.6.1
+    resources:
+      requests:
+        memory: "64Mi"
+        cpu: "1m"
+      limits:
+        memory: "96Mi"
+        cpu: "1.3m"
+    serviceMonitor:
+      enabled: true
+  certController:
+    image:
+      repository: dkr.plural.sh/external-secrets/external-secrets/external-secrets
+      tag: v0.6.1
+    resources:
+      requests:
+        memory: "96Mi"
+        cpu: "0.1m"
+      limits:
+        memory: "128Mi"
+        cpu: "0.2m"
+    serviceMonitor:
+      enabled: true
