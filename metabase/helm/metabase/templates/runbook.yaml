@@ -1,0 +1,90 @@
+apiVersion: platform.plural.sh/v1alpha1
+kind: Runbook
+metadata:
+  labels:
+    app.kubernetes.io/instance: metabase
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: metabase
+    app.kubernetes.io/version: 0.41.5
+    helm.sh/chart: metabase-0.1.5
+    platform.plural.sh/pinned: "true"
+  name: scaling-manual
+  namespace: metabase
+spec:
+  actions:
+    - action: config
+      configuration:
+        updates:
+          - path: ["metabase", "resources", "requests", "cpu"]
+            valueFrom: metabase-cpu
+          - path: ["metabase", "resources", "requests", "memory"]
+            valueFrom: metabase-memory
+      name: scale
+      redirectTo: /
+  datasources:
+    - name: metabase-cpu
+      prometheus:
+        format: cpu
+        legend: $pod
+        query: >-
+          sum(rate(container_cpu_usage_seconds_total{namespace="metabase",pod=~"metabase.*"}[5m]))
+          by (pod)
+      type: prometheus
+    - name: metabase-memory
+      prometheus:
+        format: memory
+        legend: $pod
+        query: >-
+          sum(container_memory_working_set_bytes{namespace="metabase",pod=~"metabase.*"})
+          by (pod)
+      type: prometheus
+    - kubernetes:
+        name: metabase
+        resource: deployment
+      name: metabase
+      type: kubernetes
+    - name: nodes
+      type: nodes
+  description: overview of how to optimally scale your metabase deployment
+  display: |-
+    <root gap='medium'>
+
+    <box pad='small' gap='medium' direction='row' align='center'>
+        <box direction='row' align='center' gap='small'>
+          <box gap='small' align='center'>
+            <timeseries datasource="metabase-cpu" label="Metabase CPU Usage" />
+            <text size='small'>You should set a reservation to 
+              roughly correspond to 60% utilization</text>
+          </box>
+          <box gap='small' align='center'>
+            <timeseries datasource="metabase-memory" label="Metabase Memory Usage" />
+            <text size='small'>You should set a reservation to 
+              roughly correspond to 80% utilization</text>
+          </box>
+        </box>
+        <box gap='xsmall'>
+          <input placeholder="250m" label='Metabase CPU Request' name='metabase-cpu'>
+            <valueFrom 
+              datasource="metabase" 
+              doc="kubernetes.raw" 
+              path="spec.template.spec.containers[0].resources.requests.cpu" />
+          </input>
+          <input placeholder="1Gi" label='Metabase Memory Request' name='metabase-memory'>
+            <valueFrom 
+              datasource="metabase" 
+              doc="kubernetes.raw" 
+              path="spec.template.spec.containers[0].resources.requests.memory" />
+          </input>
+          <button label='Scale' action='scale' primary='true' headline="true" />
+        </box>
+      </box>
+      <box width='100%' gap='small'>
+        <text size='small'>Be sure to scale your airflow pods within your node's capacity, listed here:</text>
+        <table width='100%' datasource='nodes' path='nodes'>
+          <tableColumn path='metadata.name' header='name' width='33%' />
+          <tableColumn path='status.capacity.cpu' header='cpu' width='33%' />
+          <tableColumn path='status.capacity.memory' header='memory' width='33%' />
+        </table>
+      </box>
+    </root>
+  name: Metabase Scaling
