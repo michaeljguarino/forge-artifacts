@@ -5,13 +5,11 @@ global:
     - description: jenkins instance
       url: {{ $hostname }}
 
-ingress:
-  hosts:
-   - host: {{ $hostname }}
-     paths:
-       - path: /
-         pathType: ImplementationSpecific
-  tls:
-   - secretName: jenkins-tls
-     hosts:
-       - {{ $hostname }}
+jenkins:
+  controller:
+    ingress:
+      hostName: {{ $hostname }}
+      tls:
+      - secretName: jenkins-tls
+        hosts:
+          - {{ $hostname }}

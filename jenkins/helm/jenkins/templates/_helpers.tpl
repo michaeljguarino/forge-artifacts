@@ -1,7 +1,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "jenkins.name" -}}
+{{- define "jenkins-plural.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
@@ -10,7 +10,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "jenkins.fullname" -}}
+{{- define "jenkins-plural.fullname" -}}
 {{- if .Values.fullnameOverride }}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -26,16 +26,16 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "jenkins.chart" -}}
+{{- define "jenkins-plural.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Common labels
 */}}
-{{- define "jenkins.labels" -}}
-helm.sh/chart: {{ include "jenkins.chart" . }}
-{{ include "jenkins.selectorLabels" . }}
+{{- define "jenkins-plural.labels" -}}
+helm.sh/chart: {{ include "jenkins-plural.chart" . }}
+{{ include "jenkins-plural.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -45,17 +45,17 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "jenkins.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "jenkins.name" . }}
+{{- define "jenkins-plural.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "jenkins-plural.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "jenkins.serviceAccountName" -}}
+{{- define "jenkins-plural.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create }}
-{{- default (include "jenkins.fullname" .) .Values.serviceAccount.name }}
+{{- default (include "jenkins-plural.fullname" .) .Values.serviceAccount.name }}
 {{- else }}
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
