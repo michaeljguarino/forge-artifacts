@@ -1,0 +1,105 @@
+<root gap='medium'>
+    <box pad='small' gap='medium' direction='row' align='center'>
+        <button label='Scale' action='scale' primary='true' headline='true' />
+        <box direction='row' align='center' gap='small'>
+            <box gap='small' align='center'>
+                <timeseries datasource="vault-web-cpu" label="Vault Web CPU Usage" />
+                <text size='small'>You should set a requests to
+                    roughly correspond to 80% regular utilization</text>
+                <text size='small'>Normally a CPU limit is not required</text>
+            </box>
+            <box gap='small' align='center'>
+                <timeseries datasource="vault-web-memory" label="Vault Web Memory Usage" />
+                <text size='small'>You should set a requests to
+                    roughly correspond to 80% regular utilization</text>
+                <text size='small'>A memory limit should be set to avoid resource starvation</text>
+            </box>
+        </box>
+        <box gap='xsmall'>
+            <box gap='xsmall'>
+                <input placeholder="250m" label='Vault Web CPU Request' name='vault-web-cpu'>
+                    <valueFrom
+                            datasource="vault"
+                            doc="kubernetes.raw"
+                            path="spec.template.spec.containers[0].resources.requests.cpu" />
+                </input>
+                <input placeholder="1Gi" label='Vault Web Memory Request' name='vault-web-memory'>
+                    <valueFrom
+                            datasource="vault"
+                            doc="kubernetes.raw"
+                            path="spec.template.spec.containers[0].resources.requests.memory" />
+                </input>
+            </box>
+            <box gap='xsmall'>
+                <input placeholder="250m" label='Vault Web CPU Limit' name='vault-web-cpu-limit'>
+                    <valueFrom
+                            datasource="vault"
+                            doc="kubernetes.raw"
+                            path="spec.template.spec.containers[0].resources.limits.cpu" />
+                </input>
+                <input placeholder="1Gi" label='Vault Web Memory Limit' name='vault-web-memory-limit'>
+                    <valueFrom
+                            datasource="vault"
+                            doc="kubernetes.raw"
+                            path="spec.template.spec.containers[0].resources.limits.memory" />
+                </input>
+            </box>
+        </box>
+    </box>
+    <box pad='small' gap='medium' direction='row' align='center'>
+        <box direction='row' align='center' gap='small'>
+            <box gap='small' align='center'>
+                <timeseries datasource="vault-injector-cpu" label="Vault Injector CPU Usage" />
+                <text size='small'>You should set a requests to
+                    roughly correspond to 80% regular utilization</text>
+                <text size='small'>Normally a CPU limit is not required</text>
+            </box>
+            <box gap='small' align='center'>
+                <timeseries datasource="vault-injector-memory" label="Vault Injector Memory Usage" />
+                <text size='small'>You should set a requests to
+                    roughly correspond to 80% regular utilization</text>
+                <text size='small'>A memory limit should be set to avoid resource starvation</text>
+            </box>
+        </box>
+        <box gap='xsmall'>
+            <box gap='xsmall'>
+                <input placeholder="250m" label='Vault Injector  CPU Request' name='vault-injector-cpu'>
+                    <valueFrom
+                            datasource="vault-injector"
+                            doc="kubernetes.raw"
+                            path="spec.template.spec.containers[0].resources.requests.cpu" />
+                </input>
+                <input placeholder="1Gi" label='Vault Injector Memory Request' name='vault-injector-memory'>
+                    <valueFrom
+                            datasource="vault-injector"
+                            doc="kubernetes.raw"
+                            path="spec.template.spec.containers[0].resources.requests.memory" />
+                </input>
+            </box>
+            <box gap='xsmall'>
+                <input placeholder="250m" label='Vault Injector CPU Limit' name='vault-injector-cpu-limit'>
+                    <valueFrom
+                            datasource="vault-injector"
+                            doc="kubernetes.raw"
+                            path="spec.template.spec.containers[0].resources.limits.cpu" />
+                </input>
+                <input placeholder="1Gi" label='Vault Injector Memory Limit' name='vault-injector-memory-limit'>
+                    <valueFrom
+                            datasource="vault-injector"
+                            doc="kubernetes.raw"
+                            path="spec.template.spec.containers[0].resources.limits.memory" />
+                </input>
+                <input placeholder="1" label='Vault Injector Replicas' name='vault-injector-replicas'>
+                    <valueFrom
+                            datasource="vault-injector"
+                            doc="kubernetes.raw"
+                            path="spec.replicas" />
+                </input>
+            </box>
+        </box>
+    </box>
+    <box width='100%' gap='small'>
+        <text size='small'>Be sure to scale your Vault components within the capacity of your nodes.</text>
+        <text size='small'>By default this is a maximum of 8 CPU and 32 Gi memory.</text>
+    </box>
+</root>
