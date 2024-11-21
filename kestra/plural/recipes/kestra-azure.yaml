@@ -1,0 +1,20 @@
+name: kestra-azure
+description: Installs kestra on an aws eks cluster
+provider: AZURE
+primary: true
+dependencies:
+- repo: bootstrap
+  name: azure-k8s
+
+
+- repo: postgres
+  name: azure-postgres
+
+sections:
+- name: kestra
+  configuration: []
+  items:
+  - type: TERRAFORM
+    name: azure
+  - type: HELM
+    name: kestra

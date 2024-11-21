@@ -1,0 +1,15 @@
+dependencies:
+- name: elasticsearch
+  repository: https://helm.elastic.co
+  version: 7.17.3
+- name: kafka
+  repository: https://charts.bitnami.com/bitnami
+  version: 18.5.0
+- name: minio
+  repository: https://charts.min.io/
+  version: 4.1.0
+- name: postgresql
+  repository: https://charts.bitnami.com/bitnami
+  version: 11.9.13
+digest: sha256:f410fc312054189ac6f62fbf5ce08293a980f3116eec79f17dab8be11cbf3be6
+generated: "2023-12-13T08:05:50.479227+01:00"

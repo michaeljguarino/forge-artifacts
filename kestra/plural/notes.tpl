@@ -1,0 +1,1 @@
+Use `plural watch kestra` to track the status of your application

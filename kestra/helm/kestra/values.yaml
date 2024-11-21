@@ -1,0 +1,267 @@
+### Image
+image:
+  image: kestra/kestra
+  tag: latest-full
+  pullPolicy: Always
+
+imagePullSecrets: []
+
+
+### Configurations for deployments
+configuration: {}
+
+
+### Secrets for deployments
+secrets: {}
+
+
+### configuration files
+configurationPath:
+
+
+### Kestra executable
+executable: /app/kestra
+
+
+### Deployments
+deployments:
+  webserver:
+    enabled: false
+    kind: Deployment
+    replicaCount: 1
+    command: "server webserver"
+    resources: {}
+    nodeSelector: {}
+    tolerations: []
+    affinity: {}
+    strategy: {}
+    podSecurityContext: {}
+    securityContext: {}
+    terminationGracePeriodSeconds: 30
+    extraContainers: []
+    autoscaler:
+      enabled: false
+      minReplicas: 1
+      maxReplicas: 3
+      extra: {}
+      metrics: []
+      #  - type: Resource
+      #    resource:
+      #      name: cpu
+      #      target:
+      #        type: Utilization
+      #        averageUtilization: 50
+      #  - type: Resource
+      #    resource:
+      #      name: memory
+      #      target:
+      #        type: AverageValue
+      #        averageValue: 100Mi
+
+  executor:
+    enabled: false
+    kind: Deployment
+    command: "server executor"
+
+  indexer:
+    enabled: false
+    kind: Deployment
+    command: "server indexer"
+
+  scheduler:
+    enabled: false
+    kind: Deployment
+    command: "server scheduler"
+
+  worker:
+    enabled: false
+    kind: Deployment
+    command: "server worker --thread={{ .Values.deployments.worker.workerThreads }}"
+    terminationGracePeriodSeconds: 60
+    workerThreads: 128
+
+  standalone:
+    enabled: true
+    kind: Deployment
+    command: "server standalone --worker-thread={{ .Values.deployments.standalone.workerThreads }}"
+    terminationGracePeriodSeconds: 60
+    workerThreads: 128
+
+# EE only - Define additional group of workers.
+# Must be used in addition to default workers (in standalone or separate worker deployment).
+workerGroup:
+  workergroupname: # name of the worker group
+    enabled: false
+    kind: Deployment
+    command: "server worker --thread={{ .Values.workerGroup.workergroupname.workerThreads }} --worker-group={{ .WorkerGroup }}"
+    terminationGracePeriodSeconds: 60
+    workerThreads: 128
+
+# for io.kestra.core.tasks.scripts.Bash task or io.kestra.plugin.scripts.*, attach a docker dind container in order to isolate in a container
+# every command launch
+dind:
+  enabled: true
+  image:
+    image: docker
+    tag: dind-rootless
+    pullPolicy: IfNotPresent
+  socketPath: /dind/
+  tmpPath: /tmp/
+  resources: {}
+  args:
+    - --log-level=fatal
+    - --group=1000
+  securityContext:
+    runAsUser: 1000
+    runAsGroup: 1000
+  extraVolumeMounts: []
+  extraEnv: []
+
+### Kafka
+kafka:
+  enabled: false
+
+### ElasticSearch
+elasticsearch:
+  enabled: false
+  clusterName: "es-kestra"
+
+  esConfig:
+    elasticsearch.yml: |
+      xpack:
+        security:
+          enabled: false
+
+  antiAffinity: "soft"
+
+  roles:
+    ml: "false"
+
+
+### Minio
+minio:
+  enabled: true
+  rootUser: please-change-me
+  rootPassword: its-not-a-secret
+  mode: standalone
+  persistence:
+    size: 8Gi
+  buckets:
+    - name: kestra
+      policy: none
+      purge: false
+  resources:
+    requests:
+      memory: 512Mi
+
+### Postgresql
+postgresql:
+  enabled: true
+  auth:
+    database: kestra
+    username: kestra
+    password: kestra
+
+  primary:
+    persistence:
+      enabled: true
+      size: 8Gi
+
+### Service
+service:
+  type: ClusterIP
+  port: 8080
+  annotations: {}
+
+
+### Ingress
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+  # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+
+### Global Deployement
+nameOverride: ""
+serviceAccountName: ""
+
+
+### Annotations for deployments
+annotations: {}
+podAnnotations: {}
+initContainers: []
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+terminationGracePeriodSeconds: 30
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+extraVolumeMounts: []
+
+extraVolumes: []
+
+extraEnv: []
+
+extraContainers: []
+
+podSecurityContext: {}
+# fsGroup: 2000
+
+securityContext:
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
+
+### Readiness / Liveness probe config.
+### ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/
+readinessProbe:
+  enabled: true
+  path: /health
+  port: management
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 3
+  httpGetExtra: {}
+
+livenessProbe:
+  enabled: true
+  path: /health
+  port: management
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 3
+  httpGetExtra: {}

@@ -1,0 +1,33 @@
+apiVersion: plural.sh/v1alpha1
+kind: Dependencies
+metadata:
+  application: true
+  description: Deploys kestra crafted for the target cloud
+spec:
+  dependencies:
+  - type: helm
+    name: bootstrap
+    repo: bootstrap
+    version: '>= 0.5.1'
+  
+  
+  - type: helm
+    name: postgres
+    repo: postgres
+    version: ">= 0.1.6"
+  
+  - type: terraform
+    name: aws
+    repo: kestra
+    version: '>= 0.1.0'
+    optional: true
+  - type: terraform
+    name: azure
+    repo: kestra
+    version: '>= 0.1.0'
+    optional: true
+  - type: terraform
+    name: gcp
+    repo: kestra
+    version: '>= 0.1.0'
+    optional: true

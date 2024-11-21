@@ -1,0 +1,20 @@
+name: kestra-gcp
+description: Installs kestra on an aws eks cluster
+provider: GCP
+primary: true
+dependencies:
+- repo: bootstrap
+  name: gcp-k8s
+
+
+- repo: postgres
+  name: gcp-postgres
+
+sections:
+- name: kestra
+  configuration: []
+  items:
+  - type: TERRAFORM
+    name: gcp
+  - type: HELM
+    name: kestra

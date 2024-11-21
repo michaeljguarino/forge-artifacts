@@ -1,0 +1,20 @@
+name: kestra-aws
+description: Installs kestra on an aws eks cluster
+provider: AWS
+primary: true
+dependencies:
+- repo: bootstrap
+  name: aws-k8s
+
+
+- repo: postgres
+  name: aws-postgres
+
+sections:
+- name: kestra
+  configuration: []
+  items:
+  - type: TERRAFORM
+    name: aws
+  - type: HELM
+    name: kestra
