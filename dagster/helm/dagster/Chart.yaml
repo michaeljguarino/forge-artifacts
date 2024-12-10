@@ -2,8 +2,8 @@ apiVersion: v2
 name: dagster
 description: A Helm chart for Kubernetes
 type: application
-version: 0.1.50
-appVersion: 1.7.7
+version: 0.1.51
+appVersion: 1.9.4
 dependencies:
 - name: postgres
   version: 0.1.16
@@ -13,7 +13,7 @@ dependencies:
   repository: https://pluralsh.github.io/module-library
   condition: oidc-config.enabled
 - name: dagster
-  version: 1.7.7
+  version: 1.9.4
   repository: https://dagster-io.github.io/helm
 - name: config-overlays
   version: 0.1.1
