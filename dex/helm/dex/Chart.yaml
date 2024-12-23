@@ -2,9 +2,9 @@ apiVersion: v2
 name: dex
 description: Dex idp packaged for deployment on plural
 type: application
-version: 0.1.6
-appVersion: "1.16.0"
+version: 0.2.0
+appVersion: "2.35.3"
 dependencies:
 - name: dex
-  version: 0.4.0
+  version: 0.13.0
   repository: https://charts.dexidp.io
