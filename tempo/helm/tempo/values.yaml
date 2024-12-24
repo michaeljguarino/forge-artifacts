@@ -35,7 +35,7 @@ tempo-distributed:
     image:
       registry: dkr.plural.sh
       repository: tempo/grafana/tempo
-      tag: 2.1.1
+      tag: 2.2.0
   distributor:
     resources:
       requests:
@@ -56,7 +56,7 @@ tempo-distributed:
       image:
         registry: dkr.plural.sh
         repository: tempo/grafana/tempo-query
-        tag: 2.1.1
+        tag: 2.2.0
     resources:
       requests:
         cpu: 100m
